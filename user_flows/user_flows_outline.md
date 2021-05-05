@@ -1,6 +1,6 @@
 # Meal Planner App User Flows
 
-# User Flow 1: Searching for Recepies (any user)
+# User Flow 1: Searching for Recipies (any user)
 Users will visit a search page, where they will have the option to search for recipes:
  - by ingredients (e.g., "I have eggs, chicken, and celery. What could I make?")
  - by cuisine (e.g., "I'd like to try a new Italian recipe.")

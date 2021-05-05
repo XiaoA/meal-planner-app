@@ -33,7 +33,7 @@ CREATE TABLE recipes (
 
 CREATE TABLE  recipe_boxes (
   id SERIAL PRIMARY KEY,
-  liked? BOOLEAN,
+  is_liked BOOLEAN,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE
 );
