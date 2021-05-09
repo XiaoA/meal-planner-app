@@ -15,8 +15,8 @@ CREATE TABLE logins (
  id SERIAL PRIMARY KEY,
  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
  email VARCHAR(30) UNIQUE NOT NULL,
- password_hashed VARCHAR(60) NOT NULL
- password_confirmation_hashed VARCHAR(60) NOT NULL
+ password_hashed VARCHAR(264) NOT NULL
+ password_confirmation_hashed VARCHAR(264) NOT NULL
  );
 
 CREATE TABLE followers (
