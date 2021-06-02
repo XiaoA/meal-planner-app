@@ -15,7 +15,7 @@ API_BASE_URL = "https://api.spoonacular.com"
 app.logger.removeHandler(default_handler)
 
 # Configure custom logging
-file_handler = RotatingFileHandler('recipie.log',
+file_handler = RotatingFileHandler('instance/recipie.log',
                                    maxBytes=16384,
                                    backupCount=20)
 file_formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(filename)s:%(lineno)d]')
