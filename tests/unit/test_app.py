@@ -5,7 +5,7 @@ from app import app
 
 def test_get_index():
     """
-    GIVEN a Flask application
+    GIVEN this Flask application
     WHEN the '/' page is requested (GET)
     THEN check the response is valid
     """
