@@ -15,8 +15,8 @@ CREATE TABLE logins (
  id SERIAL PRIMARY KEY,
  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
  email VARCHAR(30) UNIQUE NOT NULL,
- password_hashed VARCHAR(60) NOT NULL
- password_confirmation_hashed VARCHAR(60) NOT NULL
+ password_hashed VARCHAR(264) NOT NULL,
+ password_confirmation_hashed VARCHAR(264) NOT NULL
  );
 
 CREATE TABLE followers (
@@ -52,10 +52,10 @@ INSERT INTO users
   (2, 'batman4u', 'Bruce', 'Wayne');
 
 INSERT INTO logins
-(id, user_id, email, password_hashed)
+(id, user_id, email, password_hashed, password_confirmation_hashed)
   VALUES
-  (1, 1, 'sherlock@example.com', '$2b$14$dPp4ixbBXumqb;zW-C2*m*9J]SV@.A3U-xk'),
-  (2, 2, 'batman@example.com', '$2b$14YDTrPn/=jD4%.;K%qSD4[$C&TA%U4*enQ3L');
+  (1, 1, 'sherlock@example.com', '$2b$14$dPp4ixbBXumqb;zW-C2*m*9J]SV@.A3U-xk', '$2b$14$dPp4ixbBXumqb;zW-C2*m*9J]SV@.A3U-xk'),
+  (2, 2, 'batman@example.com', '$2b$14YDTrPn/=jD4%.;K%qSD4[$C&TA%U4*enQ3L', '$2b$14YDTrPn/=jD4%.;K%qSD4[$C&TA%U4*enQ3L');
 
 INSERT INTO followers
 (id, follower, followed_user)
@@ -70,7 +70,7 @@ INSERT INTO recipes
   (2, 'popcorn shrimp cakes', 'https://www.example.com/23');
 
 INSERT INTO recipe_boxes
-(id, liked, user_id, recipe_id)
+(id, is_liked, user_id, recipe_id)
   VALUES
   (1, TRUE, 1, 1),
   (2, FALSE, 2, 2);
