@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Welcome to Recipie!{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<form action="/search-results" method="POST">
+  {{ form.hidden_tag() }}
+  {% for field in form if field.widget.input_type != 'hidden' %}
+  <p>
+    {{ field.label }}
+    {{ field }}
+    <button>Submit</button>
+  </p>
+  {% endfor %}
+</form>
+{% endblock %}
+
