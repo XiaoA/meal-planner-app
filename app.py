@@ -4,6 +4,7 @@ from forms import SearchRecipesForm
 from config import API_KEY, SECRET_KEY
 import logging
 from flask.logging import default_handler
+from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 
@@ -14,7 +15,9 @@ API_BASE_URL = "https://api.spoonacular.com"
 app.logger.removeHandler(default_handler)
 
 # Configure custom logging
-file_handler = logging.FileHandler('recipie.log')
+file_handler = RotatingFileHandler('recipie.log',
+                                   maxBytes=16384,
+                                   backupCount=20)
 file_formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(filename)s:%(lineno)d]')
 file_handler.setFormatter(file_formatter)
 file_handler.setLevel(logging.INFO)
@@ -34,8 +37,8 @@ def show_recipes():
     response = requests.get(f"{API_BASE_URL}/food/ingredients/search", params={"apiKey": API_KEY, "query": ingredient})
 
     data = response.json()
-
     results = data['results']
+    app.logger.info(f"Searched for recipes containing: { ingredient }")
 
     return render_template('search-results.html', data=data)
 
