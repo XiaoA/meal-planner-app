@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Search Results{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  {{ data }}
+</div>
+<div class="container">
+  <h2>Sign up!</h2>
+  <p>Register for a free account to create search for more recipes, save them, and join our community!</p>
+</div>
+{% endblock %}
