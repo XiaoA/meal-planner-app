@@ -1,7 +1,6 @@
 """
 This file (test_recipes.py) contains the functional tests for recipe searches and API calls.
 """
-from app import app
 from config import API_KEY
 
 def test_show_recipes():
