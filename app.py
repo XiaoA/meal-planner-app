@@ -26,19 +26,10 @@ app.logger.addHandler(file_handler)
 # Log application startup event
 app.logger.info('Starting Recipie App...')
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    form = SearchRecipesForm()
-    return render_template('index.html', form=form)
+# Import the blueprints
+from project.recipes import recipes_blueprint
+from project.users import users_blueprint
 
-@app.route('/search-results', methods=['GET', 'POST'])
-def show_recipes():
-    ingredient = request.form['query']
-    response = requests.get(f"{API_BASE_URL}/food/ingredients/search", params={"apiKey": API_KEY, "query": ingredient})
-
-    data = response.json()
-    results = data['results']
-    app.logger.info(f"Searched for recipes containing: { ingredient }")
-
-    return render_template('search-results.html', data=data)
-
+# Register the blueprints
+app.register_blueprint(recipes_blueprint)
+app.register_blueprint(users_blueprint, url_prefix='/users')

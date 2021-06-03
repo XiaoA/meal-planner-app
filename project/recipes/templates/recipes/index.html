@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<form action="/search-results" method="POST">
+<form action="/recipes/search-results" method="POST">
   {{ form.hidden_tag() }}
   {% for field in form if field.widget.input_type != 'hidden' %}
   <p>
