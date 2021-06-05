@@ -1,11 +1,9 @@
 from . import recipes_blueprint
-from flask import current_app, render_template, request, session, flash, redirect, url_for, jsonify, flash
+from flask import current_app, render_template, request
+from project import create_app
 import requests
 from forms import SearchRecipesForm
-from config import API_KEY, SECRET_KEY
-from app import app
-
-API_BASE_URL = "https://api.spoonacular.com"
+from config import API_BASE_URL, API_KEY
 
 # Request Callbacks
 @recipes_blueprint.before_request
@@ -37,6 +35,6 @@ def show_recipes():
 
     data = response.json()
     results = data['results']
-    app.logger.info(f"Searched for recipes containing: { ingredient }")
+    current_app.logger.info(f"Searched for recipes containing: { ingredient }")
 
-    return render_template('/search-results.html', data=data)
+    return render_template('/recipes/search-results.html', data=data)
