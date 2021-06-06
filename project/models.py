@@ -3,18 +3,14 @@ from project import database
 
 class User(database.Model):
     """
-    Class that represents a user of the site.
+    Class that represents a user of the site. (Note: authentication is handled outside of the User model.)
 
     The following attributes of a stock are stored in this table:
-        stock symbol (type: string)
-        number of shares (type: integer)
-        purchase price (type: integer)
+        username (type: string) 
+        first_name (type: string) 
+        last_name (type: string)
 
-    Note: Due to a limitation in the data types supported by SQLite, the
-          purchase price is stored as an integer:
-              $24.10 -> 2410
-              $100.00 -> 10000
-              $87.65 -> 8765
+    The username and first_name attributes are required; last_name is optional.
     """
 
     __tablename__ = 'users'
