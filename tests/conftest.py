@@ -1,6 +1,8 @@
 import pytest
-from project import create_app
+from project import create_app, database
 from flask import current_app
+from project.models import User
+
 
 @pytest.fixture(scope='module')
 def test_client():
@@ -16,7 +18,10 @@ def test_client():
 
     yield testing_client
 
-
+@pytest.fixture(scope='module')
+def new_user():
+    user = User('batman99', 'Bruce', 'Wayne')
+    return user
     
 
     

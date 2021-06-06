@@ -1,8 +1,25 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_bcrypt import Bcrypt
 import logging
 from flask.logging import default_handler
 from logging.handlers import RotatingFileHandler
 import os
+
+'''
+Create instances of the Flask application
+'''
+database = SQLAlchemy()
+db_migration = Migrate()
+bcrypt = Bcrypt()
+
+"""
+Helper Functions
+"""
+def initialize_extensions(app):
+    database.init_app(app)
+
 
 def register_app_callbacks(app):
     @app.before_request
@@ -28,8 +45,10 @@ def create_app():
 
     # Configure the Flask app
     config_type = os.getenv('CONFIG_TYPE', default='config.DevelopmentConfig')
-    app.config.from_object('config.DevelopmentConfig')
+    app.config.from_object(config_type)
 
+
+    initialize_extensions(app)
     register_blueprints(app)
     configure_logging(app)
     register_app_callbacks(app)
