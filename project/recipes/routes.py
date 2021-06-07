@@ -40,4 +40,5 @@ def show_recipes():
 
     flash(f"Searched for recipes with { ingredient }", 'success')    
     return render_template('/recipes/search-results.html', data=data)
-    
+
+

@@ -30,3 +30,6 @@ class User(database.Model):
 
         u = self
         return f"<User {u.id} {u.username} {u.first_name} {u.last_name}"
+
+    
+    

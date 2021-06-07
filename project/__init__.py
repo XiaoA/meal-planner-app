@@ -19,7 +19,8 @@ Helper Functions
 """
 def initialize_extensions(app):
     database.init_app(app)
-
+    db_migration.init_app(app, database)
+    bcrypt.init_app(app)
 
 def register_app_callbacks(app):
     @app.before_request
