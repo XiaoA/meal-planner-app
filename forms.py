@@ -7,4 +7,5 @@ class SearchRecipesForm(FlaskForm):
     query = StringField("Recipe Search", validators=[InputRequired(message="Search term can't be blank.")])
     apiKey = API_KEY
 
+
     
