@@ -61,7 +61,7 @@ def register_blueprints(app):
 
     # Register the blueprints
     app.register_blueprint(recipes_blueprint)
-    app.register_blueprint(users_blueprint, url_prefix='/users')
+    app.register_blueprint(users_blueprint)
 
 def configure_logging(app):
     # Remove the default Flask logger
