@@ -8,7 +8,7 @@ CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   username VARCHAR(15) UNIQUE NOT NULL,
   first_name VARCHAR(15) NOT NULL,
-  last_name VARCHAR(15) NOT NULL
+  last_name VARCHAR(15)
 );
 
 CREATE TABLE logins (

@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_wtf.csrf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
@@ -13,6 +14,7 @@ Create instances of the Flask application
 database = SQLAlchemy()
 db_migration = Migrate()
 bcrypt = Bcrypt()
+csrf_protection = CSRFProtect()
 
 """
 Helper Functions
@@ -21,6 +23,7 @@ def initialize_extensions(app):
     database.init_app(app)
     db_migration.init_app(app, database)
     bcrypt.init_app(app)
+    csrf_protection.init_app(app)
 
 def register_app_callbacks(app):
     @app.before_request

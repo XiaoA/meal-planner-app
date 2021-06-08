@@ -1,7 +1,7 @@
 import pytest
 from project import create_app, database
 from flask import current_app
-from project.models import User
+from project.models import User, Login
 
 
 @pytest.fixture(scope='module')
