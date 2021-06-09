@@ -1,7 +1,7 @@
 from . import users_blueprint
 from flask import current_app, render_template, flash, abort, request, redirect, url_for, session
 import requests
-from forms import RegistrationForm, NewUserProfileForm
+from forms import RegistrationForm
 from project.models import User, UserProfile
 from project import database
 from sqlalchemy.exc import IntegrityError
@@ -24,25 +24,7 @@ def register():
                 database.session.commit()
                 user_id = new_user_registration.id
                 session['user_id'] = user_id
-                                             
 
-                current_app.logger.info(f'Registered new user: {form.email.data}!')
-                return redirect(url_for('users.new_user_profile'))
-            except IntegrityError:
-                database.session.rollback()
-                flash(f'ERROR! Email ({form.email.data}) already exists.', 'error')
-        else:
-            flash(f"Error in form data!", 'error')
-            
-    return render_template('users/register.html', form=form)
-
-@users_blueprint.route('/users/new', methods=['GET', 'POST'])
-def new_user_profile():
-    form = NewUserProfileForm()
-
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            try:
                 user_id = session['user_id']
                 new_user_profile = UserProfile(form.username.data, form.first_name.data, form.last_name.data, user_id)
                 database.session.add(new_user_profile)
@@ -53,9 +35,8 @@ def new_user_profile():
                 return redirect(url_for('recipes.index'))
             except IntegrityError:
                 database.session.rollback()
-                flash(f'ERROR! User ({form.username.data}) already exists.', 'error')
+                flash(f'ERROR! Email ({form.email.data}) already exists.', 'error')
         else:
             flash(f"Error in form data!", 'error')
             
-    return render_template('users/new.html', form=form)
-
+    return render_template('users/register.html', form=form)

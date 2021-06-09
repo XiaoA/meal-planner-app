@@ -6,24 +6,31 @@ from flask_bcrypt import Bcrypt
 import logging
 from flask.logging import default_handler
 from logging.handlers import RotatingFileHandler
+from flask_login import LoginManager
 import os
 
-'''
-Create instances of the Flask application
-'''
+
+""" Create instances of the Flask application """
 database = SQLAlchemy()
 db_migration = Migrate()
 bcrypt = Bcrypt()
 csrf_protection = CSRFProtect()
+login = LoginManager()
+login.login_view = "users.login"
 
-"""
-Helper Functions
-"""
+""" Helper Functions """
 def initialize_extensions(app):
     database.init_app(app)
     db_migration.init_app(app, database)
     bcrypt.init_app(app)
     csrf_protection.init_app(app)
+    login.init_app(app)
+
+    from project.models import User
+
+    @login.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
 def register_app_callbacks(app):
     @app.before_request
@@ -82,7 +89,3 @@ def configure_logging(app):
 
     # Log application startup event
     app.logger.info('Starting Recipie App...')
-
-
-
-
