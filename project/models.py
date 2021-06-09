@@ -20,13 +20,13 @@ class User(database.Model):
     username = database.Column(database.String, nullable=False)
     first_name = database.Column(database.String, nullable=False)
     last_name = database.Column(database.String, nullable=True)
-
   
     def __init__(self, username: str, first_name: str, last_name: str):
         self.username = username
         self.first_name = first_name
         self.last_name = last_name
 
+    
     def __repr__(self):
         """ Show info about user. """
 
@@ -50,13 +50,14 @@ class Login(database.Model):
     password_hashed = database.Column(database.String(264))
     password_confirmation_hashed = database.Column(database.String(264))
 
-
-    def __init__(self, email: str, password_plaintext: str, password_confirmation_plaintext: str, ):
+    def __init__(self, email: str, password_plaintext: str, password_confirmation_plaintext: str):
         self.email = email
         self.password_hashed = bcrypt.generate_password_hash(
             password_plaintext, current_app.config.get('BCRYPT_LOG_ROUNDS')).decode('utf-8')
         self.password_confirmation_hashed = bcrypt.generate_password_hash(
             password_plaintext, current_app.config.get('BCRYPT_LOG_ROUNDS')).decode('utf-8')
+
+
 
     def is_password_correct(self, password_plaintext: str):
         return bcrypt.check_password_hash(self.password_hashed, password_plaintext)

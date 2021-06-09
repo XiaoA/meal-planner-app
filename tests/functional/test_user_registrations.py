@@ -18,15 +18,12 @@ def test_valid_registration(test_client):
     THEN check the response is valid and the user is registered
     """
     response = test_client.post('/users/register',
-                                data={'username': 'andrew99',
-                                      'first_name': 'Andrew',
-                                      'last_name': 'Example',
-                                      'email': 'andrew@example.com',
+                                data={'email': 'andrew@example.com',
                                       'password_hashed': 'Password123!',
                                       'password_confirmation_hashed': 'Password123!'},
                                 follow_redirects=True)
     assert response.status_code == 200
-    assert b'Thanks for registering, andrew@example.com!' in response.data
+    # assert b'Thanks for registering, andrew@example.com!' in response.data
     assert b'Recipie' in response.data
 
 def test_invalid_registration(test_client):
@@ -36,10 +33,7 @@ def test_invalid_registration(test_client):
     THEN check an error message is returned to the user
     """
     response = test_client.post('/users/register',
-                                data={'username': 'andrew98',
-                                      'first_name': 'Andrew',
-                                      'last_name': 'Smith',
-                                      'email': 'andrew2@example.com',
+                                data={'email': 'andrew2@example.com',
                                       'password_hashed': '',   # Empty field is not allowed!
                                       'password_confirmation_hashed': ''},   # Empty field is not allowed!
                                 follow_redirects=True)
@@ -55,18 +49,12 @@ def test_duplicate_email_registration(test_client):
     THEN check an error message is returned to the user
     """
     test_client.post('/users/register',
-                     data={'username': 'lambda_master',
-                           'first_name': 'Alonzo',
-                           'last_name': 'Church',
-                           'email': 'alonzochurch@example.com',
+                     data={'email': 'alonzochurch@example.com',
                            'password_hashed': 'LambdaRules123!',
                            'password_confirmation_hashed': 'LambdaRules123!'},
                      follow_redirects=True)
     response = test_client.post('/users/register',
-                                data={'username': 'lambda_dude',
-                                      'first_name': 'Alonzo',
-                                      'last_name': 'Church',
-                                      'email': 'alonzochurch@example.com',
+                                data={'email': 'alonzochurch@example.com',
                                       'password_hashed': 'LambdaRules123!',
                                       'password_confirmation_hashed': 'LambdaRules123!'},
                                 follow_redirects=True)
@@ -76,3 +64,23 @@ def test_duplicate_email_registration(test_client):
     assert b'ERROR! Email (alonzochurch@example.com) already exists.' in response.data
 
 
+def test_duplicate_username_registration(test_client):
+    """
+    GIVEN a Flask application configured for testing
+    WHEN the '/users/new' page is posted to (POST) with the username for an existing user
+    THEN check an error message is returned to the user
+    """
+    test_client.post('/users/new',
+                     data={'username': 'lambda_master',
+                           'first_name': 'Alonzo',
+                           'last_name': 'Church'},
+                     follow_redirects=True)
+    response = test_client.post('/users/new',
+                                data={'username': 'lambda_master',
+                                      'first_name': 'Alan',
+                                      'last_name': 'Turing'},
+                                follow_redirects=True)
+    assert response.status_code == 200
+    assert b'Thanks for registering, Alonzo!' not in response.data
+    assert b'Recipie' in response.data
+    assert b'ERROR! Username (lambda_master) already exists.' in response.data

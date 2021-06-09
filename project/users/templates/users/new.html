@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-wrap">
+  <h1>Set up your user profile</h1>
+
+  <form method="post">
+    {{ form.csrf_token }}
+
+    <div class="field">
+      {{ form.username.label }}
+      {{ form.username }}
+      {% for error in form.username.errors %}
+      <p class="validation-error">[{{ error }}]</p>
+      {% endfor %}
+    </div>
+
+    <div class="field">
+      {{ form.first_name.label }}
+      {{ form.first_name }}
+      {% for error in form.first_name.errors %}
+      <p class="validation-error">[{{ error }}]</p>
+      {% endfor %}
+    </div>
+
+    <div class="field">
+      {{ form.last_name.label }}
+      {{ form.last_name }}
+      {% for error in form.last_name.errors %}
+      <p class="validation-error">[{{ error }}]</p>
+      {% endfor %}
+    </div>
+    
+
+    <div class="field">
+      <button type="submit">Let's go!</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+
