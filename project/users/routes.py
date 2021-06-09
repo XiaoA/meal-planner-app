@@ -1,11 +1,11 @@
 from . import users_blueprint
 from flask import current_app, render_template, flash, abort, request, redirect, url_for, session
 import requests
-from forms import RegistrationForm
+from forms import RegistrationForm, LoginForm
 from project.models import User, UserProfile
 from project import database
 from sqlalchemy.exc import IntegrityError
-from flask_login import current_user
+from flask_login import current_user, login_user, login_required, logout_user
 
 @users_blueprint.route('/users')
 def list_users():
@@ -40,3 +40,34 @@ def register():
             flash(f"Error in form data!", 'error')
             
     return render_template('users/register.html', form=form)
+
+@users_blueprint.route('/users/login', methods=['GET', 'POST'])
+def login():
+    # If the user is already logged in, don't allow them to try to log in again
+    if current_user.is_authenticated:
+        flash('Already logged in!')
+        current_app.logger.info(f'Duplicate login attempt by user: {current_user.email}')
+        return redirect(url_for('recipes.index'))
+
+    form = LoginForm()
+
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            user = User.query.filter_by(email=form.email.data).first()
+            if user and user.is_password_correct(form.password.data):
+                # User's credentials have been validated, so log them in
+                login_user(user, remember=form.remember_me.data)
+                flash(f'Thanks for logging in, {current_user.email}!')
+                current_app.logger.info(f'Logged in user: {current_user.email}')
+                return redirect(url_for('recipes.index'))
+
+        flash('ERROR! Incorrect login credentials.', 'error')
+    return render_template('users/login.html', form=form)
+
+@users_blueprint.route('/users/logout')
+@login_required
+def logout():
+    current_app.logger.info(f'Logged out user: {current_user.email}')
+    logout_user()
+    flash('Goodbye!')
+    return redirect(url_for('recipes.index'))
