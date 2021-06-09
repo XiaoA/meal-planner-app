@@ -1,10 +1,11 @@
 from . import users_blueprint
-from flask import current_app, render_template, flash, abort, request, redirect, url_for
+from flask import current_app, render_template, flash, abort, request, redirect, url_for, session
 import requests
 from forms import RegistrationForm, NewUserProfileForm
-from project.models import User, Login
+from project.models import User, UserProfile
 from project import database
 from sqlalchemy.exc import IntegrityError
+from flask_login import current_user
 
 @users_blueprint.route('/users')
 def list_users():
@@ -18,9 +19,12 @@ def register():
     if request.method == 'POST':
         if form.validate_on_submit():
             try:
-                new_registration = Login(form.email.data, form.password_hashed.data, form.password_confirmation_hashed.data)
-                database.session.add(new_registration)
+                new_user_registration = User(form.email.data, form.password_hashed.data, form.password_confirmation_hashed.data)
+                database.session.add(new_user_registration)
                 database.session.commit()
+                user_id = new_user_registration.id
+                session['user_id'] = user_id
+                                             
 
                 current_app.logger.info(f'Registered new user: {form.email.data}!')
                 return redirect(url_for('users.new_user_profile'))
@@ -39,7 +43,8 @@ def new_user_profile():
     if request.method == 'POST':
         if form.validate_on_submit():
             try:
-                new_user_profile = User(form.username.data, form.first_name.data, form.last_name.data)
+                user_id = session['user_id']
+                new_user_profile = UserProfile(form.username.data, form.first_name.data, form.last_name.data, user_id)
                 database.session.add(new_user_profile)
                 database.session.commit()
 

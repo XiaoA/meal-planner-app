@@ -1,7 +1,7 @@
 import pytest
 from project import create_app, database
 from flask import current_app
-from project.models import User, Login
+from project.models import User, UserProfile
 
 
 @pytest.fixture(scope='module')
@@ -20,8 +20,13 @@ def test_client():
 
 @pytest.fixture(scope='module')
 def new_user():
-    user = User('batman99', 'Bruce', 'Wayne')
-    return user
+    flask_app = create_app()
+    flask_app.config.from_object('config.TestingConfig')
+
+    # Establish an application context before creating the User object
+    with flask_app.app_context():
+        user = User('batman@example.com', 'password', 'password')
+        yield user    
     
 
     

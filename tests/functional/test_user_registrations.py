@@ -63,24 +63,3 @@ def test_duplicate_email_registration(test_client):
     assert b'Recipie' in response.data
     assert b'ERROR! Email (alonzochurch@example.com) already exists.' in response.data
 
-
-def test_duplicate_username_registration(test_client):
-    """
-    GIVEN a Flask application configured for testing
-    WHEN the '/users/new' page is posted to (POST) with the username for an existing user
-    THEN check an error message is returned to the user
-    """
-    test_client.post('/users/new',
-                     data={'username': 'lambda_master',
-                           'first_name': 'Alonzo',
-                           'last_name': 'Church'},
-                     follow_redirects=True)
-    response = test_client.post('/users/new',
-                                data={'username': 'lambda_master',
-                                      'first_name': 'Alan',
-                                      'last_name': 'Turing'},
-                                follow_redirects=True)
-    assert response.status_code == 200
-    assert b'Thanks for registering, Alonzo!' not in response.data
-    assert b'Recipie' in response.data
-    assert b'ERROR! Username (lambda_master) already exists.' in response.data

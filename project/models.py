@@ -4,37 +4,6 @@ from flask import current_app
 
 class User(database.Model):
     """
-    Class that represents a user of the site. (Note: authentication is handled outside of the User model.)
-
-    The following attributes of a stock are stored in this table:
-        username (type: string) 
-        first_name (type: string) 
-        last_name (type: string)
-
-    The username and first_name attributes are required; last_name is optional.
-    """
-
-    __tablename__ = 'users'
-
-    id = database.Column(database.Integer, primary_key=True)
-    username = database.Column(database.String, nullable=False)
-    first_name = database.Column(database.String, nullable=False)
-    last_name = database.Column(database.String, nullable=True)
-  
-    def __init__(self, username: str, first_name: str, last_name: str):
-        self.username = username
-        self.first_name = first_name
-        self.last_name = last_name
-
-    
-    def __repr__(self):
-        """ Show info about user. """
-
-        u = self
-        return f"<User {u.id} {u.username} {u.first_name} {u.last_name}"
-
-class Login(database.Model):
-    """
     Class that handles user logins and authentication.
 
     The following attributes of a login are stored in this table:
@@ -43,12 +12,13 @@ class Login(database.Model):
         * hashed password - hashed password (using Flask-Bcrypt)
         * password_confirmation_hashed - hashed password confirmation field
     """
-    __tablename__ = 'logins'
+    __tablename__ = 'users'
 
     id = database.Column(database.Integer, primary_key=True)
     email = database.Column(database.String, unique=True)
     password_hashed = database.Column(database.String(264))
     password_confirmation_hashed = database.Column(database.String(264))
+    user_profiles = database.relationship('UserProfile', backref='user', lazy='dynamic')
 
     def __init__(self, email: str, password_plaintext: str, password_confirmation_plaintext: str):
         self.email = email
@@ -63,4 +33,55 @@ class Login(database.Model):
         return bcrypt.check_password_hash(self.password_hashed, password_plaintext)
 
     def __repr__(self):
-        return f'<Login: {self.email} {self.password_hashed} {self.password_confirmation_hashed}>'
+        return f'<User: {self.email} {self.password_hashed} {self.password_confirmation_hashed}>'
+
+class UserProfile(database.Model):
+    """
+    Class that represents a user's profile information.
+
+    The following attributes of a user are stored in this table:
+        username (type: string) 
+        first_name (type: string) 
+        last_name (type: string)
+
+    The username attribute is required; first_name and last_name are optional.
+    """
+
+    __tablename__ = 'user_profiles'
+
+    id = database.Column(database.Integer, primary_key=True)
+    username = database.Column(database.String, nullable=False)
+    first_name = database.Column(database.String, nullable=True)
+    last_name = database.Column(database.String, nullable=True)   
+    user_id = database.Column(database.Integer, database.ForeignKey('users.id')) 
+
+    def __init__(self, username: str, first_name: str, last_name: str, user_id: int):
+        self.username = username
+        self.first_name = first_name
+        self.last_name = last_name
+        self.user_id = user_id
+    
+    def __repr__(self):
+        """ Show info about user. """
+
+        u = self
+        return f"<UserProfile {u.username} {u.first_name} {u.last_name}"
+
+    @property
+    def is_authenticated(self):  # NEW!!
+        """Return True if the user has been successfully registered."""
+        return True
+
+    @property
+    def is_active(self):  # NEW!!
+        """Always True, as all users are active."""
+        return True
+
+    @property
+    def is_anonymous(self):  # NEW!!
+        """Always False, as anonymous users aren't supported."""
+        return False
+
+    def get_id(self):  # NEW!!
+        """Return the user ID as a unicode string (`str`)."""
+        return str(self.id)

@@ -16,5 +16,5 @@ class RegistrationForm(FlaskForm):
 class NewUserProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=3, max=15)])
     first_name = StringField('First Name', validators=[DataRequired(), Length(min=1, max=15)])
-    last_name = StringField('Last Name', validators=[Length(max=25)])    
+    last_name = StringField('Last Name', validators=[Length(max=25)])
     submit = SubmitField('Finish Registration')

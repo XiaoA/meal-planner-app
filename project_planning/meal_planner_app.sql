@@ -6,18 +6,18 @@ CREATE DATABASE meal_planner_app;
 
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
-  username VARCHAR(15) UNIQUE NOT NULL,
-  first_name VARCHAR(15) NOT NULL,
-  last_name VARCHAR(15)
-);
-
-CREATE TABLE logins (
- id SERIAL PRIMARY KEY,
- user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
- email VARCHAR(30) UNIQUE NOT NULL,
- password_hashed VARCHAR(264) NOT NULL,
- password_confirmation_hashed VARCHAR(264) NOT NULL
+  email VARCHAR(30) UNIQUE NOT NULL,
+  password_hashed VARCHAR(264) NOT NULL,
+  password_confirmation_hashed VARCHAR(264) NOT NULL
  );
+ 
+CREATE TABLE user_profiles (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(15) UNIQUE NOT NULL,
+  first_name VARCHAR(15),
+  last_name VARCHAR(15),
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
+);
 
 CREATE TABLE followers (
   id SERIAL PRIMARY KEY,
@@ -46,16 +46,16 @@ CREATE TABLE meals (
 );
 
 INSERT INTO users
-(id, username, first_name, last_name)
+(id, email, password_hashed, password_confirmation_hashed)
   VALUES
-  (1, 'sherlock99', 'Sherlock', 'Holmes'),
-  (2, 'batman4u', 'Bruce', 'Wayne');
+  (1, 'sherlock@example.com', '$2b$14$dPp4ixbBXumqb;zW-C2*m*9J]SV@.A3U-xk', '$2b$14$dPp4ixbBXumqb;zW-C2*m*9J]SV@.A3U-xk'),
+  (2, 'batman@example.com', '$2b$14YDTrPn/=jD4%.;K%qSD4[$C&TA%U4*enQ3L', '$2b$14YDTrPn/=jD4%.;K%qSD4[$C&TA%U4*enQ3L');
 
-INSERT INTO logins
-(id, user_id, email, password_hashed, password_confirmation_hashed)
+INSERT INTO user_profiles
+(id, username, first_name, last_name, user_id)
   VALUES
-  (1, 1, 'sherlock@example.com', '$2b$14$dPp4ixbBXumqb;zW-C2*m*9J]SV@.A3U-xk', '$2b$14$dPp4ixbBXumqb;zW-C2*m*9J]SV@.A3U-xk'),
-  (2, 2, 'batman@example.com', '$2b$14YDTrPn/=jD4%.;K%qSD4[$C&TA%U4*enQ3L', '$2b$14YDTrPn/=jD4%.;K%qSD4[$C&TA%U4*enQ3L');
+  (1, 'sherlock99', 'Sherlock', 'Holmes', 1),
+  (2, 'batman4u', 'Bruce', 'Wayne', 2);
 
 INSERT INTO followers
 (id, follower, followed_user)
