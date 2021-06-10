@@ -16,9 +16,9 @@
     </div>
 
     <div class="field">
-      {{ form.password.label }}
-      {{ form.password }}
-      {% for error in form.password.errors %}
+      {{ form.password_hashed.label }}
+      {{ form.password_hashed }}
+      {% for error in form.password_hashed.errors %}
         <span class="validation-error">[{{ error }}]</span>
       {% endfor %}
     </div>
