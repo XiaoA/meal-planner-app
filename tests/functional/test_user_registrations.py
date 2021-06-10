@@ -23,9 +23,13 @@ def test_valid_registration(test_client):
                                       'password_confirmation_hashed': 'Password123!'},
                                 follow_redirects=True)
     assert response.status_code == 200
-    # assert b'Thanks for registering, andrew@example.com!' in response.data
+    assert b'Thanks for registering, andrew@example.com!' in response.data
     assert b'Recipie' in response.data
-
+    assert len(outbox) == 1
+    assert outbox[0].subject == 'Registration - Flask Stock Portfolio App'
+    assert outbox[0].sender == 'andrewflaskdev@gmail.com'
+    assert outbox[0].recipients[0] == 'andrew@example.com'
+    
 def test_invalid_registration(test_client):
     """
     GIVEN a Flask application configured for testing

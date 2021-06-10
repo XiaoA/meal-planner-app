@@ -7,6 +7,7 @@ import logging
 from flask.logging import default_handler
 from logging.handlers import RotatingFileHandler
 from flask_login import LoginManager
+from flask_mail import Mail
 import os
 
 
@@ -17,6 +18,7 @@ bcrypt = Bcrypt()
 csrf_protection = CSRFProtect()
 login = LoginManager()
 login.login_view = "users.login"
+mail = Mail()
 
 """ Helper Functions """
 def initialize_extensions(app):
@@ -25,6 +27,7 @@ def initialize_extensions(app):
     bcrypt.init_app(app)
     csrf_protection.init_app(app)
     login.init_app(app)
+    mail.init_app(app)
 
     from project.models import User
 

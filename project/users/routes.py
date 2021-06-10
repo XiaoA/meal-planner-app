@@ -33,6 +33,14 @@ def register():
                 flash(f'Thanks for registering, {new_user_profile.username}!')
                 current_app.logger.info(f'Registered new user: {form.username.data}!')
                 return redirect(url_for('recipes.index'))
+
+                # Send an email confirming registration
+                msg = Message(subject='Registration - Recipie App',
+                              body='Thanks for registering with Recipie!',
+                              recipients=[form.email.data])
+                mail.send(msg)
+                return redirect(url_for('users.login'))
+            
             except IntegrityError:
                 database.session.rollback()
                 flash(f'ERROR! Email ({form.email.data}) already exists.', 'error')

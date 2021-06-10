@@ -8,6 +8,7 @@ from project.models import User, UserProfile
 def test_client():
     flask_app = create_app()
     flask_app.config.from_object('config.TestingConfig')
+    flask_app.extensions['mail'].suppress = True
 
     # Create a test client using the Flask app testing config
     with flask_app.test_client() as testing_client:
@@ -49,5 +50,3 @@ def log_in_default_user(test_client, register_default_user):
 
     # Log out the default user
     test_client.get('/users/logout', follow_redirects=True)
-
-    
