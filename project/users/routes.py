@@ -54,7 +54,7 @@ def login():
     if request.method == 'POST':
         if form.validate_on_submit():
             user = User.query.filter_by(email=form.email.data).first()
-            if user and user.is_password_correct(form.password.data):
+            if user and user.is_password_correct(form.password_hashed.data):
                 # User's credentials have been validated, so log them in
                 login_user(user, remember=form.remember_me.data)
                 flash(f'Thanks for logging in, {current_user.email}!')
@@ -71,3 +71,8 @@ def logout():
     logout_user()
     flash('Goodbye!')
     return redirect(url_for('recipes.index'))
+
+@users_blueprint.route('/users/profile')
+@login_required
+def user_profile():
+    return render_template('users/profile.html')
