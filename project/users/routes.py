@@ -1,11 +1,12 @@
 from . import users_blueprint
-from flask import current_app, render_template, flash, abort, request, redirect, url_for, session
+from flask import current_app, render_template, flash, abort, request, redirect, url_for, session, copy_current_request_context
 import requests
 from forms import RegistrationForm, LoginForm
 from project.models import User, UserProfile
 from project import database
 from sqlalchemy.exc import IntegrityError
 from flask_login import current_user, login_user, login_required, logout_user
+from threading import Thread
 
 @users_blueprint.route('/users')
 def list_users():
@@ -84,3 +85,4 @@ def logout():
 @login_required
 def user_profile():
     return render_template('users/profile.html')
+
