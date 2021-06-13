@@ -5,6 +5,7 @@ from project.models import User, UserProfile
 from datetime import datetime
 import requests
 
+
 @pytest.fixture(scope='module')
 def test_client():
     flask_app = create_app()
@@ -87,5 +88,5 @@ def afterwards_reset_default_user_password():
     user = User.query.filter_by(email='andrewflaskdev@gmail.com').first()
     user.set_password('password123')
     database.session.add(user)
-    database.session.commit()
-    
+    database.session.commit()    
+

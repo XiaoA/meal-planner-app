@@ -1,7 +1,7 @@
 from . import users_blueprint
 from flask import current_app, render_template, flash, abort, request, redirect, url_for, session, copy_current_request_context, escape
 import requests
-from forms import RegistrationForm, LoginForm, EmailForm, PasswordForm
+from forms import RegistrationForm, LoginForm, EmailForm, PasswordForm, ChangePasswordForm
 from project.models import User, UserProfile
 from project import database, mail
 from sqlalchemy.exc import IntegrityError
@@ -204,7 +204,20 @@ def process_password_reset_token(token):
 
 @users_blueprint.route('/change_password', methods=['GET', 'POST'])
 def change_password():
-    return '<h1>This Page Is Under Construction</h1>'
+    form = ChangePasswordForm()
+
+    if form.validate_on_submit():
+        if current_user.is_password_correct(form.current_password.data):
+            current_user.set_password(form.new_password.data)
+            database.session.add(current_user)
+            database.session.commit()
+            flash('Your password has been updated!', 'success')
+            current_app.logger.info(f'Password updated for user: {current_user.email}')
+            return redirect(url_for('users.user_profile'))
+        else:
+            flash('ERROR! Incorrect user credentials!')
+            current_app.logger.info(f'Incorrect password change for user: {current_user.email}')
+    return render_template('users/change_password.html', form=form)
 
 
 @users_blueprint.route('/resend_email_confirmation')
