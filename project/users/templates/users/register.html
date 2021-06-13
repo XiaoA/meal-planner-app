@@ -25,13 +25,6 @@
     </div>
 
     <div class="field">
-      {{ form.password_confirmation_hashed.label }}
-      {{ form.password_confirmation_hashed }}
-      {% for error in form.password_confirmation_hashed.errors %}
-        <p class="validation-error">[{{ error }}]</p>
-      {% endfor %}
-    </div>
-        <div class="field">
       {{ form.username.label }}
       {{ form.username }}
       {% for error in form.username.errors %}

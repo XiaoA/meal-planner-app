@@ -31,6 +31,10 @@
     <div class="field">
       {{ form.submit() }}
     </div>
+
+    <div class="forgot-password">
+      <p><em><a href="{{ url_for('users.password_reset_via_email') }}">Forgot your password?</a></em></p>
+    </div>
   </form>
 </div>
 

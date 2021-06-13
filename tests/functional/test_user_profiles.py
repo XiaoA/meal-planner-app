@@ -1,5 +1,5 @@
-from project import mail
 from project.models import User, UserProfile
+from project import mail
 from itsdangerous import URLSafeTimedSerializer
 from flask import current_app
 

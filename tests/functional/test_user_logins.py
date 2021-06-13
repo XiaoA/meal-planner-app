@@ -1,4 +1,6 @@
-from project.models import User
+from project.models import User, UserProfile
+from project import mail
+from itsdangerous import URLSafeTimedSerializer
 from flask import current_app
 
 def test_get_login_page(test_client):
@@ -13,6 +15,7 @@ def test_get_login_page(test_client):
     assert b'Email' in response.data
     assert b'Password' in response.data
     assert b'Login' in response.data
+    assert b'Forgot your password?' in response.data
 
 def test_valid_login_and_logout(test_client, register_default_user):
     """
@@ -93,3 +96,15 @@ def test_invalid_logout_not_logged_in(test_client):
     assert b'Recipie' in response.data
     assert b'Login' in response.data
     assert b'Please log in to access this page.' in response.data
+
+def test_get_password_reset_via_email_page(test_client):
+    """
+    GIVEN a Flask application configured for testing
+    WHEN the '/users/password_reset_via_email' page is requested (GET)
+    THEN check that the page is successfully returned
+    """
+    response = test_client.get('/users/password_reset_via_email', follow_redirects=True)
+    assert response.status_code == 200
+    assert b'Password Reset via Email' in response.data
+    assert b'Email' in response.data
+    assert b'Submit' in response.data

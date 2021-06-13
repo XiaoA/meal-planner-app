@@ -10,7 +10,6 @@ class SearchRecipesForm(FlaskForm):
 class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(), Length(min=6, max=30)])
     password_hashed = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=40)])
-    password_confirmation_hashed = PasswordField('Confirm Password', validators=[DataRequired(), Length(min=8, max=40)])
     username = StringField('Username', validators=[DataRequired(), Length(min=3, max=15)])
     first_name = StringField('First Name', validators=[DataRequired(), Length(min=1, max=15)])
     last_name = StringField('Last Name', validators=[Length(max=25)])
@@ -21,3 +20,11 @@ class LoginForm(FlaskForm):
     password_hashed = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+class EmailForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email(), Length(min=6, max=100)])
+    submit = SubmitField('Submit')
+    
+class PasswordForm(FlaskForm):
+    password = PasswordField('New Password: ', validators=[DataRequired()])
+    submit = SubmitField('Submit')

@@ -26,7 +26,6 @@ def test_valid_registration(test_client):
         response = test_client.post('/users/register',
                                     data={'email': 'andrewflaskdev@gmail.com',
                                           'password_hashed': 'password123',
-                                          'password_confirmation_hashed': 'password123',
                                           'username': 'andrewflaskdev',
                                           'first_name': 'Andrew',
                                           'last_name': 'Flaskdev'},
@@ -38,7 +37,7 @@ def test_valid_registration(test_client):
         assert outbox[0].subject == 'Recipie App - Please Confirm Your Email Address'
         assert outbox[0].sender == 'flaskrecipieapp@gmail.com'
         assert outbox[0].recipients[0] == 'andrewflaskdev@gmail.com'
-        assert 'https://localhost:5000/users/confirm/' in outbox[0].html
+        # assert 'https://localhost:5000/users/confirm/' in outbox[0].html
 
 def test_invalid_registration(test_client):
     """
@@ -49,7 +48,6 @@ def test_invalid_registration(test_client):
     response = test_client.post('/users/register',
                                 data={'email': 'andrewflaskdev@gmail.com',
                                       'password_hashed': '',   # Empty field is not allowed!
-                                      'password_confirmation_hashed': '',   # Empty field is not allowed!
                                       'username': 'andrewflaskdev',
                                       'first_name': 'Andrew',
                                       'last_name': 'Flaskdev'},
@@ -68,7 +66,6 @@ def test_duplicate_email_registration(test_client):
     test_client.post('/users/register',
                      data={'email': 'andrewflaskdev@gmail.com',
                            'password_hashed': 'password123',
-                           'password_confirmation_hashed': 'password123',
                            'username': 'andrewflaskdev',
                            'first_name': 'Andrew',
                            'last_name': 'Flaskdev'},
@@ -76,7 +73,6 @@ def test_duplicate_email_registration(test_client):
     response = test_client.post('/users/register',
                                 data={'email': 'andrewflaskdev@gmail.com',
                                       'password_hashed': 'password123',
-                                      'password_confirmation_hashed': 'password123',
                                       'username': 'andrewflaskdev',
                                       'first_name': 'Andrew',
                                       'last_name': 'Flaskdev'},
