@@ -129,3 +129,32 @@ def test_confirm_email_invalid(test_client):
     response = test_client.get('/users/confirm/bad_confirmation_link', follow_redirects=True)
     assert response.status_code == 200
     assert b'The confirmation link is invalid or has expired.' in response.data
+
+def test_get_resend_email_confirmation_logged_in(test_client, log_in_default_user):
+    """
+    GIVEN a Flask application configured for testing with the user logged in
+    WHEN the '/users/resend_email_confirmation' page is retrieved (GET)
+    THEN check that an email was queued up to send
+    """
+    with mail.record_messages() as outbox:
+        response = test_client.get('/users/resend_email_confirmation', follow_redirects=True)
+        assert response.status_code == 200
+        assert b'Email sent to confirm your email address.  Please check your email!' in response.data
+        assert len(outbox) == 1
+        assert outbox[0].subject == 'Recipie App - Confirm Your Email Address'
+        assert outbox[0].sender == 'flaskrecipieapp@gmail.com'
+        assert outbox[0].recipients[0] == 'andrewflaskdev@gmail.com'
+        assert 'http://localhost/users/confirm/' in outbox[0].html
+
+def test_get_resend_email_confirmation_not_logged_in(test_client):
+    """
+    GIVEN a Flask application configured for testing with the user not logged in
+    WHEN the '/users/resend_email_confirmation' page is retrieved (GET)
+    THEN check that an email was not queued up to send
+    """
+    with mail.record_messages() as outbox:
+        response = test_client.get('/users/resend_email_confirmation', follow_redirects=True)
+        assert response.status_code == 200
+        assert b'Email sent to confirm your email address.  Please check your email!' not in response.data
+        assert len(outbox) == 0
+        assert b'Please log in to access this page.' in response.data        

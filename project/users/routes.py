@@ -222,4 +222,16 @@ def change_password():
 
 @users_blueprint.route('/resend_email_confirmation')
 def resend_email_confirmation():
-    return '<h1>This Page Is Under Construction</h1>'
+    @copy_current_request_context
+    def send_email(email_message):
+        with current_app.app_context():
+            mail.send(email_message)
+
+    # Send an email to confirm the user's email address
+    message = generate_confirmation_email(current_user.email)
+    email_thread = Thread(target=send_email, args=[message])
+    email_thread.start()
+
+    flash('Email sent to confirm your email address.  Please check your email!', 'success')
+    current_app.logger.info(f'Email re-sent to confirm email address for user: {current_user.email}')
+    return redirect(url_for('users.user_profile'))
