@@ -201,3 +201,12 @@ def process_password_reset_token(token):
         return redirect(url_for('users.login'))
 
     return render_template('users/reset_password_with_token.html', form=form)
+
+@users_blueprint.route('/change_password', methods=['GET', 'POST'])
+def change_password():
+    return '<h1>This Page Is Under Construction</h1>'
+
+
+@users_blueprint.route('/resend_email_confirmation')
+def resend_email_confirmation():
+    return '<h1>This Page Is Under Construction</h1>'

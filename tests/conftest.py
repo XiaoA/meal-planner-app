@@ -66,7 +66,7 @@ def confirm_email_default_user(test_client, log_in_default_user):
     # Mark the user as having their email address confirmed
     user = User.query.filter_by(email='andrewflaskdev@gmail.com').first()
     user.email_confirmed = True
-    user.email_confirmed_on = datetime(2020, 7, 8)
+    user.email_confirmed_on = datetime(2021, 6, 13)
     database.session.add(user)
     database.session.commit()
 
