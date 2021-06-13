@@ -8,8 +8,18 @@
   <header>
     {% block header %}{% endblock %}
   </header>
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
+
+  <div class="messages">
+  <!-- flash messages - available types: success, info, error, message (default) -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash-message flash-message-{{ category }}">
+          <p>{{ message }}</p>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  </div>
   {% block content %}{% endblock %}
 </section>

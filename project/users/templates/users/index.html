@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Welcome to Recipie!{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<h2>Users</h2>
+{% for user in users %}
+<div>
+  <p> {{ user_profile.username }}</p>
+</div>
+{% endfor %}
+{% endblock %}
+

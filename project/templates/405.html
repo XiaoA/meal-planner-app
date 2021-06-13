@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="errorpage-title">Method Not Allowed (405)</h1>
+<div class="errorpage-section">
+  <h4>Sorry, the requested method is not allowed!</h4>
+  <h4><a href="{{ url_for('recipes.index') }}">Recipie</a></h4>
+</div>
+{% endblock %}
