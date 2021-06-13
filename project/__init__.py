@@ -29,7 +29,7 @@ def initialize_extensions(app):
     login.init_app(app)
     mail.init_app(app)
 
-    from project.models import User
+    from project.models import User, UserProfile
 
     @login.user_loader
     def load_user(user_id):

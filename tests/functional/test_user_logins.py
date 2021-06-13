@@ -21,11 +21,11 @@ def test_valid_login_and_logout(test_client, register_default_user):
     THEN check the response is valid
     """
     response = test_client.post('/users/login',
-                                data={'email': 'default_user@example.com',
+                                data={'email': 'andrewflaskdev@gmail.com',
                                       'password': 'password123'},
                                 follow_redirects=True)
     assert response.status_code == 200
-    assert b'Thanks for logging in, default_user@example.com!' in response.data
+    assert b'Thanks for logging in, andrewflaskdev@gmail.com!' in response.data
     assert b'Recipie' in response.data
     assert b'Please log in to access this page.' not in response.data
 
@@ -47,8 +47,8 @@ def test_invalid_login(test_client, register_default_user):
     THEN check an error message is returned to the user
     """
     response = test_client.post('/users/login',
-                                data={'email': 'default_user@example.com',
-                                      'password': 'wrong-password'},  # Incorrect!
+                                data={'email': 'andrewflaskdev@gmail.com',
+                                      'password': 'wrong-password'},
                                 follow_redirects=True)
     assert response.status_code == 200
     assert b'ERROR! Incorrect login credentials.' in response.data
@@ -61,7 +61,7 @@ def test_valid_login_when_logged_in_already(test_client, log_in_default_user):
     THEN check a warning is returned to the user (already logged in)
     """
     response = test_client.post('/users/login',
-                                data={'email': 'default_user@example.com',
+                                data={'email': 'andrewflaskdev@gmail.com',
                                       'password': 'password123'},
                                 follow_redirects=True)
     assert response.status_code == 200

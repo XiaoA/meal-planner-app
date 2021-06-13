@@ -1,3 +1,8 @@
+from project import mail
+from project.models import User, UserProfile
+from itsdangerous import URLSafeTimedSerializer
+from flask import current_app
+
 def test_user_profile_logged_in(test_client, log_in_default_user):
     """
     GIVEN a Flask application configured for testing and the default user logged in
@@ -8,7 +13,7 @@ def test_user_profile_logged_in(test_client, log_in_default_user):
     assert response.status_code == 200
     assert b'Recipie' in response.data
     assert b'User Profile' in response.data
-    assert b'Email: default_user@example.com' in response.data
+    assert b'Email: andrewflaskdev@gmail.com' in response.data
 
 def test_user_profile_not_logged_in(test_client):
     """
@@ -20,5 +25,5 @@ def test_user_profile_not_logged_in(test_client):
     assert response.status_code == 200
     assert b'Recipie' in response.data
     assert b'User Profile!' not in response.data
-    assert b'Email: default_user@example.com' not in response.data
+    assert b'Email: andrewflaskdev@gmail.com' not in response.data
     assert b'Please log in to access this page.' in response.data

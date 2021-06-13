@@ -2,7 +2,8 @@ import pytest
 from project import create_app, database
 from flask import current_app
 from project.models import User, UserProfile
-
+from datetime import datetime
+import requests
 
 @pytest.fixture(scope='module')
 def test_client():
@@ -26,15 +27,19 @@ def new_user():
 
     # Establish an application context before creating the User object
     with flask_app.app_context():
-        user = User('default_user@example.com', 'password', 'password')
+        user = User('andrewflaskdev@gmail.com', 'password123', 'password123')
         yield user
 
 @pytest.fixture(scope='module')
 def register_default_user(test_client):
     # Register the default user
     test_client.post('/users/register',
-                     data={'email': 'default_user@example.com',
-                           'password': 'password123'},
+                     data={'email': 'andrewflaskdev@gmail.com',
+                           'password_hashed': 'password123',
+                           'password_confirmation_hashed': 'password123',
+                           'username': 'abuckingham',
+                           'first_name': 'Andrew',
+                           'last_name': 'Buckingham'},
                      follow_redirects=True)
     return
 
@@ -42,7 +47,7 @@ def register_default_user(test_client):
 def log_in_default_user(test_client, register_default_user):
     # Log in the default user
     test_client.post('/users/login',
-                     data={'email': 'default_user@example.com',
+                     data={'email': 'andrewflaskdev@gmail.com',
                            'password': 'password123'},
                      follow_redirects=True)
 

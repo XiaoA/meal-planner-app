@@ -1,12 +1,20 @@
 from . import users_blueprint
-from flask import current_app, render_template, flash, abort, request, redirect, url_for, session, copy_current_request_context
+from flask import current_app, render_template, flash, abort, request, redirect, url_for, session, copy_current_request_context, escape
 import requests
 from forms import RegistrationForm, LoginForm
 from project.models import User, UserProfile
-from project import database
+from project import database, mail
 from sqlalchemy.exc import IntegrityError
 from flask_login import current_user, login_user, login_required, logout_user
+from urllib.parse import urlparse
 from threading import Thread
+from flask_mail import Message
+from itsdangerous import URLSafeTimedSerializer
+from itsdangerous.exc import BadSignature
+from datetime import datetime
+
+
+""" Routes """
 
 @users_blueprint.route('/users')
 def list_users():
@@ -31,17 +39,23 @@ def register():
                 database.session.add(new_user_profile)
                 database.session.commit()
 
-                flash(f'Thanks for registering, {new_user_profile.username}!')
+                print(form.email.data)
+                flash(f'Thanks for registering, {new_user_profile.username}! Please check your email to confirm your email address.', 'success')
+
                 current_app.logger.info(f'Registered new user: {form.username.data}!')
-                return redirect(url_for('recipes.index'))
+
+                # Set app_context for email confirmation
+                @copy_current_request_context
+                def send_email(message):
+                    with current_app.app_context():
+                        mail.send(message)
 
                 # Send an email confirming registration
-                msg = Message(subject='Registration - Recipie App',
-                              body='Thanks for registering with Recipie!',
-                              recipients=[form.email.data])
-                mail.send(msg)
-                return redirect(url_for('users.login'))
-            
+                msg = generate_confirmation_email(form.email.data)
+                email_thread = Thread(target=send_email, args=[msg])
+                email_thread.start()
+                
+                return redirect(url_for('recipes.index'))            
             except IntegrityError:
                 database.session.rollback()
                 flash(f'ERROR! Email ({form.email.data}) already exists.', 'error')
@@ -86,3 +100,38 @@ def logout():
 def user_profile():
     return render_template('users/profile.html')
 
+def generate_confirmation_email(user_email):
+    confirm_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+
+    confirm_url = url_for('users.confirm_email',
+                          token=confirm_serializer.dumps(user_email, salt='email-confirmation-salt'),
+                          _external=True)
+
+    return Message(subject='Recipie App - Please Confirm Your Email Address',
+                   html=render_template('users/email-confirmation.html', confirm_url=confirm_url),
+                   recipients=[user_email])
+
+@users_blueprint.route('/confirm/<token>')
+def confirm_email(token):
+    try:
+        confirm_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+        email = confirm_serializer.loads(token, salt='email-confirmation-salt', max_age=3600)
+    except BadSignature as e:
+        flash(f'The confirmation link is invalid or has expired.', 'error')
+        current_app.logger.info(f'Invalid or expired confirmation link received from IP address: {request.remote_addr}')
+        return redirect(url_for('users.login'))
+
+    user = User.query.filter_by(email=email).first()
+
+    if user.email_confirmed:
+        flash('Account already confirmed. Please login.', 'info')
+        current_app.logger.info(f'Confirmation link received for a confirmed user: {user.email}')
+    else:
+        user.email_confirmed = True
+        user.email_confirmed_on = datetime.now()
+        database.session.add(user)
+        database.session.commit()
+        flash('Thank you for confirming your email address!', 'success')
+        current_app.logger.info(f'Email address confirmed for: {user.email}')
+
+    return redirect(url_for('recipes.index'))

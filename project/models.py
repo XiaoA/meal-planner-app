@@ -1,6 +1,6 @@
 from project import database, bcrypt
 from flask import current_app
-
+from datetime import datetime
 
 class User(database.Model):
     """
@@ -15,9 +15,14 @@ class User(database.Model):
     __tablename__ = 'users'
 
     id = database.Column(database.Integer, primary_key=True)
-    email = database.Column(database.String, unique=True)
-    password_hashed = database.Column(database.String(264))
-    password_confirmation_hashed = database.Column(database.String(264))
+    email = database.Column(database.String, unique=True, nullable=False)
+    password_hashed = database.Column(database.String(264), nullable=False)
+    password_confirmation_hashed = database.Column(database.String(264), nullable=False)
+    registered_on = database.Column(database.DateTime, nullable=True)                  
+    email_confirmation_sent_on = database.Column(database.DateTime, nullable=True)     
+    email_confirmed = database.Column(database.Boolean, default=False)  
+    email_confirmed_on = database.Column(database.DateTime, nullable=True)             
+
     user_profiles = database.relationship('UserProfile', backref='user', lazy='dynamic')
 
     def __init__(self, email: str, password_plaintext: str, password_confirmation_plaintext: str):
@@ -26,7 +31,10 @@ class User(database.Model):
             password_plaintext, current_app.config.get('BCRYPT_LOG_ROUNDS')).decode('utf-8')
         self.password_confirmation_hashed = bcrypt.generate_password_hash(
             password_plaintext, current_app.config.get('BCRYPT_LOG_ROUNDS')).decode('utf-8')
-
+        self.registered_on = datetime.now()
+        self.email_confirmation_sent_on = datetime.now()
+        self.email_confirmed = False
+        self.email_confirmed_on = None
 
 
     def is_password_correct(self, password_plaintext: str):
