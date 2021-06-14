@@ -56,3 +56,14 @@ def test_user_profile_logged_in_email_confirmed(test_client, confirm_email_defau
     assert b'Account Actions' in response.data
     assert b'Change Password' in response.data
     assert b'Resend Email Confirmation' not in response.data
+
+def test_user_profiles_for_all_members(test_client):
+    """
+    GIVEN a Flask application with authenticated users
+    WHEN the '/users/index' page is requested (GET)
+    THEN check that authenticated users are visible
+    """
+    response = test_client.get('/users/index')
+    assert response.status_code == 200
+    assert b'andrewflaskdev' in response.data
+    assert b'Follow' in response.data

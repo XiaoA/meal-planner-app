@@ -101,6 +101,6 @@ class UserProfile(database.Model):
 
         u = self
         return f"<UserProfile {u.username} {u.first_name} {u.last_name}"
-
+    
 
     

@@ -27,10 +27,11 @@ def generate_password_reset_email(user_email):
                    html=render_template('users/email_password_reset.html', password_reset_url=password_reset_url),
                    recipients=[user_email])
 
-@users_blueprint.route('/users')
+@users_blueprint.route('/users/index', methods=['GET'])
 def list_users():
-    users = User.query.order_by(User.id).all()
-    return render_template('users/index.html', users=users)
+    # This should be refactored for better performance if site becomes popular
+    user_profiles = UserProfile.query.order_by(UserProfile.id).all()
+    return render_template('users/index.html', user_profiles=user_profiles)
 
 @users_blueprint.route('/users/register', methods=['GET', 'POST'])
 def register():
@@ -235,3 +236,4 @@ def resend_email_confirmation():
     flash('Email sent to confirm your email address.  Please check your email!', 'success')
     current_app.logger.info(f'Email re-sent to confirm email address for user: {current_user.email}')
     return redirect(url_for('users.user_profile'))
+
