@@ -93,7 +93,7 @@ def login():
                 login_user(user, remember=form.remember_me.data)
                 flash(f'Thanks for logging in, {current_user.email}!')
                 current_app.logger.info(f'Logged in user: {current_user.email}')
-                return redirect(url_for('recipes.index'))
+                return redirect(url_for('users.user_profile'))
 
         flash('ERROR! Incorrect login credentials.', 'error')
     return render_template('users/login.html', form=form)

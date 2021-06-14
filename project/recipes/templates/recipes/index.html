@@ -1,20 +1,24 @@
 {% extends 'base.html' %}
 
-{% block header %}
-<h1>{% block title %}Welcome to Recipie!{% endblock %}</h1>
-{% endblock %}
-
 {% block content %}
-<form action="/recipes/search-results" method="POST">
-  {{ form.hidden_tag() }}
-  {{ form.csrf_token }}
-  {% for field in form if field.widget.input_type != 'hidden' %}
-  <p>
-    {{ field.label }}
-    {{ field }}
-    <button>Submit</button>
-  </p>
-  {% endfor %}
-</form>
+<div class="p-5 mb-4 bg-light rounded-3">
+  <div class="container-fluid py-5 text-center">
+    <h1 class="display-5 fw-bold text-center">Welcome to Recipie!</h1>
+    <p class="text-center">Enter an ingredient to find sample recipies. Or create a free account!</p>
+    <form action="/recipes/search-results" method="POST">
+      {{ form.hidden_tag() }}
+      {{ form.csrf_token }}
+      {% for field in form if field.widget.input_type != 'hidden' %}
+      <p>
+        {{ field.label }}
+        {{ field }}
+        <button>Submit</button>
+      </p>
+      {% endfor %}
+    </form>
+    <a href="{{url_for('users.register')}}" class="btn btn-primary">Join for free!</a>
+    <a href="{{url_for('users.login')}}" class="btn btn-success">Member login</a>
+  </div>
+</div>
 {% endblock %}
 
