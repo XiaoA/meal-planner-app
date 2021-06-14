@@ -36,9 +36,10 @@ def show_recipes():
     session['ingredient'] = ingredient
     data = response.json()
     results = data['results']
+    
     current_app.logger.info(f"Searched for recipes containing: { ingredient }")
 
     flash(f"Searched for recipes with { ingredient }", 'success')    
-    return render_template('/recipes/search-results.html', data=data)
+    return render_template('/recipes/search-results.html', results=results)
 
 
