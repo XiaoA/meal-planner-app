@@ -56,3 +56,46 @@ def test_user_profile_logged_in_email_confirmed(test_client, confirm_email_defau
     assert b'Account Actions' in response.data
     assert b'Change Password' in response.data
     assert b'Resend Email Confirmation' not in response.data
+
+def test_user_profiles_for_all_members(test_client):
+    """
+    GIVEN a Flask application with authenticated users
+    WHEN the '/users/index' page is requested (GET)
+    THEN check that authenticated users are visible
+    """
+    response = test_client.get('/users')
+    assert response.status_code == 200
+    assert b'andrewflaskdev' in response.data
+    assert b'Follow' in response.data
+
+def test_navigation_bar_logged_in(test_client, log_in_default_user):
+    """
+    GIVEN a Flask application configured for testing
+    WHEN the '/' page is requested (GET) when the user is logged in
+    THEN check that the 'My Account', 'My Profile', 'My Recipe Box', and 'Logout' links are present
+    """
+    response = test_client.get('/')
+    assert response.status_code == 200
+    assert b'Recipie' in response.data
+    assert b'My Account' in response.data
+    assert b'My Profile' in response.data
+    assert b'My Recipe Box' in response.data
+    assert b'Logout' in response.data
+    assert b'Register' not in response.data
+    assert b'Login' not in response.data
+
+def test_navigation_bar_not_logged_in(test_client):
+    """
+    GIVEN a Flask application configured for testing
+    WHEN the '/' page is requested (GET) when the user is not logged in
+    THEN check that the 'Register' and 'Login' links are present
+    """
+    response = test_client.get('/')
+    assert response.status_code == 200
+    assert b'Recipie' in response.data
+    assert b'Register' in response.data
+    assert b'Login' not in response.data
+    assert b'My Account' not in response.data
+    assert b'My Profile' not in response.data
+    assert b'My Recipe Box' not in response.data
+    assert b'Logout' not in response.data

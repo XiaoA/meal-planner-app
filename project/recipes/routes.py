@@ -1,8 +1,10 @@
 from . import recipes_blueprint
 from flask import current_app, render_template, request, session, flash
 from project import create_app
+from flask_login import current_user
 import requests
 from forms import SearchRecipesForm
+from project.models import User, UserProfile
 from config import API_BASE_URL, API_KEY
 
 # Request Callbacks
@@ -36,10 +38,9 @@ def show_recipes():
     session['ingredient'] = ingredient
     data = response.json()
     results = data['results']
-    
+
     current_app.logger.info(f"Searched for recipes containing: { ingredient }")
 
     flash(f"Searched for recipes with { ingredient }", 'success')    
     return render_template('/recipes/search-results.html', results=results)
-
 

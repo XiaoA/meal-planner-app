@@ -2,7 +2,7 @@ from . import users_blueprint
 from flask import current_app, render_template, flash, abort, request, redirect, url_for, session, copy_current_request_context, escape
 import requests
 from forms import RegistrationForm, LoginForm, EmailForm, PasswordForm, ChangePasswordForm
-from project.models import User, UserProfile
+from project.models import User, UserProfile, Follows
 from project import database, mail
 from sqlalchemy.exc import IntegrityError
 from flask_login import current_user, login_user, login_required, logout_user
@@ -27,10 +27,13 @@ def generate_password_reset_email(user_email):
                    html=render_template('users/email_password_reset.html', password_reset_url=password_reset_url),
                    recipients=[user_email])
 
-@users_blueprint.route('/users')
-def list_users():
+@users_blueprint.route('/users', methods=['GET'])
+@login_required
+def show_all_users():
+    # This should be refactored for better performance 
     users = User.query.order_by(User.id).all()
-    return render_template('users/index.html', users=users)
+    user_profiles = UserProfile.query.order_by(UserProfile.id).all()
+    return render_template('users/index.html', users=users, user_profiles=user_profiles)
 
 @users_blueprint.route('/users/register', methods=['GET', 'POST'])
 def register():
@@ -65,13 +68,13 @@ def register():
                 email_thread = Thread(target=send_email, args=[msg])
                 email_thread.start()
                 
-                # return redirect(url_for('recipes.index'))
+                # return redirect(url_for('recipes.index))
                 return redirect(url_for('users.login'))            
             except IntegrityError:
                 database.session.rollback()
-                flash(f'ERROR! Email ({form.email.data}) already exists.', 'error')
+                flash(f'ERROR! Email ({form.email.data}) already exists.', 'danger')
         else:
-            flash(f"Error in form data!", 'error')
+            flash(f"Error in form data!", 'danger')
             
     return render_template('users/register.html', form=form)
 
@@ -79,7 +82,7 @@ def register():
 def login():
     # If the user is already logged in, don't allow them to try to log in again
     if current_user.is_authenticated:
-        flash('Already logged in!')
+        flash('Already logged in!', 'danger')
         current_app.logger.info(f'Duplicate login attempt by user: {current_user.email}')
         return redirect(url_for('recipes.index'))
 
@@ -89,13 +92,14 @@ def login():
         if form.validate_on_submit():
             user = User.query.filter_by(email=form.email.data).first()
             if user and user.is_password_correct(form.password_hashed.data):
+                user_id = user.id
                 # User's credentials have been validated, so log them in
                 login_user(user, remember=form.remember_me.data)
-                flash(f'Thanks for logging in, {current_user.email}!')
+                flash(f'Thanks for logging in, {current_user.email}!', 'success')
                 current_app.logger.info(f'Logged in user: {current_user.email}')
-                return redirect(url_for('users.user_profile'))
+                return redirect(url_for('users.show_user_profile', user_id=user_id))
 
-        flash('ERROR! Incorrect login credentials.', 'error')
+        flash('ERROR! Incorrect login credentials.', 'danger')
     return render_template('users/login.html', form=form)
 
 @users_blueprint.route('/users/logout')
@@ -103,13 +107,14 @@ def login():
 def logout():
     current_app.logger.info(f'Logged out user: {current_user.email}')
     logout_user()
-    flash('Goodbye!')
+    flash('Goodbye!', 'primary')
     return redirect(url_for('recipes.index'))
 
-@users_blueprint.route('/users/profile')
-@login_required
-def user_profile():
-    return render_template('users/profile.html')
+# @users_blueprint.route('/users/<int:user_profile_id>')
+# @login_required
+# def user_profile():
+#     user_profile = UserProfile.query.get_or_404(user_profile_id).limit(10)
+#     return render_template('users/profile.html', user_profile=user_profile)
 
 def generate_confirmation_email(user_email):
     confirm_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
@@ -128,7 +133,7 @@ def confirm_email(token):
         confirm_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
         email = confirm_serializer.loads(token, salt='email-confirmation-salt', max_age=3600)
     except BadSignature as e:
-        flash(f'The confirmation link is invalid or has expired.', 'error')
+        flash(f'The confirmation link is invalid or has expired.', 'danger')
         current_app.logger.info(f'Invalid or expired confirmation link received from IP address: {request.remote_addr}')
         return redirect(url_for('users.login'))
 
@@ -155,7 +160,7 @@ def password_reset_via_email():
         user = User.query.filter_by(email=form.email.data).first()
 
         if user is None:
-            flash('Error! Invalid email address!', 'error')
+            flash('Error! Invalid email address!', 'danger')
             return render_template('users/password_reset_via_email.html', form=form)
 
         if user.email_confirmed:
@@ -171,7 +176,7 @@ def password_reset_via_email():
 
             flash('Please check your email for a password reset link.', 'success')
         else:
-            flash('Your email address must be confirmed before attempting a password reset.', 'error')
+            flash('Your email address must be confirmed before attempting a password reset.', 'danger')
         return redirect(url_for('users.login'))
 
     return render_template('users/password_reset_via_email.html', form=form)
@@ -182,7 +187,7 @@ def process_password_reset_token(token):
         password_reset_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
         email = password_reset_serializer.loads(token, salt='password-reset-salt', max_age=3600)
     except BadSignature as e:
-        flash('The password reset link is invalid or has expired.', 'error')
+        flash('The password reset link is invalid or has expired.', 'danger')
         return redirect(url_for('users.login'))
 
     form = PasswordForm()
@@ -191,7 +196,7 @@ def process_password_reset_token(token):
         user = User.query.filter_by(email=email).first()
 
         if user is None:
-            flash('Invalid email address!', 'error')
+            flash('Invalid email address!', 'danger')
             return redirect(url_for('users.login'))
 
         user.set_password(form.password.data)
@@ -235,3 +240,68 @@ def resend_email_confirmation():
     flash('Email sent to confirm your email address.  Please check your email!', 'success')
     current_app.logger.info(f'Email re-sent to confirm email address for user: {current_user.email}')
     return redirect(url_for('users.user_profile'))
+
+### Following
+
+@users_blueprint.route('/users/<int:user_id>')
+@login_required
+def show_user_profile(user_id):
+    user = User.query.get_or_404(user_id)
+    return render_template('users/profile.html', user=user)
+
+
+@users_blueprint.route('/users/<int:user_id>/following')
+@login_required
+def show_following(user_id):
+    """Show list of people this user is following."""
+
+    if current_user.is_authenticated == False:
+        flash("Access unauthorized.", "danger")
+        return redirect("users.login")
+
+    user = User.query.get_or_404(user_id)
+    return render_template('users/following.html', user=user)
+
+@users_blueprint.route('/users/follow/<int:follow_id>', methods=['POST'])
+@login_required
+def follow_user(follow_id):
+    """Current user follows another user."""    
+
+    if current_user.is_authenticated == False:
+        flash("Access unauthorized.", "danger")
+        return redirect("user.login")
+
+    followed_user = User.query.get_or_404(follow_id)
+    current_user.following.append(followed_user)
+    database.session.commit()
+
+    return redirect(f"/users/{current_user.id}/following")
+
+@users_blueprint.route('/users/<int:user_id>/followers')
+@login_required
+def users_followers(user_id):
+    """Show list of followers of this user."""
+
+    if current_user.is_authenticated == False:
+    # if not current_user:
+        flash("Access unauthorized.", "danger")
+        return redirect("users.login")
+
+    user = User.query.get_or_404(user_id)
+    return render_template('users/followers.html', user=user)
+
+
+@users_blueprint.route('/users/stop-following/<int:follow_id>', methods=['POST'])
+@login_required
+def stop_following(follow_id):
+    """Have currently-logged-in-user stop following this user."""
+
+    if not current_user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    followed_user = User.query.get(follow_id)
+    current_user.following.remove(followed_user)
+    database.session.commit()
+
+    return redirect(f"/users/{current_user.id}/following")
