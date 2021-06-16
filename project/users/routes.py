@@ -82,7 +82,7 @@ def register():
 def login():
     # If the user is already logged in, don't allow them to try to log in again
     if current_user.is_authenticated:
-        flash('Already logged in!')
+        flash('Already logged in!', 'danger')
         current_app.logger.info(f'Duplicate login attempt by user: {current_user.email}')
         return redirect(url_for('recipes.index'))
 
@@ -244,12 +244,14 @@ def resend_email_confirmation():
 ### Following
 
 @users_blueprint.route('/users/<int:user_id>')
+@login_required
 def show_user_profile(user_id):
     user = User.query.get_or_404(user_id)
     return render_template('users/profile.html', user=user)
 
 
 @users_blueprint.route('/users/<int:user_id>/following')
+@login_required
 def show_following(user_id):
     """Show list of people this user is following."""
 
@@ -261,6 +263,7 @@ def show_following(user_id):
     return render_template('users/following.html', user=user)
 
 @users_blueprint.route('/users/follow/<int:follow_id>', methods=['POST'])
+@login_required
 def follow_user(follow_id):
     """Current user follows another user."""    
 
@@ -275,6 +278,7 @@ def follow_user(follow_id):
     return redirect(f"/users/{current_user.id}/following")
 
 @users_blueprint.route('/users/<int:user_id>/followers')
+@login_required
 def users_followers(user_id):
     """Show list of followers of this user."""
 
@@ -288,6 +292,7 @@ def users_followers(user_id):
 
 
 @users_blueprint.route('/users/stop-following/<int:follow_id>', methods=['POST'])
+@login_required
 def stop_following(follow_id):
     """Have currently-logged-in-user stop following this user."""
 
