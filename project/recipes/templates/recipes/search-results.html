@@ -5,12 +5,13 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-  <div class="row row-cols-1 row-cols-md-2 g-4">
-    {% for result in results %}
-    <div class="col">
+<div class="container-fluid">
+  <div class="row">
+  {% for result in results %}
+
+    <div class="col-3">
       <div class="card" style="width: 18rem;">
-        <img src="https://spoonacular.com/recipeimages/{{result.id}}-240x150.jpg" class="card-img-top" alt="...">
+        <img src="https://spoonacular.com/recipeImages/{{result['id']}}-556x370.jpg" class="card-img-top" alt="...">
         <div class="card-body">
           <h5 class="card-title text-center">{{ result.name }}</h5>
           <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -20,15 +21,16 @@
           <a href="#" class="card-link">Like Recipe</a>
         </div>
       </div>
-      {% endfor %}
     </div>
+  {% endfor %}
   </div>
 </div>
 
 
 
-  <div class="container">
-    <h2>Sign up!</h2>
-    <p>Register for a free account to create search for more recipes, save them, and join our community!</p>
-  </div>
-  {% endblock %}
+
+<div class="container">
+  <h2>Sign up!</h2>
+  <p>Register for a free account to create search for more recipes, save them, and join our community!</p>
+</div>
+{% endblock %}
