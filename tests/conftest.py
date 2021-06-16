@@ -61,6 +61,41 @@ def log_in_default_user(test_client, register_default_user):
     # Log out the default user
     test_client.get('/users/logout', follow_redirects=True)
 
+""" Create secondary user fixture to test follower/following relationships """
+@pytest.fixture(scope='module')
+def secondary_user():
+    flask_app = create_app()
+    flask_app.config.from_object('config.TestingConfig')
+
+    # Establish an application context before creating the User object
+    with flask_app.app_context():
+        user = User('secondary_user@example.com', 'password123')
+        yield user
+
+@pytest.fixture(scope='module')
+def register_secondary_user(test_client):
+    # Register the default user
+    test_client.post('/users/register',
+                     data={'email': 'secondary_user@example.com',
+                           'password_hashed': 'password123',
+                           'username': 'secondary',
+                           'first_name': 'Secondary',
+                           'last_name': 'User'},
+                     follow_redirects=True)
+    return
+
+@pytest.fixture(scope='function')
+def log_in_secondary_user(test_client, register_secondary_user):
+    # Log in the default user
+    user = test_client.post('/users/login',
+                            data={'email': 'secondary_user@example.com',
+                                  'password': 'password123'},
+                            follow_redirects=True)
+
+    yield
+
+    # Log out the default user
+    test_client.get('/users/logout', follow_redirects=True)
 
 @pytest.fixture(scope='function')
 def confirm_email_default_user(test_client, log_in_default_user):

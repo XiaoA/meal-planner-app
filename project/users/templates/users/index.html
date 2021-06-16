@@ -1,24 +1,44 @@
 {% extends 'base.html' %}
 
+{% block header %}
+<h1 class="text-center">{% block title %}Users{% endblock %}</h1>
+{% endblock %}
+
 {% block content %}
-<h2 class="text-center">Users</h2>
-<div class="container">
-  <div class="row row-cols-1 row-cols-md-2 g-4">
+<div class="container-fluid">
+  <div class="row">
     {% for user_profile in user_profiles %}
-    <div class="col">
+    <div class="col-3">
       <div class="card" style="width: 18rem;">
+        <img src="https://www.fillmurray.com/500/500" class="card-img-top" alt="Fill Murray">
         <div class="card-body">
-          <h5 class="card-title text-center">{{ user_profile.username }}</h5>
+          <h5 class="card-title">{{ user_profile.username }}</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
         </div>
-        <div class="card-body text-center">
-          <a href="#" class="card-link">Follow</a>
+        <div class="card-body">
+          <a href="#" class="btn btn-primary">View Profile</a>
+
+          {% for user in users %}
+
+          {% if current_user.is_following(user) %}
+          <form method="POST" action="/users/stop-following/{{ user.id }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>  
+            <button class="btn btn-danger">Unfollow</button>
+
+          </form>
+          {% else %}
+          <form method="POST" action="/users/follow/{{ user.id }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <button class="btn btn-success">Follow</button>
+          </form>
+          {% endif %}
+
+          {% endfor %}
         </div>
       </div>
-      {% endfor %}
     </div>
+    {% endfor %}
+    {% endblock %}
   </div>
 </div>
-
-
-{% endblock %}
 
