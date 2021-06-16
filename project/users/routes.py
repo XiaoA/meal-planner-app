@@ -95,7 +95,7 @@ def login():
                 user_id = user.id
                 # User's credentials have been validated, so log them in
                 login_user(user, remember=form.remember_me.data)
-                flash(f'Thanks for logging in, {current_user.email}!')
+                flash(f'Thanks for logging in, {current_user.email}!', 'success')
                 current_app.logger.info(f'Logged in user: {current_user.email}')
                 return redirect(url_for('users.show_user_profile', user_id=user_id))
 
@@ -107,7 +107,7 @@ def login():
 def logout():
     current_app.logger.info(f'Logged out user: {current_user.email}')
     logout_user()
-    flash('Goodbye!')
+    flash('Goodbye!', 'primary')
     return redirect(url_for('recipes.index'))
 
 # @users_blueprint.route('/users/<int:user_profile_id>')
