@@ -285,3 +285,18 @@ def users_followers(user_id):
 
     user = User.query.get_or_404(user_id)
     return render_template('users/followers.html', user=user)
+
+
+@users_blueprint.route('/users/stop-following/<int:follow_id>', methods=['POST'])
+def stop_following(follow_id):
+    """Have currently-logged-in-user stop following this user."""
+
+    if not current_user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    followed_user = User.query.get(follow_id)
+    current_user.following.remove(followed_user)
+    database.session.commit()
+
+    return redirect(f"/users/{current_user.id}/following")

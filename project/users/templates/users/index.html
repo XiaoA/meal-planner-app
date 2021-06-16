@@ -8,8 +8,9 @@
 <div class="container-fluid">
   <div class="row">
     {% for user_profile in user_profiles %}
-    <div class="col-3">
-      <div class="card" style="width: 18rem;">
+
+    <div class="col-4">
+      <div class="card" style="width: 20rem;">
         <img src="https://www.fillmurray.com/500/500" class="card-img-top" alt="Fill Murray">
         <div class="card-body">
           <h5 class="card-title">{{ user_profile.username }}</h5>
@@ -24,19 +25,21 @@
           <form method="POST" action="/users/stop-following/{{ user.id }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>  
             <button class="btn btn-danger">Unfollow</button>
-
           </form>
           {% else %}
+          
           <form method="POST" action="/users/follow/{{ user.id }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <button class="btn btn-success">Follow</button>
           </form>
           {% endif %}
+     
 
           {% endfor %}
         </div>
       </div>
     </div>
+
     {% endfor %}
     {% endblock %}
   </div>
