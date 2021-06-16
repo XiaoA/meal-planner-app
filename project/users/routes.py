@@ -72,9 +72,9 @@ def register():
                 return redirect(url_for('users.login'))            
             except IntegrityError:
                 database.session.rollback()
-                flash(f'ERROR! Email ({form.email.data}) already exists.', 'error')
+                flash(f'ERROR! Email ({form.email.data}) already exists.', 'danger')
         else:
-            flash(f"Error in form data!", 'error')
+            flash(f"Error in form data!", 'danger')
             
     return render_template('users/register.html', form=form)
 
@@ -99,7 +99,7 @@ def login():
                 current_app.logger.info(f'Logged in user: {current_user.email}')
                 return redirect(url_for('users.show_user_profile', user_id=user_id))
 
-        flash('ERROR! Incorrect login credentials.', 'error')
+        flash('ERROR! Incorrect login credentials.', 'danger')
     return render_template('users/login.html', form=form)
 
 @users_blueprint.route('/users/logout')
@@ -133,7 +133,7 @@ def confirm_email(token):
         confirm_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
         email = confirm_serializer.loads(token, salt='email-confirmation-salt', max_age=3600)
     except BadSignature as e:
-        flash(f'The confirmation link is invalid or has expired.', 'error')
+        flash(f'The confirmation link is invalid or has expired.', 'danger')
         current_app.logger.info(f'Invalid or expired confirmation link received from IP address: {request.remote_addr}')
         return redirect(url_for('users.login'))
 
@@ -160,7 +160,7 @@ def password_reset_via_email():
         user = User.query.filter_by(email=form.email.data).first()
 
         if user is None:
-            flash('Error! Invalid email address!', 'error')
+            flash('Error! Invalid email address!', 'danger')
             return render_template('users/password_reset_via_email.html', form=form)
 
         if user.email_confirmed:
@@ -176,7 +176,7 @@ def password_reset_via_email():
 
             flash('Please check your email for a password reset link.', 'success')
         else:
-            flash('Your email address must be confirmed before attempting a password reset.', 'error')
+            flash('Your email address must be confirmed before attempting a password reset.', 'danger')
         return redirect(url_for('users.login'))
 
     return render_template('users/password_reset_via_email.html', form=form)
@@ -187,7 +187,7 @@ def process_password_reset_token(token):
         password_reset_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
         email = password_reset_serializer.loads(token, salt='password-reset-salt', max_age=3600)
     except BadSignature as e:
-        flash('The password reset link is invalid or has expired.', 'error')
+        flash('The password reset link is invalid or has expired.', 'danger')
         return redirect(url_for('users.login'))
 
     form = PasswordForm()
@@ -196,7 +196,7 @@ def process_password_reset_token(token):
         user = User.query.filter_by(email=email).first()
 
         if user is None:
-            flash('Invalid email address!', 'error')
+            flash('Invalid email address!', 'danger')
             return redirect(url_for('users.login'))
 
         user.set_password(form.password.data)
