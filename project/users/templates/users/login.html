@@ -4,34 +4,27 @@
 <div class="form-wrap">
   <h1 class="form-heading">Login</h1>
 
-  <form method="post">
+  <form method="POST">
     {{ form.csrf_token }}
 
-    <div class="field">
-      {{ form.email.label }}
-      {{ form.email }}
+      {{ form.email.label(class="form-label") }}
+      {{ form.email(class="form-control") }}
       {% for error in form.email.errors %}
-        <span class="validation-error">[{{ error }}]</span>
+      <span class="validation-error">[{{ error }}]</span>
       {% endfor %}
-    </div>
 
-    <div class="field">
-      {{ form.password_hashed.label }}
-      {{ form.password_hashed }}
+      {{ form.password_hashed.label(class="form-label") }}
+      {{ form.password_hashed(class="form-control") }}
       {% for error in form.password_hashed.errors %}
-        <span class="validation-error">[{{ error }}]</span>
+      <span class="validation-error">[{{ error }}]</span>
       {% endfor %}
-    </div>
 
-    <div class="field checkbox">
-      {{ form.remember_me.label }}
-      {{ form.remember_me() }}
-    </div>
-
-    <div class="field">
-      {{ form.submit() }}
-    </div>
-
+      {{ form.remember_me(class="form-check-input") }}
+      {{ form.remember_me.label(class="form-check-label") }}
+      <br />
+      
+      {{ form.submit(class="btn btn-primary") }}
+    
     <div class="forgot-password">
       <p><em><a href="{{ url_for('users.password_reset_via_email') }}">Forgot your password?</a></em></p>
     </div>
