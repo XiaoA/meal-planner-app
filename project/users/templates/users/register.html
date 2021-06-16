@@ -2,56 +2,44 @@
 
 
 {% block content %}
-<div class="form-wrap">
-  <h1>User Registration</h1>
+    <div class="form-wrap">
+      <h1>User Registration</h1>
 
-  <form method="post">
-    {{ form.csrf_token }}
+      <form method="post">
+        {{ form.csrf_token }}
 
-    <div class="field">
-      {{ form.email.label }}
-      {{ form.email }}
-      {% for error in form.email.errors %}
+        {{ form.email.label(class="form-label") }}
+        {{ form.email(class="form-control") }}
+        {% for error in form.email.errors %}
         <p class="validation-error">[{{ error }}]</p>
-      {% endfor %}
-    </div>
+        {% endfor %}
 
-    <div class="field">
-      {{ form.password_hashed.label }}
-      {{ form.password_hashed }}
-      {% for error in form.password_hashed.errors %}
+        {{ form.password_hashed.label(class="form-label") }}
+        {{ form.password_hashed(class="form-control") }}
+        {% for error in form.password_hashed.errors %}
         <p class="validation-error">[{{ error }}]</p>
-      {% endfor %}
-    </div>
+        {% endfor %}
+        
+        {{ form.username.label(class="form-label") }}
+        {{ form.username(class="form-control") }}
+        {% for error in form.username.errors %}
+        <p class="validation-error">[{{ error }}]</p>
+        {% endfor %}
+        
+        {{ form.first_name.label(class="form-label") }}
+        {{ form.first_name(class="form-control") }}
+        {% for error in form.first_name.errors %}
+        <p class="validation-error">[{{ error }}]</p>
+        {% endfor %}
+        
+        {{ form.last_name.label(class="form-label") }}
+        {{ form.last_name(class="form-control") }}
+        {% for error in form.last_name.errors %}
+        <p class="validation-error">[{{ error }}]</p>
+        {% endfor %}
+        
 
-    <div class="field">
-      {{ form.username.label }}
-      {{ form.username }}
-      {% for error in form.username.errors %}
-      <p class="validation-error">[{{ error }}]</p>
-      {% endfor %}
+        {{ form.submit(class="btn btn-primary") }}
+      </form>
     </div>
-
-    <div class="field">
-      {{ form.first_name.label }}
-      {{ form.first_name }}
-      {% for error in form.first_name.errors %}
-      <p class="validation-error">[{{ error }}]</p>
-      {% endfor %}
-    </div>
-
-    <div class="field">
-      {{ form.last_name.label }}
-      {{ form.last_name }}
-      {% for error in form.last_name.errors %}
-      <p class="validation-error">[{{ error }}]</p>
-      {% endfor %}
-    </div>
-
-    <div class="field">
-      <button type="submit">Submit</button>
-    </div>
-  </form>
-</div>
 {% endblock %}
-
