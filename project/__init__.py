@@ -64,8 +64,9 @@ def register_blueprints(app):
 
 def create_app():
     # Create the Flask app
-    app = Flask(__name__)
 
+    app = Flask(__name__)
+    
     # Configure the Flask app
     config_type = os.getenv('CONFIG_TYPE', default='config.DevelopmentConfig')
     app.config.from_object(config_type)
