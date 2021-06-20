@@ -7,6 +7,17 @@ class SearchRecipesForm(FlaskForm):
     query = StringField("Recipe Search", validators=[InputRequired(message="Search term can't be blank.")])
     apiKey = API_KEY
 
+class SearchCuisineForm(FlaskForm):
+    cuisine = SelectField("Search by Cuisine", choices=[
+        ('African'), ('American'), ('British'), ('Cajun'),
+        ('Caribbean'), ('Chinese'), ('Eastern European'),
+        ('European'), ('French'), ('German'), ('Greek'), ('Indian'),
+        ('Irish'), ('Italian'), ('Japanese'), ('Jewish'), ('Korean'),
+        ('Latin American'), ('Mediterranean'), ('Mexican'),
+        ('Middle Eastern'), ('Nordic'), ('Southern'), ('Spanish'),
+        ('Thai'), ('Vietnamese')])
+    apiKey = API_KEY
+
 class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(), Length(min=6, max=30)])
     password_hashed = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=40)])
