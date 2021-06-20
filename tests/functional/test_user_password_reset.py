@@ -32,7 +32,7 @@ def test_post_password_reset_via_email_page_valid(test_client, confirm_email_def
         assert outbox[0].sender == 'flaskrecipieapp@gmail.com'
         assert outbox[0].recipients[0] == 'andrewflaskdev@gmail.com'
         assert 'Questions? Comments?' in outbox[0].html
-        assert 'flaskreceipieapp@gmail.com' in outbox[0].html
+        assert 'flaskrecipieapp@gmail.com' in outbox[0].html
         assert 'http://localhost/users/password_reset_via_token/' in outbox[0].html    
 
 def test_post_password_reset_via_email_page_invalid(test_client):
@@ -43,11 +43,13 @@ def test_post_password_reset_via_email_page_invalid(test_client):
     """
     with mail.record_messages() as outbox:
         response = test_client.post('/users/password_reset_via_email',
-                                    data={'email': 'andrewflaskdev@gmail.com'},
+                                    data={'email': 'andrewflaskdev'},
                                     follow_redirects=True)
         assert response.status_code == 200
+        print(response.data)
         assert len(outbox) == 0
-        assert b'Error! Invalid email address!' in response.data
+        assert b'validation-error' in response.data
+        assert b'Invalid email address.' in response.data
 
 def test_post_password_reset_via_email_page_not_confirmed(test_client, log_in_default_user):
     """
@@ -156,7 +158,7 @@ def test_post_change_password_logged_in_valid_current_password(test_client, log_
                                       'new_password': 'newpassword123'},
                                 follow_redirects=True)
     assert response.status_code == 200
-    assert b'Password has been updated!' in response.data
+    assert b'Your password has been updated!' in response.data
     user = User.query.filter_by(email='andrewflaskdev@gmail.com').first()
     assert not user.is_password_correct('password123')
     assert user.is_password_correct('newpassword123')

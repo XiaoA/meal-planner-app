@@ -37,7 +37,7 @@ def test_valid_registration(test_client):
         assert outbox[0].subject == 'Recipie App - Please Confirm Your Email Address'
         assert outbox[0].sender == 'flaskrecipieapp@gmail.com'
         assert outbox[0].recipients[0] == 'andrewflaskdev@gmail.com'
-        # assert 'https://localhost:5000/users/confirm/' in outbox[0].html
+        # assert 'http://localhost:5000/users/confirm/' in outbox[0].html
 
 def test_invalid_registration(test_client):
     """
@@ -141,7 +141,7 @@ def test_get_resend_email_confirmation_logged_in(test_client, log_in_default_use
         assert response.status_code == 200
         assert b'Email sent to confirm your email address.  Please check your email!' in response.data
         assert len(outbox) == 1
-        assert outbox[0].subject == 'Recipie App - Confirm Your Email Address'
+        assert outbox[0].subject == 'Recipie App - Please Confirm Your Email Address'
         assert outbox[0].sender == 'flaskrecipieapp@gmail.com'
         assert outbox[0].recipients[0] == 'andrewflaskdev@gmail.com'
         assert 'http://localhost/users/confirm/' in outbox[0].html
@@ -157,4 +157,4 @@ def test_get_resend_email_confirmation_not_logged_in(test_client):
         assert response.status_code == 200
         assert b'Email sent to confirm your email address.  Please check your email!' not in response.data
         assert len(outbox) == 0
-        assert b'Please log in to access this page.' in response.data        
+        assert b'Please log in to access this page.' in response.data
