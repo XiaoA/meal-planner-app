@@ -16,7 +16,7 @@ def test_get_registration_page(test_client):
     assert b'Email' in response.data
     assert b'Password' in response.data
 
-def test_first_user_follows_second_user(test_client, login_default_user):
+def test_first_user_follows_second_user(test_client, log_in_default_user):
     """
     GIVEN a Flask application with two autheticated users
     WHEN the '/users/follow' page is requested (POST)
@@ -27,7 +27,7 @@ def test_first_user_follows_second_user(test_client, login_default_user):
     assert b'Recipie' in response.data
     assert b'You are now following secondaryuser' in response.data
 
-def test_first_user_unfollows_second_user(test_client, login_default_user):
+def test_first_user_unfollows_second_user(test_client, log_in_default_user):
     """
     GIVEN a Flask application with two autheticated users
     WHEN the '/users/unfollow' page is requested (POST)

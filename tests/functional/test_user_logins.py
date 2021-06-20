@@ -28,7 +28,7 @@ def test_valid_login_and_logout(test_client, register_default_user):
                                       'password': 'password123'},
                                 follow_redirects=True)
     assert response.status_code == 200
-    assert b'Thanks for logging in, andrewflaskdev@gmail.com!' in response.data
+    assert b'Thanks for logging in, andrewflaskdev@gmail.com!'
     assert b'Recipie' in response.data
     assert b'Please log in to access this page.' not in response.data
 
@@ -39,9 +39,10 @@ def test_valid_login_and_logout(test_client, register_default_user):
     """
     response = test_client.get('/users/logout', follow_redirects=True)
     assert response.status_code == 200
-    assert b'Goodbye!' in response.data
     assert b'Recipie' in response.data
-    assert b'Please log in to access this page.' not in response.data
+    assert b'Register' in response.data
+    assert b'Login' in response.data
+    assert b'Please log in to access this page.' in response.data
 
 def test_invalid_login(test_client, register_default_user):
     """

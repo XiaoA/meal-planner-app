@@ -1,11 +1,20 @@
 import pytest
 from project import create_app, database
 from flask import current_app
-from project.models import User, UserProfile
+from project.models import User, UserProfile, Follows
 from datetime import datetime
 import requests
 
+@pytest.fixture(scope='module')
+def new_user():
+    flask_app = create_app()
+    flask_app.config.from_object('config.TestingConfig')
 
+    # Establish an application context before creating the User object
+    with flask_app.app_context():
+        user = User('andrewflaskdev@gmail.com', 'password123')
+        yield user
+        
 @pytest.fixture(scope='module')
 def test_client():
     flask_app = create_app()
@@ -26,15 +35,7 @@ def test_client():
         with flask_app.app_context():
             database.drop_all()
 
-@pytest.fixture(scope='module')
-def new_user():
-    flask_app = create_app()
-    flask_app.config.from_object('config.TestingConfig')
 
-    # Establish an application context before creating the User object
-    with flask_app.app_context():
-        user = User('andrewflaskdev@gmail.com', 'password123')
-        yield user
 
 @pytest.fixture(scope='module')
 def register_default_user(test_client):
@@ -51,11 +52,10 @@ def register_default_user(test_client):
 @pytest.fixture(scope='function')
 def log_in_default_user(test_client, register_default_user):
     # Log in the default user
-    user = test_client.post('/users/login',
-                            data={'email': 'andrewflaskdev@gmail.com',
-                                  'password': 'password123'},
-                            follow_redirects=True)
-
+    test_client.post('/users/login',
+                     data={'email': 'andrewflaskdev@gmail.com',
+                           'password_hashed': 'password123'},
+                     follow_redirects=True)
     yield
 
     # Log out the default user
@@ -89,7 +89,7 @@ def log_in_secondary_user(test_client, register_secondary_user):
     # Log in the default user
     user = test_client.post('/users/login',
                             data={'email': 'secondary_user@example.com',
-                                  'password': 'password123'},
+                                  'password_hashed': 'password123'},
                             follow_redirects=True)
 
     yield
