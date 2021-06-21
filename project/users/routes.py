@@ -119,9 +119,6 @@ def login():
                 return render_template('users/profile.html', user=user)
 
         flash('ERROR! Incorrect login credentials.', 'danger')
-        return redirect(url_for('users.show_user_profile', user_id=current_user.id))
-
-        flash('ERROR! Incorrect login credentials.', 'danger')
     return render_template('users/login.html', form=form)
 
 @users_blueprint.route('/users/logout')
