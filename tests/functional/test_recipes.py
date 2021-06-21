@@ -6,7 +6,9 @@ import requests
 import json
 
 """ Helpers """
-class MockSuccessResponse(object):
+
+# Cuisine Search
+class MockCuisineSuccessResponse(object):
     def __init__(self, url):
         self.status_code = 200
         self.url = url
@@ -15,19 +17,32 @@ class MockSuccessResponse(object):
     def json(self):
         return {
             "results": {
-                 "id": '652078',
-                 "title": "Miso Soup With Thin Noodles",
-                 "image": "https://spoonacular.com/recipeImages/652078-312x231.jpg",
-                }
+                "id": '652078',
+                "title": "Miso Soup With Thin Noodles",
+                "image": "https://spoonacular.com/recipeImages/652078-312x231.jpg",
             }
+        }
 
-    
+class MockDietSuccessResponse(object):
+    def __init__(self, url):
+        self.status_code = 200
+        self.url = url
+        self.headers = {'key': 'val'}
+
+    def json(self):
+        return {
+            "results": {
+                "id": '646512',
+                "title": "Salmon Caesar Salad",
+                "image": "https://spoonacular.com/recipeImages/646512-312x231.jpg",
+            }
+        }
 
 class MockFailedResponse(object):
     def __init__(self, url):
         self.status_code = 404
         self.url = url
-        self.headers = {'blaa': '1234'}
+        self.headers = {'key': 'value'}
 
     def json(self):
         return {'error': 'bad'}   
@@ -41,7 +56,7 @@ def test_cuisine_search_monkeypatch_get_success(monkeypatch):
     THEN check the HTTP response
     """
     def mock_get(url):
-        return MockSuccessResponse(url)
+        return MockCuisineSuccessResponse(url)
 
     url = f'https://api.spoonacular.com/recipes/complexSearch?apiKey={API_KEY}&cuisine=Japanese'
     monkeypatch.setattr(requests, 'get', mock_get)
@@ -67,7 +82,46 @@ def test_cuisine_searchmonkeypatch_get_failure(monkeypatch):
     print(r.json())
     assert r.status_code == 404
     assert r.url == url
+    assert 'bad' in r.json()['error']
+
+def test_diet_search_monkeypatch_get_success(monkeypatch):
+    """
+    GIVEN a Flask application and a monkeypatched version of requests.get()
+    WHEN the HTTP response is set to successful
+    THEN check the HTTP response
+    """
+    def mock_get(url):
+        return MockDietSuccessResponse(url)
+
+    url = f'https://api.spoonacular.com/recipes/complexSearch?apiKey={API_KEY}&diet=Ketogenic'
+    monkeypatch.setattr(requests, 'get', mock_get)
+    request = requests.get(url)
+    assert request.status_code == 200
+    assert request.url == url
+    assert '646512' in request.json()['results']['id']
+    assert 'Salmon Caesar Salad' in request.json()['results']['title']
+    assert "https://spoonacular.com/recipeImages/646512-312x231.jpg" in request.json()['results']["image"]
+
+def test_diet_searchmonkeypatch_get_failure(monkeypatch):
+    """
+    GIVEN a Flask application and a monkeypatched version of requests.get()
+    WHEN the HTTP response is set to failed
+    THEN check the HTTP response
+    """
+    def mock_get(url):
+        return MockFailedResponse(url)
+
+    url = f'https://api.spoonacular.com/recipes/complexSearch?apiKey={API_KEY}&diet=Ketogenic'
+    monkeypatch.setattr(requests, 'get', mock_get)
+    r = requests.get(url)
+    print(r.json())
+    assert r.status_code == 404
+    assert r.url == url
     assert 'bad' in r.json()['error']    
+
+
+
+
 
 # def test_show_recipes(test_client):
 #                 """

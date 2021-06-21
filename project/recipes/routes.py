@@ -3,7 +3,7 @@ from flask import current_app, render_template, request, session, flash
 from project import create_app
 from flask_login import current_user
 import requests
-from forms import SearchRecipesForm, SearchCuisineForm
+from forms import SearchRecipesForm, SearchCuisineForm, SearchDietForm
 from project.models import User, UserProfile
 from config import API_BASE_URL, API_KEY
 
@@ -25,11 +25,38 @@ def recipes_teardown_request(error=None):
 
 """ Recipe Index Routes """
 @recipes_blueprint.route('/', methods=['GET', 'POST'])
+# Ingredient Search
 def index():
     form = SearchRecipesForm()
     return render_template('recipes/index.html', form=form)
 
+# Cuisine Search
+def search_cuisine_recipes():
+    """
+    Returns a list of supported cuisines, including: 
+
+    [African, American, British, Cajun, Caribbean, Chinese, Eastern
+    European, European, French, German, Greek, Indian, Irish, Italian,
+    Japanese, Jewish, Korean, Latin American, Mediterranean, Mexican,
+    Middle Eastern, Nordic, Southern, Spanish, Thai, Vietnamese]
+    """
+    search_cuisine_form = SearchCuisineForm()
+    return render_template('recipes/index.html', form=search_cuisine_form)
+
+# Diet Search
+def search_diet_recipes():
+    """
+    Returns a list of supported specialty diets, including: 
+
+    [Gluten Free, Ketogenic, Vegetarian, Lacto-Vegetarian, Ovo-Vegetarian,
+    Vegan, Pescetarian, Paleo, Primal, Whole30]
+    """
+    search_diet_form = SearchDietForm()
+    return render_template('recipes/index.html', form=search_diet_form)
+
+""" Show Search Results """
 @recipes_blueprint.route('/recipes/search-results', methods=['GET', 'POST'])
+# Show Ingredient Search Results
 def show_recipes():
     ingredient = request.form['query']
     response = requests.get(f"{API_BASE_URL}/food/ingredients/search", params={"apiKey": API_KEY, "query": ingredient})
@@ -43,21 +70,7 @@ def show_recipes():
     flash(f"Searched for recipes with { ingredient }", 'success')    
     return render_template('/recipes/search-results.html', results=results)
 
-""" Cuisine Search """
-@recipes_blueprint.route('/recipes/search-results', methods=['GET', 'POST'])
-def search_cuisines():
-    """
-    Returns a list of supported cuisines, including: 
-
-    [African, American, British, Cajun, Caribbean, Chinese, Eastern
-    European, European, French, German, Greek, Indian, Irish, Italian,
-    Japanese, Jewish, Korean, Latin American, Mediterranean, Mexican,
-    Middle Eastern, Nordic, Southern, Spanish, Thai, Vietnamese]
-    """
-    search_cuisine_form = SearchCuisineForm()
-    return render_template('recipes/index.html', form=search_cuisine_form)   
-
-@recipes_blueprint.route('/recipes/search-results', methods=['GET', 'POST'])
+# Show Cusine Search Results
 def show_cuisine_search_results():
     try:
         cuisine = request.form['query']
@@ -83,3 +96,21 @@ def show_cuisine_search_results():
     except requests.exceptions.RequestException:
         print('HTTP Request failed')
         return render_template('recipes/index.html', form=search_cuisine_form)
+
+# Show Diet Search Results 
+def show_diet_recipe_results():
+    diet = request.form['query']
+    response = requests.get(f"{API_BASE_URL}", params={"apiKey": API_KEY, "query": diet})
+
+    session['diet'] = diet
+    data = response.json()
+    results = data['results']
+
+    current_app.logger.info(f"Searched for recipes containing: { diet }")
+
+    flash(f"Searched for recipes with { diet }", 'success')    
+    return render_template('/recipes/search-results.html', results=results)
+
+    
+
+    

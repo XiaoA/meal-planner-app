@@ -18,6 +18,12 @@ class SearchCuisineForm(FlaskForm):
         ('Thai'), ('Vietnamese')])
     apiKey = API_KEY
 
+class SearchDietForm(FlaskForm):
+    diet = SelectField("Search by Diet", choices=[
+        ('Gluten Free'), ('Ketogenic'), ('Vegetarian'), ('Lacto-Vegetarian'),
+        ('Ovo-Vegetarian'), ('Vegan'), ('Pescetarian'), ('Paleo'), ('Primal'), ('Whole30')])
+    apiKey = API_KEY    
+
 class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(), Length(min=6, max=30)])
     password_hashed = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=40)])
