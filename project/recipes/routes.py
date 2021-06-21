@@ -3,7 +3,7 @@ from flask import current_app, render_template, request, session, flash
 from project import create_app
 from flask_login import current_user
 import requests
-from forms import SearchRecipesForm, SearchCuisineForm, SearchDietForm
+from forms import SearchRecipesForm, SearchCuisineForm, SearchDietForm, SearchMealTypeForm
 from project.models import User, UserProfile
 from config import API_BASE_URL, API_KEY
 
@@ -53,6 +53,17 @@ def search_diet_recipes():
     """
     search_diet_form = SearchDietForm()
     return render_template('recipes/index.html', form=search_diet_form)
+
+# Meal Type Search
+def search_diet_recipes():
+    """
+    Returns a list of supported specialty diets, including: 
+
+    [Gluten Free, Ketogenic, Vegetarian, Lacto-Vegetarian, Ovo-Vegetarian,
+    Vegan, Pescetarian, Paleo, Primal, Whole30]
+    """
+    search_diet_type_form = SearchMealTypeForm()
+    return render_template('recipes/index.html', form=search_meal_type_form)
 
 """ Show Search Results """
 @recipes_blueprint.route('/recipes/search-results', methods=['GET', 'POST'])

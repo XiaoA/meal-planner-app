@@ -6,8 +6,19 @@ import requests
 import json
 
 """ Helpers """
+# Failing Search Test
+""" Shared by all search types """
+class MockFailedResponse(object):
+    def __init__(self, url):
+        self.status_code = 404
+        self.url = url
+        self.headers = {'key': 'value'}
 
-# Cuisine Search
+    def json(self):
+        return {'error': 'bad'}  
+
+    
+# Successful Cuisine Search
 class MockCuisineSuccessResponse(object):
     def __init__(self, url):
         self.status_code = 200
@@ -22,7 +33,7 @@ class MockCuisineSuccessResponse(object):
                 "image": "https://spoonacular.com/recipeImages/652078-312x231.jpg",
             }
         }
-
+# Successful Diet Search
 class MockDietSuccessResponse(object):
     def __init__(self, url):
         self.status_code = 200
@@ -38,17 +49,29 @@ class MockDietSuccessResponse(object):
             }
         }
 
-class MockFailedResponse(object):
+# Successful Meal Type Search
+class MockMealTypeSuccessResponse(object):
     def __init__(self, url):
-        self.status_code = 404
+        self.status_code = 200
         self.url = url
-        self.headers = {'key': 'value'}
+        self.headers = {'key': 'val'}
 
     def json(self):
-        return {'error': 'bad'}   
+        return {
+            "results": {
+                "id": '663845',
+                "title": "TROPICAL BANANA GREEN SMOOTHIE",
+                "image": "https://spoonacular.com/recipeImages/663845-312x231.jpg",
+            }
+        }    
+
+    
+
+
+ 
 
 """ Recipe Tests """
-
+# Cuisine Searches
 def test_cuisine_search_monkeypatch_get_success(monkeypatch):
     """
     GIVEN a Flask application and a monkeypatched version of requests.get()
@@ -84,6 +107,7 @@ def test_cuisine_searchmonkeypatch_get_failure(monkeypatch):
     assert r.url == url
     assert 'bad' in r.json()['error']
 
+# Diet Searches
 def test_diet_search_monkeypatch_get_success(monkeypatch):
     """
     GIVEN a Flask application and a monkeypatched version of requests.get()
@@ -119,6 +143,41 @@ def test_diet_searchmonkeypatch_get_failure(monkeypatch):
     assert r.url == url
     assert 'bad' in r.json()['error']    
 
+# Meal Type Searches
+def test_meal_type_search_monkeypatch_get_success(monkeypatch):
+    """
+    GIVEN a Flask application and a monkeypatched version of requests.get()
+    WHEN the HTTP response is set to successful
+    THEN check the HTTP response
+    """
+    def mock_get(url):
+        return MockMealTypeSuccessResponse(url)
+
+    url = f'https://api.spoonacular.com/recipes/complexSearch?apiKey={API_KEY}&type=drink'
+    monkeypatch.setattr(requests, 'get', mock_get)
+    request = requests.get(url)
+    assert request.status_code == 200
+    assert request.url == url
+    assert '663845' in request.json()['results']['id']
+    assert 'TROPICAL BANANA GREEN SMOOTHIE' in request.json()['results']['title']
+    assert "https://spoonacular.com/recipeImages/663845-312x231.jpg" in request.json()['results']["image"]
+
+def test_diet_searchmonkeypatch_get_failure(monkeypatch):
+    """
+    GIVEN a Flask application and a monkeypatched version of requests.get()
+    WHEN the HTTP response is set to failed
+    THEN check the HTTP response
+    """
+    def mock_get(url):
+        return MockFailedResponse(url)
+
+    url = f'https://api.spoonacular.com/recipes/complexSearch?apiKey={API_KEY}&diet=Ketogenic'
+    monkeypatch.setattr(requests, 'get', mock_get)
+    r = requests.get(url)
+    print(r.json())
+    assert r.status_code == 404
+    assert r.url == url
+    assert 'bad' in r.json()['error']    
 
 
 

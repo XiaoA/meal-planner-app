@@ -55,5 +55,22 @@
   </div>
 </div>
 
+<div class="p-5 mb-4 bg-light rounded-3">
+  <div class="container-fluid py-5 text-center">
+    <h3 class="display-5 fw-bold text-center">Meal Type Search</h3>
+    <p class="text-center">Search by Meal Type!</p>
+    <form action="/recipes/search-results" method="POST">
+      {{ form.csrf_token }}
+      {% for field in form if field.widget.input_type != 'hidden' %}
+      <p>
+        {{ field.label }}
+        {{ field }}
+        <button>Submit</button>
+      </p>
+      {% endfor %}
+    </form>
+  </div>
+</div>
+
 {% endblock %}
 

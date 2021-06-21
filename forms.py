@@ -3,6 +3,7 @@ from wtforms import StringField, SelectField, PasswordField, SubmitField, Boolea
 from wtforms.validators import InputRequired, Length, Email, DataRequired
 from config import API_KEY
 
+""" Recipe Search Forms"""
 class SearchRecipesForm(FlaskForm):
     query = StringField("Recipe Search", validators=[InputRequired(message="Search term can't be blank.")])
     apiKey = API_KEY
@@ -22,8 +23,18 @@ class SearchDietForm(FlaskForm):
     diet = SelectField("Search by Diet", choices=[
         ('Gluten Free'), ('Ketogenic'), ('Vegetarian'), ('Lacto-Vegetarian'),
         ('Ovo-Vegetarian'), ('Vegan'), ('Pescetarian'), ('Paleo'), ('Primal'), ('Whole30')])
+    apiKey = API_KEY
+
+class SearchMealTypeForm(FlaskForm):
+    type = SelectField("Search by Meal Type", choices=[
+        ('main course'), ('side dish'), ('dessert'), ('appetizer'),
+        ('salad'), ('bread'), ('breakfast'), ('soup'), ('beverage'),
+        ('sauce'), ('marinade'), ('fingerfood'), ('snack'), ('drink')])
     apiKey = API_KEY    
 
+
+
+""" User Forms """    
 class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(), Length(min=6, max=30)])
     password_hashed = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=40)])
