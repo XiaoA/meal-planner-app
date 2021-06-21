@@ -6,7 +6,6 @@
     <h1 class="display-5 fw-bold text-center">Welcome to Recipie!</h1>
     <p class="text-center">Enter an ingredient to find sample recipies. Or create a free account!</p>
     <form action="/recipes/search-results" method="POST">
-      {{ form.hidden_tag() }}
       {{ form.csrf_token }}
       {% for field in form if field.widget.input_type != 'hidden' %}
       <p>
@@ -19,6 +18,74 @@
 
     <a href="{{url_for('users.register')}}" class="btn btn-primary">Join for free!</a>
     <a href="{{url_for('users.login')}}" class="btn btn-success">Member login</a>
+  </div>
+</div>
+
+<div class="p-5 mb-4 bg-light rounded-3">
+  <div class="container-fluid py-5 text-center">
+    <h3 class="display-5 fw-bold text-center">Cuisine Search</h3>
+    <p class="text-center">Search by Cuisine!</p>
+    <form action="/recipes/search-results" method="POST">
+      {{ form.csrf_token }}
+      {% for field in form if field.widget.input_type != 'hidden' %}
+      <p>
+        {{ field.label }}
+        {{ field }}
+        <button>Submit</button>
+      </p>
+      {% endfor %}
+    </form>
+  </div>
+</div>
+
+<div class="p-5 mb-4 bg-light rounded-3">
+  <div class="container-fluid py-5 text-center">
+    <h3 class="display-5 fw-bold text-center">Diet Search</h3>
+    <p class="text-center">Search by Diet!</p>
+    <form action="/recipes/search-results" method="POST">
+      {{ form.csrf_token }}
+      {% for field in form if field.widget.input_type != 'hidden' %}
+      <p>
+        {{ field.label }}
+        {{ field }}
+        <button>Submit</button>
+      </p>
+      {% endfor %}
+    </form>
+  </div>
+</div>
+
+<div class="p-5 mb-4 bg-light rounded-3">
+  <div class="container-fluid py-5 text-center">
+    <h3 class="display-5 fw-bold text-center">Meal Type Search</h3>
+    <p class="text-center">Search by Meal Type!</p>
+    <form action="/recipes/search-results" method="POST">
+      {{ form.csrf_token }}
+      {% for field in form if field.widget.input_type != 'hidden' %}
+      <p>
+        {{ field.label }}
+        {{ field }}
+        <button>Submit</button>
+      </p>
+      {% endfor %}
+    </form>
+  </div>
+</div>
+
+<div class="p-5 mb-4 bg-light rounded-3">
+  <div class="container-fluid py-5 text-center">
+    <h3 class="display-5 fw-bold text-center">Intolerance Type Search</h3>
+    <p class="text-center">Search by Dietary Intolerances!</p>
+    <form action="/recipes/search-results" method="POST">
+      {{ form.csrf_token }}
+      {% for field in form if field.widget.input_type != 'hidden' %}
+      <p>
+        {{ field.label }}
+        {{ field }}
+        <button>Submit</button>
+      </p>
+      {% endfor %}
+    </form>
   </div>
 </div>
 
