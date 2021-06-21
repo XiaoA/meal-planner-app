@@ -30,9 +30,13 @@ class SearchMealTypeForm(FlaskForm):
         ('main course'), ('side dish'), ('dessert'), ('appetizer'),
         ('salad'), ('bread'), ('breakfast'), ('soup'), ('beverage'),
         ('sauce'), ('marinade'), ('fingerfood'), ('snack'), ('drink')])
-    apiKey = API_KEY    
+    apiKey = API_KEY
 
-
+class SearchIntoleranceTypeForm(FlaskForm):
+    type = SelectField("Search by Dietary Intolerance", choices=[
+        ('Dairy'), ('Egg'), ('Gluten'), ('Grain'), ('Peanut'), ('Seafood'),
+        ('Sesame'), ('Shellfish'), ('Soy'), ('Sulfite'), ('Tree Nut'), ('Wheat')])
+    apiKey = API_KEY
 
 """ User Forms """    
 class RegistrationForm(FlaskForm):

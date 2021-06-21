@@ -3,7 +3,7 @@ from flask import current_app, render_template, request, session, flash
 from project import create_app
 from flask_login import current_user
 import requests
-from forms import SearchRecipesForm, SearchCuisineForm, SearchDietForm, SearchMealTypeForm
+from forms import SearchRecipesForm, SearchCuisineForm, SearchDietForm, SearchMealTypeForm, SearchIntoleranceTypeForm
 from project.models import User, UserProfile
 from config import API_BASE_URL, API_KEY
 
