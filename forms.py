@@ -38,6 +38,10 @@ class SearchIntoleranceTypeForm(FlaskForm):
         ('Sesame'), ('Shellfish'), ('Soy'), ('Sulfite'), ('Tree Nut'), ('Wheat')])
     apiKey = API_KEY
 
+class ViewRecipeDetailsForm(FlaskForm):
+    apiKey = API_KEY
+    
+
 """ User Forms """    
 class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(), Length(min=6, max=30)])

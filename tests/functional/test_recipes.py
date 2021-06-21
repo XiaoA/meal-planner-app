@@ -230,7 +230,6 @@ def test_intolerance_search_monkeypatch_get_failure(monkeypatch):
     assert request.url == url
     assert 'bad' in request.json()['error']    
 
-
 # def test_show_recipes(test_client):
 #                 """
 #     GIVEN this Flask application
@@ -249,3 +248,4 @@ def test_intolerance_search_monkeypatch_get_failure(monkeypatch):
 #     assert b'Search Results - Recipie' in response.data
 #                 assert b'6008' in response.data
 #                 assert b'https://spoonacular.com/recipeImages/6008-556x370.jpg' in response.data
+

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1 class="text-center">{% block title %}View Recipe Details{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h3>{{ results.title }}</h3>
+  <img src="{{results.image}}">
+  <b>Ready in {{ results.readyInMinutes }} minutes</b>
+</div>
+    <div class="container">
+      <p>{{ results.summary | striptags }}</p>
+    </div>
+    <div class="container">
+      <h4>Ingredients:</h4>
+      {% for ingredient in results.extendedIngredients%}
+      <li>{{ingredient.original}}</li>
+      {% endfor %}
+    </div>
+    <a href="{{ results.sourceUrl }}">View Full Recipe</a>
+</div>
+
+
+
+
+<div class="container">
+  <h2>Sign up!</h2>
+  <p>Register for a free account to create search for more recipes, save them, and join our community!</p>
+</div>
+{% endblock %}

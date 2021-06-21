@@ -3,7 +3,7 @@ from flask import current_app, render_template, request, session, flash
 from project import create_app
 from flask_login import current_user
 import requests
-from forms import SearchRecipesForm, SearchCuisineForm, SearchDietForm, SearchMealTypeForm, SearchIntoleranceTypeForm
+from forms import SearchRecipesForm, SearchCuisineForm, SearchDietForm, SearchMealTypeForm, SearchIntoleranceTypeForm, ViewRecipeDetailsForm
 from project.models import User, UserProfile
 from config import API_BASE_URL, API_KEY
 
@@ -75,11 +75,17 @@ def show_recipes():
     session['ingredient'] = ingredient
     data = response.json()
     results = data['results']
+    session['results'] = results
 
     current_app.logger.info(f"Searched for recipes containing: { ingredient }")
 
     flash(f"Searched for recipes with { ingredient }", 'success')    
     return render_template('/recipes/search-results.html', results=results)
+
+def request_recipe_details():
+    results = session['results']
+    request_recipe_form = ViewRecipeDetailsForm()
+    return render_template('recipes/search-results.html', form=request_recipe_form)
 
 # Show Cusine Search Results
 def show_cuisine_search_results():
@@ -108,6 +114,7 @@ def show_cuisine_search_results():
         print('HTTP Request failed')
         return render_template('recipes/index.html', form=search_cuisine_form)
 
+
 # Show Diet Search Results 
 def show_diet_recipe_results():
     diet = request.form['query']
@@ -122,6 +129,26 @@ def show_diet_recipe_results():
     flash(f"Searched for recipes with { diet }", 'success')    
     return render_template('/recipes/search-results.html', results=results)
 
-    
+
+@recipes_blueprint.route('/recipes/view-recipe-details', methods=['GET', 'POST'])
+def view_recipe_details():
+    try:
+        response = requests.get(
+            url=f"https://api.spoonacular.com/recipes/93772/information",
+            params={
+                "includeNutrition": "false",
+                "apiKey": API_KEY,
+            },
+        )
+        results = response.json()
+        
+        print('Response HTTP Status Code: {status_code}'.format(
+            status_code=response.status_code))
+        print('Response HTTP Response Body: {content}'.format(
+            content=response.content))
+        return render_template('recipes/view-recipe-details.html', results=results)
+    except requests.exceptions.RequestException:
+        print('HTTP Request failed')
+        return render_template('recipes/search-results.html')
 
     
