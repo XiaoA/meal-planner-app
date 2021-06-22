@@ -5,22 +5,23 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container text-center">
   <h3>{{ results.title }}</h3>
-  <img src="{{results.image}}">
-  <b>Ready in {{ results.readyInMinutes }} minutes</b>
+  <p><img src="{{results.image}}"></p>
+  <h5>Ready in {{ results.readyInMinutes }} minutes</h5>
 </div>
-    <div class="container">
-      <p>{{ results.summary | striptags }}</p>
-    </div>
-    <div class="container">
-      <h4>Ingredients:</h4>
-      {% for ingredient in results.extendedIngredients%}
-      <li>{{ingredient.original}}</li>
-      {% endfor %}
-    </div>
-    <a href="{{ results.sourceUrl }}">View Full Recipe</a>
+<div class="container">
+  <p>{{ results.summary | striptags }}</p>
 </div>
+<div class="container">
+  <h4>Ingredients:</h4>
+  {% for ingredient in results.extendedIngredients%}
+  <li>{{ingredient.original}}</li>
+  {% endfor %}
+
+  <a href="{{ results.sourceUrl }}">View Full Recipe</a>
+</div>
+
 
 
 
