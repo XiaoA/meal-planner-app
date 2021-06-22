@@ -55,14 +55,14 @@ def search_diet_recipes():
     return render_template('recipes/index.html', form=search_diet_form)
 
 # Meal Type Search
-def search_diet_recipes():
+def search_meal_type_recipes():
     """
     Returns a list of supported specialty diets, including: 
 
     [Gluten Free, Ketogenic, Vegetarian, Lacto-Vegetarian, Ovo-Vegetarian,
     Vegan, Pescetarian, Paleo, Primal, Whole30]
     """
-    search_diet_type_form = SearchMealTypeForm()
+    search_meal_type_form = SearchMealTypeForm()
     return render_template('recipes/index.html', form=search_meal_type_form)
 
 """ Show Search Results """
