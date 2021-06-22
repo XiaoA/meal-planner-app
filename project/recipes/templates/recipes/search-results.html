@@ -7,23 +7,32 @@
 {% block content %}
 <div class="container-fluid">
   <div class="row">
-  {% for result in results %}
+    {% for result in results %}
 
     <div class="col-3">
       <div class="card" style="width: 18rem;">
         <img src="https://spoonacular.com/recipeImages/{{result['id']}}-556x370.jpg" class="card-img-top" alt="...">
         <div class="card-body">
           <h5 class="card-title text-center">{{ result.name }}</h5>
+          <h5 class="card-title text-center">{{ result.id }}</h5>
+          
           
           <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
         </div>
         <div class="card-body">
-          <a href="#" class="card-link">View Recipe</a>
           <a href="#" class="card-link">Like Recipe</a>
+          <form method = "POST" action="/recipes/view-recipe-details">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <button class="btn btn-success">View Recipe</button>
+          </form>
+
+          {% endfor %}
+
+          
         </div>
       </div>
     </div>
-  {% endfor %}
+
   </div>
 </div>
 

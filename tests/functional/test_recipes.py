@@ -82,6 +82,26 @@ class MockIntoleranceSuccessResponse(object):
             }
         }    
 
+# View Recipe Page
+class MockViewRecipeDetailsResponse(object):
+    def __init__(self, url):
+        self.status_code = 200
+        self.url = url
+        self.headers = {'key': 'val'}
+
+    def json(self):
+        return {
+            "results": {
+                
+                "id": "93772",
+                "title": "Tandoori Chicken Salad",
+                "image": "https://spoonacular.com/recipeImages/93772-312x231.png",
+                "readyInMinutes": "45",
+                "extendedIngredients": "1 teaspoon minced garlic"
+            }
+        }
+
+
 """ Recipe Tests """
 # Cuisine Searches
 def test_cuisine_search_monkeypatch_get_success(monkeypatch):
@@ -231,6 +251,25 @@ def test_intolerance_search_monkeypatch_get_failure(monkeypatch):
     assert 'bad' in request.json()['error']    
 
 
+
+def test_view_recipe_details_get_success(monkeypatch):
+    """
+    GIVEN a Flask application and a monkeypatched version of requests.get()
+    WHEN the HTTP response is set to successful
+    THEN check the HTTP response
+    """
+    def mock_get(url):
+        return MockViewRecipeDetailsResponse(url)
+
+    url = f'https://api.spoonacular.com/recipes/93772/information?includeNutrition=false&apiKey={API_KEY}'
+    monkeypatch.setattr(requests, 'get', mock_get)
+    request = requests.get(url)
+    assert request.status_code == 200
+    assert request.url == url
+    assert '93772' in request.json()['results']['id']
+    assert 'Tandoori Chicken Salad' in request.json()['results']['title']
+    assert "https://spoonacular.com/recipeImages/93772-312x231.png" in request.json()['results']["image"]
+    
 # def test_show_recipes(test_client):
 #                 """
 #     GIVEN this Flask application
@@ -249,3 +288,4 @@ def test_intolerance_search_monkeypatch_get_failure(monkeypatch):
 #     assert b'Search Results - Recipie' in response.data
 #                 assert b'6008' in response.data
 #                 assert b'https://spoonacular.com/recipeImages/6008-556x370.jpg' in response.data
+
