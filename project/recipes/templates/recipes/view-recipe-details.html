@@ -23,11 +23,10 @@
 </div>
 
 
+<form method="POST" action="/recipes/like-recipe/{{results.id}}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+  <input type="hidden" name="recipe_url" value="{{results.sourceUrl}}">
+  <button button-type="submit" class="btn btn-success">Like Recipe</button>
+</form>
 
-
-
-<div class="container">
-  <h2>Sign up!</h2>
-  <p>Register for a free account to create search for more recipes, save them, and join our community!</p>
-</div>
-{% endblock %}
+ {% endblock %}

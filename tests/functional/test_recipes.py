@@ -17,7 +17,22 @@ class MockFailedResponse(object):
     def json(self):
         return {'error': 'bad'}  
 
-    
+# Successful Ingredient Search
+class MockIngredientSuccessResponse(object):
+    def __init__(self, url):
+        self.status_code = 200
+        self.url = url
+        self.headers = {'key': 'val'}
+
+    def json(self):
+        return {
+            "results": {
+                "id": '6170',
+                "title": "beef stock",
+                "image": "https://spoonacular.com/recipeImages/6170-312x231.jpg",
+            }
+        }
+
 # Successful Cuisine Search
 class MockCuisineSuccessResponse(object):
     def __init__(self, url):
@@ -103,6 +118,42 @@ class MockViewRecipeDetailsResponse(object):
 
 
 """ Recipe Tests """
+# Ingredient Searches
+def test_show_ingredient_monkeypatch_get_success(monkeypatch):
+    """
+    GIVEN a Flask application and a monkeypatched version of requests.get()
+    WHEN the HTTP response is set to successful
+    THEN check the HTTP response
+    """
+    def mock_get(url):
+        return MockIngredientSuccessResponse(url)
+
+    url = f'https://api.spoonacular.com/food/ingredients/search?apiKey={API_KEY}&query=beef'
+    monkeypatch.setattr(requests, 'get', mock_get)
+    request = requests.get(url)
+    assert request.status_code == 200
+    assert request.url == url
+    assert '6170' in request.json()['results']['id']
+    assert 'beef stock' in request.json()['results']['title']
+    assert "https://spoonacular.com/recipeImages/6170-312x231.jpg" in request.json()['results']["image"]
+
+def test_cuisine_search_monkeypatch_get_failure(monkeypatch):
+    """
+    GIVEN a Flask application and a monkeypatched version of requests.get()
+    WHEN the HTTP response is set to failed
+    THEN check the HTTP response
+    """
+    def mock_get(url):
+        return MockFailedResponse(url)
+
+    url = f'https://api.spoonacular.com/food/ingredients/search?apiKey={API_KEY}&query=beef'
+    monkeypatch.setattr(requests, 'get', mock_get)
+    request = requests.get(url)
+    print(request.json())
+    assert request.status_code == 404
+    assert request.url == url
+    assert 'bad' in request.json()['error']
+    
 # Cuisine Searches
 def test_cuisine_search_monkeypatch_get_success(monkeypatch):
     """
@@ -122,7 +173,7 @@ def test_cuisine_search_monkeypatch_get_success(monkeypatch):
     assert 'Miso Soup With Thin Noodles' in request.json()['results']['title']
     assert "https://spoonacular.com/recipeImages/652078-312x231.jpg" in request.json()['results']["image"]
 
-def test_cuisine_searchmonkeypatch_get_failure(monkeypatch):
+def test_cuisine_search_monkeypatch_get_failure(monkeypatch):
     """
     GIVEN a Flask application and a monkeypatched version of requests.get()
     WHEN the HTTP response is set to failed
@@ -270,22 +321,5 @@ def test_view_recipe_details_get_success(monkeypatch):
     assert 'Tandoori Chicken Salad' in request.json()['results']['title']
     assert "https://spoonacular.com/recipeImages/93772-312x231.png" in request.json()['results']["image"]
     
-# def test_show_recipes(test_client):
-#                 """
-#     GIVEN this Flask application
-#     WHEN the '/search-results' page is posted to (POST)
-#     THEN check that the user is redirected to the '/search-results' page
-#     """
 
-#     response = test_client.post('/recipes/search-results', data={
-#         'query': 'beef',
-#         'apiKey': API_KEY
-#     })
-#                 # Assert page loads successfully
-#     assert response.status_code == 200
-                
-#     # Assert page title and API response data are displayed
-#     assert b'Search Results - Recipie' in response.data
-#                 assert b'6008' in response.data
-#                 assert b'https://spoonacular.com/recipeImages/6008-556x370.jpg' in response.data
 

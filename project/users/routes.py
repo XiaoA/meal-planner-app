@@ -1,5 +1,5 @@
 from . import users_blueprint
-from flask import current_app, render_template, flash, abort, request, redirect, url_for, session, copy_current_request_context, escape
+from flask import current_app, render_template, flash, abort, request, redirect, url_for, session, copy_current_request_context, escape, jsonify
 import requests
 from forms import RegistrationForm, LoginForm, EmailForm, PasswordForm, ChangePasswordForm
 from project.models import User, UserProfile, Follows
@@ -316,3 +316,4 @@ def stop_following(follow_id):
     database.session.commit()
 
     return redirect(f"/users/{current_user.id}/following")
+

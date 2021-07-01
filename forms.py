@@ -4,7 +4,7 @@ from wtforms.validators import InputRequired, Length, Email, DataRequired
 from config import API_KEY
 
 """ Recipe Search Forms"""
-class SearchRecipesForm(FlaskForm):
+class SearchIngredientForm(FlaskForm):
     query = StringField("Recipe Search", validators=[InputRequired(message="Search term can't be blank.")])
     apiKey = API_KEY
 
@@ -38,10 +38,6 @@ class SearchIntoleranceTypeForm(FlaskForm):
         ('Sesame'), ('Shellfish'), ('Soy'), ('Sulfite'), ('Tree Nut'), ('Wheat')])
     apiKey = API_KEY
 
-class ViewRecipeDetailsForm(FlaskForm):
-    apiKey = API_KEY
-    
-
 """ User Forms """    
 class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(), Length(min=6, max=30)])
@@ -62,11 +58,11 @@ class EmailForm(FlaskForm):
     submit = SubmitField('Submit')
     
 class PasswordForm(FlaskForm):
-    password = PasswordField('New Password: ', validators=[DataRequired()])
+    password = PasswordField('New Password', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 class ChangePasswordForm(FlaskForm):
-    current_password = PasswordField('Current Password: ', validators=[DataRequired()])
-    new_password = PasswordField('New Password: ', validators=[DataRequired()])
+    current_password = PasswordField('Current Password', validators=[DataRequired()])
+    new_password = PasswordField('New Password', validators=[DataRequired()])
     submit = SubmitField('Submit')
     
