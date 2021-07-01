@@ -88,7 +88,7 @@ def show_cuisine_search_results():
         )
         results = response.json()['results']
         return render_template('recipes/search-results.html', results=results)
-    current_app.logger.info(f"Searched for { cuisine }")
+        current_app.logger.info(f"Searched for { cuisine }")
     
         flash(f"Searched for { cuisine }", 'success')
     except requests.exceptions.RequestException:
