@@ -195,3 +195,5 @@ def like_recipe(recipe_id):
                 database.session.rollback()
                 flash(f"You've already liked this recipe!", "danger")
                 return redirect(url_for('recipes.view_recipe_details', recipe_id=recipe_id))
+
+            
