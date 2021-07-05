@@ -10,9 +10,7 @@ def test_show_user_profile_logged_in(test_client, log_in_default_user):
     WHEN the '/users/<int:user_id>' page is requested (GET)
     THEN check that the profile for the current user is displayed
     """
-    response = test_client.get('/users/<int:user_id>')
-    print(response.data)
-    print(response.status_code)
+    response = test_client.get('/users/1')
     assert response.status_code == 200
     assert b'Recipie' in response.data
     assert b'User Profile' in response.data
@@ -20,10 +18,10 @@ def test_show_user_profile_logged_in(test_client, log_in_default_user):
     assert b'Email: andrewflaskdev@gmail.com' in response.data
     assert b'Account Statistics' in response.data
     assert b'Joined on' in response.data
-    assert b'Email address' in response.data
-    assert b'confirmed' not in response.data
+    assert b'Email address confirmed' not in response.data
     assert b'Account Actions' in response.data
     assert b'Change Password' in response.data
+    assert b'Log Out' in response.data
     assert b'Resend Email Confirmation' in response.data
 
 def test_show_user_profile_not_logged_in(test_client):
@@ -48,7 +46,7 @@ def test_show_user_profile_logged_in_email_confirmed(test_client, confirm_email_
 
     (This test confirms that the `confirm_email_default_user` fixture works)
     """
-    response = test_client.get('/users/<int:user_id>',
+    response = test_client.get('/users/1',
                                data={'email': 'andrewflaskdev@gmail.com',
                                      'password_hashed': 'password123',
                                      'email_confirmed': True,
@@ -61,7 +59,7 @@ def test_show_user_profile_logged_in_email_confirmed(test_client, confirm_email_
     assert b'Account Statistics' in response.data
     assert b'Joined on' in response.data
     assert b'Email address has not been confirmed!' not in response.data
-    assert b'Email address confirmed on June 13, 2021' in response.data
+    assert b'Email address confirmed' in response.data
     assert b'Account Actions' in response.data
     assert b'Change Password' in response.data
     assert b'Resend Email Confirmation' not in response.data

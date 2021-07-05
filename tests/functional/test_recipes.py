@@ -97,7 +97,7 @@ class MockIntoleranceSuccessResponse(object):
             }
         }    
 
-# View Recipe Page
+# View Recipe Details Page
 class MockViewRecipeDetailsResponse(object):
     def __init__(self, url):
         self.status_code = 200
@@ -111,10 +111,16 @@ class MockViewRecipeDetailsResponse(object):
                 "id": "93772",
                 "title": "Tandoori Chicken Salad",
                 "image": "https://spoonacular.com/recipeImages/93772-312x231.png",
+                "sourceUrl": "http://www.marthastewart.com/356086/tandoori-chicken-salad",
                 "readyInMinutes": "45",
+                "vegetarian": true,
+                "vegan": false,
+                "glutenFree": true,
+                "dairyFree": false,
                 "extendedIngredients": "1 teaspoon minced garlic"
+                
             }
-        }
+        }    
 
 
 """ Recipe Tests """
@@ -301,25 +307,22 @@ def test_intolerance_search_monkeypatch_get_failure(monkeypatch):
     assert request.url == url
     assert 'bad' in request.json()['error']    
 
-
-
-def test_view_recipe_details_get_success(monkeypatch):
+def test_api_rate_exceeded(test_client):
     """
     GIVEN a Flask application and a monkeypatched version of requests.get()
-    WHEN the HTTP response is set to successful
-    THEN check the HTTP response
+    WHEN the API rate has been exceeded
+    THEN return a message that the API limit has been reached
     """
-    def mock_get(url):
-        return MockViewRecipeDetailsResponse(url)
-
-    url = f'https://api.spoonacular.com/recipes/93772/information?includeNutrition=false&apiKey={API_KEY}'
-    monkeypatch.setattr(requests, 'get', mock_get)
-    request = requests.get(url)
-    assert request.status_code == 200
-    assert request.url == url
-    assert '93772' in request.json()['results']['id']
-    assert 'Tandoori Chicken Salad' in request.json()['results']['title']
-    assert "https://spoonacular.com/recipeImages/93772-312x231.png" in request.json()['results']["image"]
     
+    
+def test_new_liked_recipe(new_liked_recipe):
+    """
+    GIVEN a RecipeBox model
+    WHEN a new RecipeBox object is created by liking a recipe
+    THEN check the object includes values for: 'is liked', 'recipe_url', and 'user_id'
+    """
+    assert new_liked_recipe.is_liked == True
+    assert new_liked_recipe.recipe_url == "http://www.marthastewart.com/356086/tandoori-chicken-salad"
+    assert new_liked_recipe.user_id == 19
 
 

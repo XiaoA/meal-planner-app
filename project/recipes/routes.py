@@ -89,7 +89,6 @@ def show_cuisine_search_results():
         results = response.json()['results']
         return render_template('recipes/search-results.html', results=results)
         current_app.logger.info(f"Searched for { cuisine }")
-    
         flash(f"Searched for { cuisine }", 'success')
     except requests.exceptions.RequestException:
         flash('Your search failed', 'danger')
@@ -109,7 +108,7 @@ def show_diet_search_results():
         )
         results = response.json()['results']
         current_app.logger.info(f"Searched for { diet } recipes")
-        flash(f"Searched for { diet } recipes", 'success')    
+        flash(f"Searched for { diet }", 'success')    
         return render_template('recipes/search-results.html', results=results)
     except requests.exceptions.RequestException:
         flash('Your search failed', 'danger')
@@ -148,7 +147,6 @@ def show_dietary_intolerance_search_results():
         )
         results = response.json()['results']
         current_app.logger.info(f"Searched for { intolerance }")
-        
         flash(f"Searched for { intolerance }", 'success')    
         return render_template('recipes/search-results.html', results=results)
     except requests.exceptions.RequestException:
@@ -169,6 +167,8 @@ def view_recipe_details(recipe_id):
         results = response.json()
         recipe_id = response.json()['id']
         recipe_url = response.json()['sourceUrl']
+        import ipdb; ipdb.set_trace()
+
         return render_template('recipes/view-recipe-details.html', results=results, recipe_id=recipe_id)
     except requests.exceptions.RequestException:
         flash('Your search failed', 'danger')

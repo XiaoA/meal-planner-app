@@ -9,7 +9,7 @@
   <h3>{{ results.title }}</h3>
   <p><img src="{{results.image}}"></p>
 
-
+  {% if current_user.is_authenticated %}
   <div class="container">
     <form method="POST" action="/recipes/like-recipe/{{results.id}}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -18,7 +18,7 @@
     </form>
   </div>
 </div>
-
+{% endif %}
 <div class="accordion" id="accordionPanelsStayOpenExample">
   <div class="accordion-item">
     <h2 class="accordion-header" id="panelsStayOpen-headingOne">
@@ -32,15 +32,15 @@
           <div class="row">
             <div class="col">
               <p><i class="bi bi-clock"></i> Ready in {{ results.readyInMinutes }} minutes</p>
-              <p><i class="bi bi-heart"></i> "Vegetarian": {{ results["vegetarian"] }}</p>
+              <p><i class="bi bi-heart"></i> Vegetarian: {{ results["vegetarian"] }}</p>
             </div>
             <div class="col">
-              <p><i class="bi bi-flower2"></i> "Vegan": {{ results["vegan"] }}</p>
-              <p><i class="bi bi-exclamation-square"></i> "Gluten Free": {{ results["glutenFree"] }}</p>
+              <p><i class="bi bi-flower2"></i> Vegan: {{ results["vegan"] }}</p>
+              <p><i class="bi bi-exclamation-square"></i> Gluten Free: {{ results["glutenFree"] }}</p>
             </div>
             <div class="col">
-              <p><i class="bi bi-cup-straw"></i> "Dairy Free": {{ results["dairyFree"] }}</p>
-              <p><i class="bi bi-pie-chart"></i> "Servings": {{ results["servings"] }}</p>
+              <p><i class="bi bi-cup-straw"></i> Dairy Free: {{ results["dairyFree"] }}</p>
+              <p><i class="bi bi-pie-chart"></i> Servings: {{ results["servings"] }}</p>
             </div>
           </div>
         </div>
