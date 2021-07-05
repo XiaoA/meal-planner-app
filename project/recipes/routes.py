@@ -1,34 +1,19 @@
 from . import recipes_blueprint
-from flask import current_app, render_template, request, session, flash
-from project import create_app
-from flask_login import current_user
+from flask import current_app, render_template, request, session, flash, redirect, url_for, json
+from project import create_app, database
+from flask_login import current_user, login_required
 import requests
-from forms import SearchRecipesForm, SearchCuisineForm, SearchDietForm, SearchMealTypeForm, SearchIntoleranceTypeForm, ViewRecipeDetailsForm
-from project.models import User, UserProfile
+from forms import SearchIngredientForm, SearchCuisineForm, SearchDietForm, SearchMealTypeForm, SearchIntoleranceTypeForm, ViewRecipeDetailsForm, LoginForm
+from project.models import User, UserProfile, RecipeBox
 from config import API_BASE_URL, API_KEY
-
-""" Request Callbacks """
-@recipes_blueprint.before_request
-def recipes_before_request():
-    current_app.logger.info('Calling before_request() for the recipes blueprint...')
-
-
-@recipes_blueprint.after_request
-def recipes_after_request(response):
-    current_app.logger.info('Calling after_request() for the recipes blueprint...')
-    return response
-
-
-@recipes_blueprint.teardown_request
-def recipes_teardown_request(error=None):
-    current_app.logger.info('Calling teardown_request() for the recipes blueprint...')
+from sqlalchemy.exc import IntegrityError
 
 """ Recipe Index Routes """
-@recipes_blueprint.route('/', methods=['GET', 'POST'])
+@recipes_blueprint.route('/', methods=['GET'])
 # Ingredient Search
 def index():
-    form = SearchRecipesForm()
-    return render_template('recipes/index.html', form=form)
+    search_ingredient_form = SearchIngredientForm()
+    return render_template('recipes/index.html', form=search_ingredient_form)
 
 # Cuisine Search
 def search_cuisine_recipes():
@@ -41,6 +26,7 @@ def search_cuisine_recipes():
     Middle Eastern, Nordic, Southern, Spanish, Thai, Vietnamese]
     """
     search_cuisine_form = SearchCuisineForm()
+
     return render_template('recipes/index.html', form=search_cuisine_form)
 
 # Diet Search
@@ -65,90 +51,149 @@ def search_meal_type_recipes():
     search_meal_type_form = SearchMealTypeForm()
     return render_template('recipes/index.html', form=search_meal_type_form)
 
-""" Show Search Results """
-@recipes_blueprint.route('/recipes/search-results', methods=['GET', 'POST'])
+
 # Show Ingredient Search Results
-def show_recipes():
-    ingredient = request.form['query']
-    response = requests.get(f"{API_BASE_URL}/food/ingredients/search", params={"apiKey": API_KEY, "query": ingredient})
+@recipes_blueprint.route('/recipes/search-results', methods=['GET'])
+def show_ingredient_search_results():
+    try:
+        ingredient = request.args['query']
+        response = requests.get(
+            f"{API_BASE_URL}/food/ingredients/search",
+            params={
+                "apiKey": API_KEY,
+                "query": ingredient,
+                "number": "4"
+            }
+        )
+        results = response.json()['results']
+        current_app.logger.info(f"Searched for recipes containing: { ingredient }")
+        flash(f"Searched for recipes with { ingredient }", 'success')    
 
-    session['ingredient'] = ingredient
-    data = response.json()
-    results = data['results']
-    session['results'] = results
-
-    current_app.logger.info(f"Searched for recipes containing: { ingredient }")
-
-    flash(f"Searched for recipes with { ingredient }", 'success')    
-    return render_template('/recipes/search-results.html', results=results)
-
-def request_recipe_details():
-    results = session['results']
-    request_recipe_form = ViewRecipeDetailsForm()
-    return render_template('recipes/search-results.html', form=request_recipe_form)
-
-# Show Cusine Search Results
+        return render_template('recipes/search-results.html', results=results)
+    except requests.exceptions.RequestException:
+        flash('Your search failed', 'danger')
+        return render_template('recipes/index.html')
+    
+# Show Cuisine Search Results
 def show_cuisine_search_results():
     try:
-        cuisine = request.form['query']
+        cuisine = request.args['query']
         response = requests.get(
             url="https://api.spoonacular.com/recipes/complexSearch",
             params={
                 "apiKey": API_KEY,
-                "cuisine": cuisine
+                "query": cuisine,
+                "number": "4",
             }
         )
-        session['cuisine'] = cuisine
-        data = response.json()
-        results = data['results']
-
-        print('Response HTTP Status Code: {status_code}'.format(
-            status_code=response.status_code))
-        print('Response HTTP Response Body: {content}'.format(
-            content=response.content))
-        current_app.logger.info(f"Searched for { cuisine } recipes")
-
-        flash(f"Searched for { cuisine } recipes", 'success')
+        results = response.json()['results']
         return render_template('recipes/search-results.html', results=results)
+        current_app.logger.info(f"Searched for { cuisine }")
+        flash(f"Searched for { cuisine }", 'success')
     except requests.exceptions.RequestException:
-        print('HTTP Request failed')
-        return render_template('recipes/index.html', form=search_cuisine_form)
-
+        flash('Your search failed', 'danger')
+        return render_template('recipes/index.html')
 
 # Show Diet Search Results 
-def show_diet_recipe_results():
-    diet = request.form['query']
-    response = requests.get(f"{API_BASE_URL}", params={"apiKey": API_KEY, "query": diet})
+def show_diet_search_results():
+    try:
+        diet = request.args['query']
+        response = requests.get(
+            url="https://api.spoonacular.com/recipes/complexSearch",
+            params={
+                "apiKey": API_KEY,
+                "query": diet,
+                "number": "4",
+            }
+        )
+        results = response.json()['results']
+        current_app.logger.info(f"Searched for { diet } recipes")
+        flash(f"Searched for { diet }", 'success')    
+        return render_template('recipes/search-results.html', results=results)
+    except requests.exceptions.RequestException:
+        flash('Your search failed', 'danger')
+        return render_template('recipes/index.html')
 
-    session['diet'] = diet
-    data = response.json()
-    results = data['results']
+# Show Meal Type Search Results 
+def show_meal_type_search_results():
+    try:
+        meal_type = request.args['query']
+        response = requests.get(
+            url="https://api.spoonacular.com/recipes/complexSearch",
+            params={
+                "apiKey": API_KEY,
+                "query": meal_type,
+                "number": "4",
+            }
+        )
+        results = response.json()['results']
+        current_app.logger.info(f"Searched for { meal_type }")
+        flash(f"Searched for { meal_type }", 'success')    
+        return render_template('recipes/search-results.html', results=results)
+    except requests.exceptions.RequestException:
+        flash('Your search failed', 'danger')
+        return render_template('recipes/index.html')    
 
-    current_app.logger.info(f"Searched for recipes containing: { diet }")
+# Show Dietary Intolerance Search Results
+def show_dietary_intolerance_search_results():
+    try:
+        intolerance = request.args['query']
+        response = requests.get(
+            url="https://api.spoonacular.com/recipes/complexSearch",
+            params={
+                "apiKey": API_KEY,
+                "query": intolerance,
+            }
+        )
+        results = response.json()['results']
+        current_app.logger.info(f"Searched for { intolerance }")
+        flash(f"Searched for { intolerance }", 'success')    
+        return render_template('recipes/search-results.html', results=results)
+    except requests.exceptions.RequestException:
+        flash('Your search failed', 'danger')
+        return render_template('recipes/index.html')
 
-    flash(f"Searched for recipes with { diet }", 'success')    
-    return render_template('/recipes/search-results.html', results=results)
-
-
-@recipes_blueprint.route('/recipes/view-recipe-details', methods=['GET', 'POST'])
-def view_recipe_details():
+# View Recipe Details
+@recipes_blueprint.route('/recipes/view-recipe-details/<int:recipe_id>', methods=['GET'])
+def view_recipe_details(recipe_id):
     try:
         response = requests.get(
-            url=f"https://api.spoonacular.com/recipes/93772/information",
+            url=f"https://api.spoonacular.com/recipes/{recipe_id}/information",
             params={
                 "includeNutrition": "false",
                 "apiKey": API_KEY,
             },
         )
         results = response.json()
-        
-        print('Response HTTP Status Code: {status_code}'.format(
-            status_code=response.status_code))
-        print('Response HTTP Response Body: {content}'.format(
-            content=response.content))
-        return render_template('recipes/view-recipe-details.html', results=results)
-    except requests.exceptions.RequestException:
-        print('HTTP Request failed')
-        return render_template('recipes/search-results.html')
+        recipe_id = response.json()['id']
+        recipe_url = response.json()['sourceUrl']
+        import ipdb; ipdb.set_trace()
 
-    
+        return render_template('recipes/view-recipe-details.html', results=results, recipe_id=recipe_id)
+    except requests.exceptions.RequestException:
+        flash('Your search failed', 'danger')
+        return render_template('recipes/index.html')
+
+# Like Recipes    
+@recipes_blueprint.route('/recipes/like-recipe/<int:recipe_id>', methods=['GET', 'POST'])
+@login_required
+def like_recipe(recipe_id):
+    recipe_id = recipe_id
+    if request.method == 'POST':
+        if current_user.is_authenticated:
+            try:
+                is_liked = True
+                recipe_url = request.form['recipe_url']
+                user_id = current_user.id
+
+                new_like_recipe = RecipeBox(is_liked, recipe_url, user_id)
+                database.session.add(new_like_recipe)
+                database.session.commit()
+                flash("You liked this recipe", "success")
+                return redirect(url_for('recipes.view_recipe_details', recipe_id=recipe_id))
+            except IntegrityError:
+                database.session.rollback()
+                flash(f"You've already liked this recipe!", "danger")
+                return redirect(url_for('recipes.view_recipe_details', recipe_id=recipe_id))
+
+            

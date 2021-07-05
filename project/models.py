@@ -60,7 +60,7 @@ class User(database.Model):
         database.DateTime,
         nullable=True
     )
-     
+    
     email_confirmation_sent_on = database.Column(
         database.DateTime,
         nullable=True
@@ -86,6 +86,12 @@ class User(database.Model):
 
     user_profiles = database.relationship(
         'UserProfile',
+        backref='user',
+        lazy='dynamic'
+    )
+
+    user_recipes = database.relationship(
+        'RecipeBox',
         backref='user',
         lazy='dynamic'
     )
@@ -197,13 +203,54 @@ class UserProfile(database.Model):
         self.first_name = first_name
         self.last_name = last_name
         self.user_id = user_id
-    
+        
     def __repr__(self):
         """ Show info about user_profile. """
 
         u = self
-        return f"<UserProfile {u.username} {u.first_name} {u.last_name}"    
+        return f"<UserProfile {u.username} {u.first_name} {u.last_name}"
 
+class RecipeBox(database.Model):
+    """
+    Class that represents a user's recipe box (liked recipes, stored in the database).
+
+    The following attributes of a user are stored in this table:
+        is_liked (type: boolean) 
+        user_id (type: int)
+        recipe_id (type: int)
+
+    All three values are required.
+    """
+
+    __tablename__ = 'recipe_boxes'
+
+    id = database.Column(
+        database.Integer,
+        primary_key=True
+    )
+
+    is_liked = database.Column(
+        database.Boolean,
+        nullable=False,
+        default=True
+    )
+
+    recipe_url = database.Column(
+        database.String,
+        nullable=False
+    ) 
+
+    user_id = database.Column(
+        database.Integer, 
+        database.ForeignKey('users.id', ondelete='cascade')
+    )
+
+    __table_args__ = (database.UniqueConstraint('recipe_url', 'user_id'),)
+
+    def __init__(self, is_liked: bool, recipe_url: str, user_id: int):
+        self.is_liked = is_liked
+        self.recipe_url = recipe_url
+        self.user_id = user_id
 
 
 

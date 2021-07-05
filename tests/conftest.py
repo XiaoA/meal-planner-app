@@ -1,7 +1,7 @@
 import pytest
 from project import create_app, database
 from flask import current_app
-from project.models import User, UserProfile, Follows
+from project.models import User, UserProfile, Follows, RecipeBox
 from datetime import datetime
 import requests
 
@@ -14,7 +14,12 @@ def new_user():
     with flask_app.app_context():
         user = User('andrewflaskdev@gmail.com', 'password123')
         yield user
-        
+
+@pytest.fixture(scope='module')
+def new_liked_recipe():
+    liked_recipe = RecipeBox(True, "http://www.marthastewart.com/356086/tandoori-chicken-salad", 19)
+    return liked_recipe
+
 @pytest.fixture(scope='module')
 def test_client():
     flask_app = create_app()
@@ -124,4 +129,5 @@ def afterwards_reset_default_user_password():
     user.set_password('password123')
     database.session.add(user)
     database.session.commit()    
+
 
