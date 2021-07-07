@@ -2,7 +2,7 @@ from . import users_blueprint
 from flask import current_app, render_template, flash, abort, request, redirect, url_for, session, copy_current_request_context, escape, jsonify
 import requests
 from forms import RegistrationForm, LoginForm, EmailForm, PasswordForm, ChangePasswordForm
-from project.models import User, UserProfile, Follows
+from project.models import User, UserProfile, Follows, RecipeBox, Meal
 from project import database, mail
 from sqlalchemy.exc import IntegrityError
 from flask_login import current_user, login_user, login_required, logout_user
@@ -286,7 +286,7 @@ def follow_user(follow_id):
     current_user.following.append(followed_user)
     database.session.commit()
 
-    return redirect(f"/users/{current_user.id}/following")
+    return redirect(f"users/{current_user.id}/following")
 
 @users_blueprint.route('/users/<int:user_id>/followers')
 @login_required
@@ -315,5 +315,22 @@ def stop_following(follow_id):
     current_user.following.remove(followed_user)
     database.session.commit()
 
-    return redirect(f"/users/{current_user.id}/following")
+    return redirect(f"users/{current_user.id}/following")
+
+@users_blueprint.route('/users/<int:user_id>/recipes', methods=['GET'])
+@login_required
+def show_recipe_box(user_id):
+    """Show an authenticated user's saved recipes."""
+    user_id = current_user.id
+
+    if not current_user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    recipes = RecipeBox.query.filter(user_id == current_user.id) 
+
+    
+    # import ipdb; ipdb.set_trace()
+
+    return render_template("users/recipes.html", user_id=user_id, recipes=recipes)
 

@@ -25,13 +25,14 @@
     <h3 class="display-5 fw-bold text-center">Cuisine Search</h3>
     <p class="text-center">Search by Cuisine!</p>
     <form action="/recipes/search-results" method="GET">
-      {% for field in form if field.widget.input_type != 'hidden' %}
-      <p>
-        {{ field.label }}
-        {{ field }}
-        <button>Submit</button>
-      </p>
+
+      {% for field in form %}
+
+
+
+    {{field}}
       {% endfor %}
+      <button>Submit</button>
     </form>
   </div>
 </div>

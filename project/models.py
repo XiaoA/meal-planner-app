@@ -110,6 +110,12 @@ class User(database.Model):
         secondaryjoin=(Follows.user_being_followed_id == id),
     )
 
+    user_meals = database.relationship(
+        "Meal",
+        backref='user',
+        lazy='dynamic'
+    )        
+
     def is_password_correct(self, password_plaintext: str):
         return bcrypt.check_password_hash(self.password_hashed, password_plaintext)
 
@@ -245,7 +251,9 @@ class RecipeBox(database.Model):
         database.ForeignKey('users.id', ondelete='cascade')
     )
 
-    __table_args__ = (database.UniqueConstraint('recipe_url', 'user_id'),)
+    __table_args__ = (
+        database.UniqueConstraint('user_id', 'recipe_url'),
+    )
 
     def __init__(self, is_liked: bool, recipe_url: str, user_id: int):
         self.is_liked = is_liked
@@ -255,3 +263,74 @@ class RecipeBox(database.Model):
 
 
     
+## Meal Planner
+class Meal(database.Model):
+    """
+    Class that handles a user's meal planning.
+
+    Users can add items from their saved recipe box to create meals.
+
+    The following attributes of a meal are stored in this table:
+        * meal_date: The date a user plans to have a meal (required)
+        * meal_title: The (optional) title of the meal, assigned by the user (not required).
+        * meal_notes: The (optional) notes about the meal, provided by the user (not required).
+        * recipe_id: The Spoonacular recipe_id (Required).
+        * recipe_title: The Spoonacular recipe_title (Required).
+        * recipe_url: The source URL of the recipe (Required).
+        * user_id: The user_id (Foreign key from User table; required).
+    """
+    
+    __tablename__ = 'meals'
+
+    id = database.Column(
+        database.Integer,
+        primary_key=True
+    )
+    
+    meal_date = database.Column(
+        database.DateTime,
+        nullable = False,
+        default = datetime.now()
+    )
+  
+    meal_title = database.Column(
+        database.String(100), 
+        nullable = True
+    )
+
+    meal_notes = database.Column(
+        database.String(1000), 
+        nullable = True
+    )
+
+    recipe_id = database.Column(
+        database.Integer, 
+        nullable = False
+    )
+
+    recipe_title = database.Column(
+        database.String, 
+        nullable = False
+    )
+
+    recipe_url = database.Column(
+        database.String, 
+        nullable = False
+    )
+
+    user_id = database.Column(
+        database.Integer, 
+        database.ForeignKey('users.id')
+    ) 
+
+
+    def __init__(self, meal_date: datetime, meal_title: str, meal_notes: str, recipe_id: int, recipe_title: str, recipe_url: str, user_id: int):
+        self.meal_date = meal_date
+        self.meal_title = meal_title
+        self.meal_notes = meal_notes
+        
+        self.recipe_id = recipe_id
+        self.recipe_title = recipe_title
+        self.recipe_url = recipe_url
+        self.user_id = user_id
+        

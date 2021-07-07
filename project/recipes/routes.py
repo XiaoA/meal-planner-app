@@ -4,7 +4,7 @@ from project import create_app, database
 from flask_login import current_user, login_required
 import requests
 from forms import SearchIngredientForm, SearchCuisineForm, SearchDietForm, SearchMealTypeForm, SearchIntoleranceTypeForm, ViewRecipeDetailsForm, LoginForm
-from project.models import User, UserProfile, RecipeBox
+from project.models import User, UserProfile, RecipeBox, Meal
 from config import API_BASE_URL, API_KEY
 from sqlalchemy.exc import IntegrityError
 
@@ -27,7 +27,7 @@ def search_cuisine_recipes():
     """
     search_cuisine_form = SearchCuisineForm()
 
-    return render_template('recipes/index.html', form=search_cuisine_form)
+    return render_template('recipes/index.html', form=search_cuisine_form, choices=choices)
 
 # Diet Search
 def search_diet_recipes():
@@ -86,10 +86,12 @@ def show_cuisine_search_results():
                 "number": "4",
             }
         )
+        
         results = response.json()['results']
+        import ipdb; ipdb.set_trace()
         return render_template('recipes/search-results.html', results=results)
-        current_app.logger.info(f"Searched for { cuisine }")
-        flash(f"Searched for { cuisine }", 'success')
+    # current_app.logger.info(f"Searched for { cuisine }")
+    # flash(f"Searched for { cuisine }", 'success')
     except requests.exceptions.RequestException:
         flash('Your search failed', 'danger')
         return render_template('recipes/index.html')
@@ -154,7 +156,7 @@ def show_dietary_intolerance_search_results():
         return render_template('recipes/index.html')
 
 # View Recipe Details
-@recipes_blueprint.route('/recipes/view-recipe-details/<int:recipe_id>', methods=['GET'])
+@recipes_blueprint.route('/recipes/view-recipe-details/<int:recipe_id>', methods=['GET', 'POST'])
 def view_recipe_details(recipe_id):
     try:
         response = requests.get(
@@ -167,7 +169,7 @@ def view_recipe_details(recipe_id):
         results = response.json()
         recipe_id = response.json()['id']
         recipe_url = response.json()['sourceUrl']
-        import ipdb; ipdb.set_trace()
+        # import ipdb; ipdb.set_trace()
 
         return render_template('recipes/view-recipe-details.html', results=results, recipe_id=recipe_id)
     except requests.exceptions.RequestException:
@@ -197,3 +199,35 @@ def like_recipe(recipe_id):
                 return redirect(url_for('recipes.view_recipe_details', recipe_id=recipe_id))
 
             
+
+# Add New Meal
+@recipes_blueprint.route('/recipes/add-new-meal/<int:recipe_id>', methods=['GET', 'POST'])
+@login_required            
+def add_new_meal(recipe_id):
+    recipe_id = recipe_id
+    if request.method == 'POST':
+        if current_user.is_authenticated:
+            try:
+                meal_date = request.form['meal_date']
+                meal_title = request.form['meal_title']
+                meal_notes = request.form['meal_notes']
+                recipe_id = request.form['recipe_id']
+                recipe_title = request.form['recipe_title']
+                recipe_url = request.form['recipe_url']
+                user_id = current_user.id                
+
+                new_meal_plan = Meal(meal_date, meal_title, meal_notes, recipe_id, recipe_title, recipe_url, user_id)
+                database.session.add(new_meal_plan)
+                database.session.commit()
+                flash("You created a new meal plan", "success")
+                return redirect(url_for('recipes.view_recipe_details', recipe_id=recipe_id))
+            except IntegrityError:
+                database.session.rollback()
+                flash(f"You've already saved this recipe!", "danger")
+                return redirect(url_for('recipes.view_recipe_details', recipe_id=recipe_id))
+
+@recipes_blueprint.route('/recipes/recipe-box', methods=['GET'])
+def show_recipe_box():
+    return render_template('recipes/recipe-box.html')
+
+
