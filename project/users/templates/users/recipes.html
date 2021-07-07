@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>My Recipe Box</h1>
+
+{% for recipe in recipes %}
+
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Recipe</h5>
+
+    <p class="card-text"><a href="{{ recipe.recipe_url }}">{{ recipe.recipe_url }}</a></p>
+    <a href="{{ recipe.recipe_url }}" class="card-link">View Recipe</a>
+    <a href="/" class="card-link">Search for Similar Recipes</a>
+  </div>
+</div>
+
+{% endfor %}
+{% endblock %}

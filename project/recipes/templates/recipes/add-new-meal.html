@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="form">
+  <h1>Add a Meal:</h1>
+
+  <form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <input type="hidden" name="recipe_url" value="{{results.sourceUrl}}">
+    <div class="mb-3">
+      <label for="mealDate">Meal Date <em>(required)</em></label>
+      <input type="date" id="mealDate" name="meal_date"  placeholder="YYYY-MM-DD" required>
+    </div>
+
+    <div class="mb-3">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

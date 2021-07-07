@@ -8,16 +8,65 @@
 <div class="container text-center">
   <h3>{{ results.title }}</h3>
   <p><img src="{{results.image}}"></p>
+  
 
   {% if current_user.is_authenticated %}
-  <div class="container">
-    <form method="POST" action="/recipes/like-recipe/{{results.id}}">
+  <div class="container interaction-buttons">
+
+    <form method="POST" action="/recipes/like-recipe/{{ results.id }}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-      <input type="hidden" name="recipe_url" value="{{results.sourceUrl}}">
+      <input type="hidden" name="recipe_url" value="{{ results.sourceUrl }}">
       <button button-type="submit" class="btn btn-success btn-small"><i class="bi bi-hand-thumbs-up"></i> Like Recipe</button>
     </form>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      <i class="bi bi-clipboard-plus"></i> Create a Meal Plan
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New Meal Plan</h5>
+            n          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="form">
+              <h3>Add a Meal Plan:</h3>
+
+              <form method="POST" action="/recipes/add-new-meal/{{ results.id }}">
+                <div class="mb-3">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                  <input type="hidden" name="recipe_id" value="{{results.id}}">
+                  <input type="hidden" name="recipe_title" value="{{results.title}}">
+                  <input type="hidden" name="recipe_url" value="{{results.sourceUrl}}">
+                  <label for="mealDate">Meal Date <em>(required)</em></label>
+                  <input type="date" id="mealDate" name="meal_date"  placeholder="YYYY-MM-DD" required>
+                </div>
+                <div class="mb-3">
+                  <label for="mealTitle">Meal title <em>(optional)</em></label>
+                  <input type="text" id="mealTitle" name="meal_title"  placeholder="Enter a meal or event title" required>
+                </div>
+
+                <div class="mb-3">
+                  <label for="mealNotes">Meal notes <em>(optional)</em></label>
+                  <input type="text" id="mealNotes" name="meal_notes"  placeholder="Enter notes about this meal plan" required>
+                </div>
+
+                <div class="mb-3">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
 {% endif %}
 <div class="accordion" id="accordionPanelsStayOpenExample">
   <div class="accordion-item">

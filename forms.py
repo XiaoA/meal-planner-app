@@ -67,5 +67,4 @@ class PasswordForm(FlaskForm):
 class ChangePasswordForm(FlaskForm):
     current_password = PasswordField('Current Password', validators=[DataRequired()])
     new_password = PasswordField('New Password', validators=[DataRequired()])
-    submit = SubmitField('Submit')
-    
+    submit = SubmitField('Submit')    
