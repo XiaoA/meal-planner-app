@@ -9,14 +9,15 @@ class SearchIngredientForm(FlaskForm):
     apiKey = API_KEY
 
 class SearchCuisineForm(FlaskForm):
-    cuisine = SelectField("Search by Cuisine", choices=[
-        ('African'), ('American'), ('British'), ('Cajun'),
-        ('Caribbean'), ('Chinese'), ('Eastern European'),
-        ('European'), ('French'), ('German'), ('Greek'), ('Indian'),
-        ('Irish'), ('Italian'), ('Japanese'), ('Jewish'), ('Korean'),
-        ('Latin American'), ('Mediterranean'), ('Mexican'),
-        ('Middle Eastern'), ('Nordic'), ('Southern'), ('Spanish'),
-        ('Thai'), ('Vietnamese')])
+    choices=[
+        'African', 'American', 'British', 'Cajun',
+        'Caribbean', 'Chinese', 'Eastern European',
+        'European', 'French', 'German', 'Greek', 'Indian',
+        'Irish', 'Italian', 'Japanese', 'Jewish', 'Korean',
+        'Latin American', 'Mediterranean', 'Mexican',
+        'Middle Eastern', 'Nordic', 'Southern', 'Spanish',
+        'Thai', 'Vietnamese']
+    query = SelectField("Search by Cuisine", choices=[(cu, cu) for cu in choices])
     apiKey = API_KEY
 
 class SearchDietForm(FlaskForm):

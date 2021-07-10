@@ -8,14 +8,17 @@ from project.models import User, UserProfile, RecipeBox, Meal
 from config import API_BASE_URL, API_KEY
 from sqlalchemy.exc import IntegrityError
 
-""" Recipe Index Routes """
-@recipes_blueprint.route('/', methods=['GET'])
+""" Recipe Search Routes """
+
 # Ingredient Search
+@recipes_blueprint.route('/', methods=['GET'])
 def index():
-    search_ingredient_form = SearchIngredientForm()
-    return render_template('recipes/index.html', form=search_ingredient_form)
+    """ Returns a list of recipes or ingredients that match the given search term. """
+    form = SearchIngredientForm()
+    return render_template('recipes/index.html', form=form)
 
 # Cuisine Search
+@recipes_blueprint.route('/recipes/search/cuisine', methods=['GET'])
 def search_cuisine_recipes():
     """
     Returns a list of supported cuisines, including: 
@@ -27,9 +30,10 @@ def search_cuisine_recipes():
     """
     search_cuisine_form = SearchCuisineForm()
 
-    return render_template('recipes/index.html', form=search_cuisine_form, choices=choices)
+    return render_template('recipes/search/cuisine.html', form=search_cuisine_form)
 
 # Diet Search
+@recipes_blueprint.route('/recipes/search/diet', methods=['GET'])
 def search_diet_recipes():
     """
     Returns a list of supported specialty diets, including: 
@@ -38,9 +42,10 @@ def search_diet_recipes():
     Vegan, Pescetarian, Paleo, Primal, Whole30]
     """
     search_diet_form = SearchDietForm()
-    return render_template('recipes/index.html', form=search_diet_form)
+    return render_template('recipes/search/diet.html', form=search_diet_form)
 
 # Meal Type Search
+@recipes_blueprint.route('/recipes/search/meal-type', methods=['GET'])
 def search_meal_type_recipes():
     """
     Returns a list of supported specialty diets, including: 
@@ -49,11 +54,22 @@ def search_meal_type_recipes():
     Vegan, Pescetarian, Paleo, Primal, Whole30]
     """
     search_meal_type_form = SearchMealTypeForm()
-    return render_template('recipes/index.html', form=search_meal_type_form)
+    return render_template('recipes/search/meal-type.html', form=search_meal_type_form)
 
+# Dietary Intolerances Search
+@recipes_blueprint.route('/recipes/search/intolerance', methods=['GET'])
+def search_dietary_intolerances():
+    """
+    Returns a list of supported dietary intolerances, including: 
+
+    ['Dairy', 'Egg', 'Gluten', 'Grain', 'Peanut', 'Seafood',
+    'Sesame', 'Shellfish', 'Soy', 'Sulfite', 'Tree Nut', 'Wheat']
+    """
+    search_intolerance_form = SearchIntoleranceTypeForm()
+    return render_template('recipes/search/intolerance.html', form=search_intolerance_form)
 
 # Show Ingredient Search Results
-@recipes_blueprint.route('/recipes/search-results', methods=['GET'])
+@recipes_blueprint.route('/recipes/search/ingredient-search-results', methods=['GET'])
 def show_ingredient_search_results():
     try:
         ingredient = request.args['query']
@@ -66,15 +82,17 @@ def show_ingredient_search_results():
             }
         )
         results = response.json()['results']
+
         current_app.logger.info(f"Searched for recipes containing: { ingredient }")
         flash(f"Searched for recipes with { ingredient }", 'success')    
 
-        return render_template('recipes/search-results.html', results=results)
+        return render_template('recipes/search/ingredient-search-results.html', results=results)
     except requests.exceptions.RequestException:
         flash('Your search failed', 'danger')
         return render_template('recipes/index.html')
     
 # Show Cuisine Search Results
+@recipes_blueprint.route('/recipes/search/cuisine-search-results', methods=['GET'])
 def show_cuisine_search_results():
     try:
         cuisine = request.args['query']
@@ -82,14 +100,13 @@ def show_cuisine_search_results():
             url="https://api.spoonacular.com/recipes/complexSearch",
             params={
                 "apiKey": API_KEY,
-                "query": cuisine,
-                "number": "4",
+                "query": cuisine, 
+                "number": "6",
             }
         )
         
         results = response.json()['results']
-        import ipdb; ipdb.set_trace()
-        return render_template('recipes/search-results.html', results=results)
+        return render_template('recipes/search/cuisine-search-results.html', results=results)
     # current_app.logger.info(f"Searched for { cuisine }")
     # flash(f"Searched for { cuisine }", 'success')
     except requests.exceptions.RequestException:
@@ -97,9 +114,10 @@ def show_cuisine_search_results():
         return render_template('recipes/index.html')
 
 # Show Diet Search Results 
+@recipes_blueprint.route('/recipes/search/diet-search-results', methods=['GET'])
 def show_diet_search_results():
     try:
-        diet = request.args['query']
+        diet = request.args['diet']
         response = requests.get(
             url="https://api.spoonacular.com/recipes/complexSearch",
             params={
@@ -111,15 +129,16 @@ def show_diet_search_results():
         results = response.json()['results']
         current_app.logger.info(f"Searched for { diet } recipes")
         flash(f"Searched for { diet }", 'success')    
-        return render_template('recipes/search-results.html', results=results)
+        return render_template('recipes/search/diet-search-results.html', results=results)
     except requests.exceptions.RequestException:
         flash('Your search failed', 'danger')
         return render_template('recipes/index.html')
 
 # Show Meal Type Search Results 
+@recipes_blueprint.route('/recipes/search/meal-type-search-results', methods=['GET'])
 def show_meal_type_search_results():
     try:
-        meal_type = request.args['query']
+        meal_type = request.args['type']
         response = requests.get(
             url="https://api.spoonacular.com/recipes/complexSearch",
             params={
@@ -131,26 +150,28 @@ def show_meal_type_search_results():
         results = response.json()['results']
         current_app.logger.info(f"Searched for { meal_type }")
         flash(f"Searched for { meal_type }", 'success')    
-        return render_template('recipes/search-results.html', results=results)
+        return render_template('recipes/search/meal-type-search-results.html', results=results)
     except requests.exceptions.RequestException:
         flash('Your search failed', 'danger')
         return render_template('recipes/index.html')    
 
 # Show Dietary Intolerance Search Results
+@recipes_blueprint.route('/recipes/search/intolerance-search-results', methods=['GET'])
 def show_dietary_intolerance_search_results():
     try:
-        intolerance = request.args['query']
+        intolerance = request.args['type']
         response = requests.get(
             url="https://api.spoonacular.com/recipes/complexSearch",
             params={
                 "apiKey": API_KEY,
                 "query": intolerance,
+                "number": "4"
             }
         )
         results = response.json()['results']
         current_app.logger.info(f"Searched for { intolerance }")
         flash(f"Searched for { intolerance }", 'success')    
-        return render_template('recipes/search-results.html', results=results)
+        return render_template('recipes/search/intolerance-search-results.html', results=results)
     except requests.exceptions.RequestException:
         flash('Your search failed', 'danger')
         return render_template('recipes/index.html')
@@ -164,6 +185,7 @@ def view_recipe_details(recipe_id):
             params={
                 "includeNutrition": "false",
                 "apiKey": API_KEY,
+                "number": "4"
             },
         )
         results = response.json()

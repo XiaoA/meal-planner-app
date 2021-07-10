@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form method="GET", action="/recipes/search/cuisine-search-results">
+  {{ form.hidden_tag() }}
+
+  {{cuisine}}
+  {% for field in form if field.widget.input_type != 'hidden'%}
+  <div class="form-group">
+    {{field.label}}
+    {{field(class_="form-control")}}
+    {% for err in field.errors %}
+    <small class="form-text text-danger">
+      {{err}}
+    </small>
+    {% endfor %}
+  </div>
+  {% endfor %}
+  <button class="btn  btn-success  btn-lg">Submit</button>
+  <a href="/" class="btn btn-danger btn-lg">Go Back</a>
+</form>
+{% endblock %}
