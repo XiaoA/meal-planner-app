@@ -13,6 +13,7 @@
         <img src="https://spoonacular.com/recipeImages/{{result['id']}}-556x370.jpg" class="card-img-top" alt="...">
         <div class="card-body text-center">
           <h5 class="card-title">{{ result.title }}</h5>
+
           <form method="GET" action="/recipes/view-recipe-details/{{result['id']}}">
             <!-- <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> -->
             <button type="submit" class="btn btn-success mx-auto">View Details</button>

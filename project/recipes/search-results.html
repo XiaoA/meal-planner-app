@@ -5,15 +5,17 @@
 {% endblock %}
 
 {% block content %}
- <div class="container">
-  {% for result in results %}
+
+<div class="container">
+  {% for cu in cuisine %}
   <div class="row">
     <div class="col-3">
-      <div class="card" style="width: 18rem">
-        <img src="https://spoonacular.com/recipeImages/{{result['id']}}-556x370.jpg" class="card-img-top" alt="...">
+
+      <div class="card">
+        <img src="https://spoonacular.com/recipeImages/{{cuisine['id']}}-556x370.jpg" class="card-img-top" alt="...">
         <div class="card-body text-center">
-          <h5 class="card-title">{{ result.title }}</h5>
-          <form method="GET" action="/recipes/view-recipe-details/{{result['id']}}">
+          <h5 class="card-title">{{ cu.name }}</h5>
+          <form method="GET" action="/recipes/view-recipe-details/{{cuisine['id']}}">
             <!-- <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> -->
             <button type="submit" class="btn btn-success mx-auto">View Details</button>
           </form>

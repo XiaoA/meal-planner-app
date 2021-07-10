@@ -1,29 +1,23 @@
 {% extends 'base.html' %}
-
-{% block header %}
-<h1 class="text-center">{% block title %}Search Results{% endblock %}</h1>
-{% endblock %}
-
 {% block content %}
- <div class="container">
-  {% for result in results %}
+
+<h1 class="text-center">Cuisine Search Results</h1>
+<div class="container">
   <div class="row">
-    <div class="col-3">
-      <div class="card" style="width: 18rem">
+    {% for result in results %}
+    <div class="col-sm-4">
+      <div class="card">
         <img src="https://spoonacular.com/recipeImages/{{result['id']}}-556x370.jpg" class="card-img-top" alt="...">
         <div class="card-body text-center">
           <h5 class="card-title">{{ result.title }}</h5>
           <form method="GET" action="/recipes/view-recipe-details/{{result['id']}}">
-            <!-- <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> -->
             <button type="submit" class="btn btn-success mx-auto">View Details</button>
           </form>
         </div> 
       </div>
-
     </div>
+    {% endfor %}
   </div>
-
-  {% endfor %}
 </div>
 {% endblock %}
 

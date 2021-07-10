@@ -269,9 +269,11 @@ def show_following(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("users.login")
 
+    
     user = User.query.get_or_404(user_id)
-    user_profile
-    return render_template('users/following.html', user=user)
+    user_profile = UserProfile.query.get_or_404(user_id)
+    import ipdb; ipdb.set_trace()
+    return render_template('users/following.html', user=user, user_profile=user_profile)
 
 @users_blueprint.route('/users/follow/<int:follow_id>', methods=['POST'])
 @login_required
