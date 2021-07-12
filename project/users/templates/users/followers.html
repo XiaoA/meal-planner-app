@@ -16,14 +16,16 @@
           </a>
 
           {% if current_user.is_following(follower) %}
-          <form method="POST" action="/users/stop-following/{{ follower.id }}">
+          <hp>You are following this user.</p>
+          <form method="POST" action="/users/unfollow/{{ follower.id }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>  
-            <button class="btn btn-primary btn-sm">Unfollow</button>
+            <button class="btn btn-danger btn-sm">Unfollow</button>
           </form>
           {% else %}
+          <p>You are not following this user.</p>
           <form method="POST" action="/users/follow/{{ follower.id }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <button class="btn btn-outline-primary btn-sm">Follow</button>
+            <button class="btn btn-primary btn-sm">Follow</button>
           </form>
           {% endif %}
 
