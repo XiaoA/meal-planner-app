@@ -2,30 +2,11 @@ from project import database, bcrypt
 from flask import current_app
 from datetime import datetime
 
-class Follows(database.Model):
-    """
-    Class that represents a relationship (follower/following) between two users.
 
-    The following attributes of a user are stored in this table:
-        user_following_id (type: int) 
-        user_being_followed_id (type: int) 
-    """
-
-    __tablename__ = 'follows'
-
-    user_following_id = database.Column(
-        database.Integer,
-        database.ForeignKey('users.id', ondelete='cascade'),
-        primary_key=True,
-        autoincrement=False,
-    )
-
-    user_being_followed_id = database.Column(
-        database.Integer,
-        database.ForeignKey('users.id', ondelete='cascade'),
-        primary_key=True,
-        autoincrement=False,
-    )
+followers = database.Table('followers',
+    database.Column('follower_id', database.Integer, database.ForeignKey('users.id')),
+    database.Column('followed_id', database.Integer, database.ForeignKey('users.id'))
+)
 
 class User(database.Model):
     """
@@ -96,19 +77,11 @@ class User(database.Model):
         lazy='dynamic'
     )
 
-    followers = database.relationship(
-        "User",
-        secondary="follows",
-        primaryjoin=(Follows.user_being_followed_id == id),
-        secondaryjoin=(Follows.user_following_id == id),
-    )
-
-    following = database.relationship(
-        "User",
-        secondary="follows",
-        primaryjoin=(Follows.user_following_id == id),
-        secondaryjoin=(Follows.user_being_followed_id == id),
-    )
+    followed = database.relationship(
+        'User', secondary=followers,
+        primaryjoin=(followers.c.follower_id == id),
+        secondaryjoin=(followers.c.followed_id == id),
+        backref=database.backref('followers', lazy='dynamic'), lazy='dynamic')
 
     user_meals = database.relationship(
         "Meal",
@@ -123,17 +96,17 @@ class User(database.Model):
     def set_password(self, password_plaintext: str):
         self.password_hashed = self._generate_password_hash(password_plaintext)
 
-    def is_followed_by(self, other_user):
-        """Is this user being followed by `other_user`?"""
+    def follow(self, user):
+        if not self.is_following(user):
+            self.followed.append(user)
 
-        found_user_list = [user for user in self.followers if user == other_user]
-        return len(found_user_list) == 1
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.followed.remove(user)
 
-    def is_following(self, other_user):
-        """Is this user following `other_user`?"""
-
-        found_user_list = [user for user in self.following if user == other_user]
-        return len(found_user_list) == 1
+    def is_following(self, user):
+        return self.followed.filter(
+            followers.c.followed_id == user.id).count() > 0
 
     @staticmethod
     def _generate_password_hash(password_plaintext):

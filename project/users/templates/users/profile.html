@@ -1,14 +1,16 @@
 {% extends "base.html" %}
-
 {% block content %}
+
 <h1>User Profile</h1>
+{% if user == current_user %}
 
 <div class="card">
   <div class="card-heading">
     <h2>Account</h2>
   </div>
   <div class="card-body">
-    <p>Email: {{ current_user.email }}</p>
+    <p>Email: {{ user.email }}</p>
+
   </div>
 </div>
 
@@ -38,4 +40,35 @@
       <p><a href="{{ url_for('users.logout') }}">Log Out</a></p>     
   </div>
 </div>
+<div class="card">
+  <div class="card-heading">
+    <h2>Follows</h2>
+  </div>
+  <div class="card-body">
+    <a href="{{ url_for('users.show_following', user_id=current_user.id) }}">Following</a>
+    Followers
+  </div>
+</div>
+
+{% else %}
+<div class="card">
+  <div class="card-heading">
+    <h2>Account</h2>
+  </div>
+  <div class="card-body">
+    <p><strong>Username:</strong> {{ user_profile.username }}</p>
+    <p>Joined on {{ current_user.registered_on.strftime("%A, %B %d, %Y") }}</p>
+  </div>
+</div>
+    
+<div class="card">
+  <div class="card-heading">
+    <h2>Follow Status</h2>
+  </div>
+  <div class="card-body">
+    Follow
+    Unfollow
+  </div>
+</div>
+{% endif %}
 {% endblock %}

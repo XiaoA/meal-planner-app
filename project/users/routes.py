@@ -2,7 +2,7 @@ from . import users_blueprint
 from flask import current_app, render_template, flash, abort, request, redirect, url_for, session, copy_current_request_context, escape, jsonify
 import requests
 from forms import RegistrationForm, LoginForm, EmailForm, PasswordForm, ChangePasswordForm
-from project.models import User, UserProfile, Follows, RecipeBox, Meal
+from project.models import User, UserProfile, RecipeBox, Meal
 from project import database, mail
 from sqlalchemy.exc import IntegrityError
 from flask_login import current_user, login_user, login_required, logout_user
@@ -46,9 +46,8 @@ def generate_password_reset_email(user_email):
 @login_required
 def show_all_users():
     # This should be refactored for better performance 
-    users = User.query.order_by(User.id).all()
     user_profiles = UserProfile.query.order_by(UserProfile.id).all()
-    return render_template('users/index.html', users=users, user_profiles=user_profiles)
+    return render_template('users/index.html', user_profiles=user_profiles)
 
 """ Routes """
 
@@ -255,10 +254,10 @@ def show_user_profile(user_id):
     if current_user.is_authenticated == False:
         flash("Access unauthorized.", "danger")
         return redirect("users.login")
-
-    user = current_user
-    return render_template('users/profile.html', user=user)
-
+    
+    user = User.query.get_or_404(user_id)
+    user_profile = user.user_profiles.first()
+    return render_template('users/profile.html', user=user, user_profile=user_profile)
 
 @users_blueprint.route('/users/<int:user_id>/following')
 @login_required
@@ -269,23 +268,23 @@ def show_following(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("users.login")
 
-    
+    # user_profiles = User.query.k
+    # UserProfile.query.order_by(UserProfile.id).all()
     user = User.query.get_or_404(user_id)
-    user_profile = UserProfile.query.get_or_404(user_id)
-    import ipdb; ipdb.set_trace()
-    return render_template('users/following.html', user=user, user_profile=user_profile)
+    # user_profile = user.user_profiles.first()
+    return render_template('users/following.html', user=user)#, user_profile=user_profile)
 
-@users_blueprint.route('/users/follow/<int:follow_id>', methods=['POST'])
+@users_blueprint.route('/users/follow/<int:follower_id>', methods=['POST'])
 @login_required
-def follow_user(follow_id):
+def follow_user(follower_id):
     """Current user follows another user."""    
 
     if current_user.is_authenticated == False:
         flash("Access unauthorized.", "danger")
         return redirect("user.login")
 
-    followed_user = User.query.get_or_404(follow_id)
-    current_user.following.append(followed_user)
+    # followed_user = User.query.get_or_404(follow_id)
+    current_user.following.append(followed)
     database.session.commit()
 
     return redirect(f"users/{current_user.id}/following")
@@ -296,7 +295,6 @@ def users_followers(user_id):
     """Show list of followers of this user."""
 
     if current_user.is_authenticated == False:
-        # if not current_user:
         flash("Access unauthorized.", "danger")
         return redirect("users.login")
 
@@ -324,15 +322,15 @@ def stop_following(follow_id):
 def show_recipe_box(user_id):
     """Show an authenticated user's saved recipes."""
     user_id = current_user.id
-
+    
     if not current_user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
     recipes = RecipeBox.query.filter(user_id == current_user.id) 
-
     
-    # import ipdb; ipdb.set_trace()
+    
+
 
     return render_template("users/recipes.html", user_id=user_id, recipes=recipes)
 
