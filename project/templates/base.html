@@ -21,6 +21,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
+            
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item dropdown">
@@ -28,8 +29,13 @@
                     My Account
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="/users/{{current_user.id}}">My Profile</a></li>
-                    <li><a class="dropdown-item" href="#">My Recipe Box</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('users.show_user_profile', user_id=current_user.id) }}">My Profile</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('users.show_recipe_box', user_id=current_user.id) }}">My Recipe Box</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('users.show_meal_plans', user_id=current_user.id) }}">My Meal Plans</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{{ url_for('users.show_all_users') }}">Show All Users</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('users.show_following', user_id=current_user.id) }}">Following</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('users.users_followers', user_id=current_user.id) }}">Followers</a></li>            
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{{url_for('users.logout')}}">Logout</a></li>
                   </ul>

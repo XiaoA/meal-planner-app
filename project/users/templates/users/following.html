@@ -1,36 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2 "text-center">Users you're following</h2>
-{% for followed_user in user.following %}
+<h2 class="text-center">Users you're following</h2>
+<div class="container">
+  <div class="row">
+    {% for followed in user.followed %}
 
-<div class="card user-card">
-  <div class="card-inner">
-    <div class="image-wrapper">
-      <img src="https://www.fillmurray.com/500/500" alt="" class="card-hero">
+    <div class="col-sm-4">
+      <div class="card">
+        <img src="https://www.fillmurray.com/200/200" alt="" class="card-hero">
+        <div class="card-body text-center">
+          <a href="/users/{{ followed.id }}" class="card-link">
+            <p>{{ followed.user_profiles[0].username }}</p>
+          </a>
+        </div>
+      </div>
     </div>
-    <div class="card-contents">
-      <a href="/users/{{ followed_user.id }}" class="card-link">
-        <img src="{{ followed_user.image_url }}" alt="Image for {{ followed_user.email }}" class="card-image">
-        <p>{{ followed_user.email }}</p>
-      </a>
-      {% if current_user != followed_user and current_user.is_following(followed_user) %}
-      <form method="POST"
-        action="/users/stop-following/{{ followed_user.id }}">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>  
-        <button class="btn btn-primary btn-sm">Unfollow</button>
-      </form>
-      {% else %}
-      <form method="POST" action="/users/follow/{{ followed_user.id }}">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>  
-        <button class="btn btn-outline-primary btn-sm">Follow</button>
-      </form>
-      {% endif %}
-    </div>
+{% endfor %}
   </div>
 </div>
-
-{% endfor %}
 {% endblock %}
 
 

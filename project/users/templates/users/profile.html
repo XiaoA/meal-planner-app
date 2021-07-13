@@ -1,14 +1,16 @@
 {% extends "base.html" %}
-
 {% block content %}
+
 <h1>User Profile</h1>
+{% if user == current_user %}
 
 <div class="card">
   <div class="card-heading">
     <h2>Account</h2>
   </div>
   <div class="card-body">
-    <p>Email: {{ current_user.email }}</p>
+    <p>Email: {{ user.email }}</p>
+
   </div>
 </div>
 
@@ -19,9 +21,9 @@
   <div class="card-body">
     <p>Joined on {{ current_user.registered_on.strftime("%A, %B %d, %Y") }}</p>
     {% if current_user.email_confirmed %}
-      <p>Email address confirmed on {{ current_user.email_confirmed_on.strftime("%A, %B %d, %Y") }}</p>
+    <p>Email address confirmed on {{ current_user.email_confirmed_on.strftime("%A, %B %d, %Y") }}</p>
     {% else %}
-      <p>Email address has not been confirmed!</p>
+    <p>Email address has not been confirmed!</p>
     {% endif %}
   </div>
 </div>
@@ -33,9 +35,56 @@
   <div class="card-body">
     <p><a href="{{ url_for('users.change_password') }}">Change Password</a></p>
     {% if not current_user.email_confirmed %}
-      <p><a href="{{ url_for('users.resend_email_confirmation') }}">Resend Email Confirmation</a></p>
-      {% endif %}
-      <p><a href="{{ url_for('users.logout') }}">Log Out</a></p>     
+    <p><a href="{{ url_for('users.resend_email_confirmation') }}">Resend Email Confirmation</a></p>
+    {% endif %}
+    <p><a href="{{ url_for('users.logout') }}">Log Out</a></p>     
   </div>
 </div>
+<div class="card">
+  <div class="card-heading">
+    <h2>Follows</h2>
+  </div>
+  <div class="card-body">
+    <a href="{{ url_for('users.show_following', user_id=current_user.id) }}">Following</a>
+    <a href="{{ url_for('users.users_followers', user_id=current_user.id) }}">Followers</a>
+
+  </div>
+</div>
+
+{% else %}
+<div class="card">
+  <div class="card-heading">
+    <h2>Account</h2>
+  </div>
+  <div class="card-body">
+    <p><strong>Username:</strong> {{ user_profile.username }}</p>
+    <p>Joined on {{ current_user.registered_on.strftime("%A, %B %d, %Y") }}</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-heading">
+    <h2>Follow Status</h2>
+  </div>
+  <div class="card-body">
+    {% if not current_user.is_following(user) %}
+    <p>You are not following {{user_profile.username }}.</p>
+    <p>
+      <form action="{{ url_for('users.follow_user', user_id=user.id) }}" method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.submit(value='Follow') }}
+      </form>
+    </p>
+    {% else %}
+    <p>You are following {{user_profile.username }}.</p>
+     <p>
+      <form action="{{ url_for('users.unfollow_user', user_id=user.id) }}" method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.submit(value='Unfollow') }}
+      </form>
+    </p>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
 {% endblock %}

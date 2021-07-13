@@ -191,6 +191,7 @@ def view_recipe_details(recipe_id):
         results = response.json()
         recipe_id = response.json()['id']
         recipe_url = response.json()['sourceUrl']
+        recipe_title = response.json()['title']
         # import ipdb; ipdb.set_trace()
 
         return render_template('recipes/view-recipe-details.html', results=results, recipe_id=recipe_id)
@@ -203,14 +204,16 @@ def view_recipe_details(recipe_id):
 @login_required
 def like_recipe(recipe_id):
     recipe_id = recipe_id
+    # import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         if current_user.is_authenticated:
             try:
                 is_liked = True
                 recipe_url = request.form['recipe_url']
+                recipe_title = request.form['recipe_title']
                 user_id = current_user.id
 
-                new_like_recipe = RecipeBox(is_liked, recipe_url, user_id)
+                new_like_recipe = RecipeBox(is_liked, recipe_url, recipe_title, user_id)
                 database.session.add(new_like_recipe)
                 database.session.commit()
                 flash("You liked this recipe", "success")
