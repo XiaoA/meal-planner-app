@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 
-
 <h2 class="text-center">Users you're following</h2>
 <div class="container">
   <div class="row">
     {% for followed in user.followed %}
+
     <div class="col-sm-4">
       <div class="card">
         <img src="https://www.fillmurray.com/200/200" alt="" class="card-hero">
         <div class="card-body text-center">
           <a href="/users/{{ followed.id }}" class="card-link">
-            <p>{{ followed.email }}</p>
+            <p>{{ followed.user_profiles[0].username }}</p>
           </a>
         </div>
       </div>

@@ -12,7 +12,7 @@
         <img src="https://www.fillmurray.com/g/200/200" alt="" class="card-hero">
         <div class="card-body text-center">
           <a href="/users/{{ follower.id }}" class="card-link">
-            <p>{{ follower.email }}</p>
+            <p>{{ follower.user_profiles[0].username }}</p>
           </a>
 
           {% if current_user.is_following(follower) %}

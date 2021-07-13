@@ -332,6 +332,7 @@ def users_followers(user_id):
         return redirect("users.login")
 
     user = User.query.get_or_404(user_id)
+    
     return render_template('users/followers.html', user=user)
 
 @users_blueprint.route('/users/<int:user_id>/recipes', methods=['GET'])
