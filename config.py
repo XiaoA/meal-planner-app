@@ -5,6 +5,11 @@ API_BASE_URL = "https://api.spoonacular.com"
 API_INGREDIENT_SEARCH_URL = " https://api.spoonacular.com/recipes/complexSearch"
 API_KEY = os.getenv('API_KEY', default='')
 
+# Fix issue with deprecated heroku-postgres URL
+uri = os.getenv("DATABASE_URL")
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+    
 # Determine the folder of the top-level directory of this project
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
