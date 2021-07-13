@@ -1,4 +1,5 @@
 import os
+import re
 from datetime import timedelta
 
 API_BASE_URL = "https://api.spoonacular.com"
@@ -12,7 +13,6 @@ if uri.startswith("postgres://"):
     
 # Determine the folder of the top-level directory of this project
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
-
 
 class Config(object):
     FLASK_ENV = 'development'
