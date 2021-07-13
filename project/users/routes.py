@@ -346,3 +346,15 @@ def show_recipe_box(user_id):
     recipes = RecipeBox.query.filter(user_id == current_user.id) 
     return render_template("users/recipes.html", user_id=user_id, recipes=recipes)
 
+@users_blueprint.route('/users/<int:user_id>/meal-plans', methods=['GET'])
+@login_required
+def show_meal_plans(user_id):
+    """Show an authenticated user's meal plans."""
+    user_id = current_user.id
+    if not current_user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    meal_plans = Meal.query.filter(user_id == current_user.id)
+    return render_template("users/meal-plans.html", user_id=user_id, meal_plans=meal_plans)
+

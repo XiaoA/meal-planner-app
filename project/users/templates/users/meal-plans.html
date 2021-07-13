@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-center">My Meal Plans</h1>
+
+{% for meal_plan in meal_plans %}
+<div class="card">
+  <div class="card-body">
+    <h3 class="card-text">{{ meal_plan.recipe_title }}</h3>
+    {% if meal_plan.meal_title %}
+    <p><strong>Meal Title:</strong> {{ meal_plan.meal_title }} </p>
+    {% elif meal_plan.meal_notes %}
+    <p><strong>Notes:</strong> {{ meal_plan.meal_notes }} </p>
+    {% endif %}
+    <p><strong>Meal Date:</strong> {{ meal_plan.meal_date }} </p>
+    <p><strong>Recipe name:</strong> {{ meal_plan.recipe_title }} </p>
+    <p><strong>Recipe URL:</strong> <a href="{{ meal_plan.recipe_url }}">{{ meal_plan.recipe_url }}</a> </p>
+    <a href="/" class="btn btn-primary">Search for New Recipes</a>
+  </div>
+</div>
+
+{% endfor %}
+{% endblock %}

@@ -15,6 +15,7 @@
     <form method="POST" action="/recipes/like-recipe/{{ results.id }}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
       <input type="hidden" name="recipe_url" value="{{ results.sourceUrl }}">
+      <input type="hidden" name="recipe_title" value="{{results.title}}">
       <button button-type="submit" class="btn btn-success btn-small"><i class="bi bi-hand-thumbs-up"></i> Like Recipe</button>
     </form>
 

@@ -217,7 +217,12 @@ class RecipeBox(database.Model):
     recipe_url = database.Column(
         database.String,
         nullable=False
-    ) 
+    )
+
+    recipe_title = database.Column(
+        database.String, 
+        nullable = False
+    )
 
     user_id = database.Column(
         database.Integer, 
@@ -228,9 +233,10 @@ class RecipeBox(database.Model):
         database.UniqueConstraint('user_id', 'recipe_url'),
     )
 
-    def __init__(self, is_liked: bool, recipe_url: str, user_id: int):
+    def __init__(self, is_liked: bool, recipe_url: str, recipe_title: str, user_id: int):
         self.is_liked = is_liked
         self.recipe_url = recipe_url
+        self.recipe_title = recipe_title
         self.user_id = user_id
 
 
