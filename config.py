@@ -1,13 +1,19 @@
 import os
+import re
 from datetime import timedelta
 
 API_BASE_URL = "https://api.spoonacular.com"
 API_INGREDIENT_SEARCH_URL = " https://api.spoonacular.com/recipes/complexSearch"
 API_KEY = os.getenv('API_KEY', default='')
 
+# Fix issue with deprecated heroku-postgres URL
+uri = os.getenv("DATABASE_URL")
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+
 # Determine the folder of the top-level directory of this project
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
-
+postgresql://loacbpydztqoik:2ef331e68d27bb076abf7881484094f4db066198a5d3e79a004bd6da56c3457a@ec2-34-225-103-117.compute-1.amazonaws.com:5432/dldh6f85pps7k
 
 class Config(object):
     FLASK_ENV = 'development'
