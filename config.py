@@ -17,7 +17,7 @@ class Config(object):
 
     WTF_CSRF_ENABLED = True
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL',
-                                        default="postgresql:///meal_planner_app")
+                                        default="postgresql:///meal_planner_app").replace("postgres://", "postgresql://", 1)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     BCRYPT_LOG_ROUNDS = 4
     REMEMBER_COOKIE_DURATION = timedelta(days=14)
