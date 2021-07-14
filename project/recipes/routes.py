@@ -108,6 +108,7 @@ def show_cuisine_search_results():
                 "apiKey": API_KEY,
                 "query": cuisine, 
                 "number": "6",
+                "sort": 'random'
             }
         )
         
@@ -129,7 +130,8 @@ def show_diet_search_results():
             params={
                 "apiKey": API_KEY,
                 "query": diet,
-                "number": "4",
+                "number": "6",
+                "sort": 'random'
             }
         )
         results = response.json()['results']
@@ -150,7 +152,8 @@ def show_meal_type_search_results():
             params={
                 "apiKey": API_KEY,
                 "query": meal_type,
-                "number": "4",
+                "number": "6",
+                "sort": 'random'
             }
         )
         results = response.json()['results']
@@ -171,7 +174,8 @@ def show_dietary_intolerance_search_results():
             params={
                 "apiKey": API_KEY,
                 "query": intolerance,
-                "number": "4"
+                "number": "6",
+                "sort": 'random'
             }
         )
         results = response.json()['results']
@@ -191,7 +195,8 @@ def view_recipe_details(recipe_id):
             params={
                 "includeNutrition": "false",
                 "apiKey": API_KEY,
-                "number": "4"
+                "number": "6",
+                "sort": 'random'
             },
         )
         results = response.json()
