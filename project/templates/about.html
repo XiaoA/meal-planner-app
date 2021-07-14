@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+<div class="container">
+  <h1>About Recipie</h1>
+
+  <h3>The Recipie app makes it easy to find new recipes, create meal plans, and share recipes with others!</h3>
+
+  <p>Without creating an account, anyone can perform various searches on the Spoonacular API:</p>
+  <ul>
+    <li>Perform a wildcard search for an ingredient, and get a list of random recipes</li>
+    <li>Search by Cuisine:** Choose from from a list of over cuisines, including: African, Cajun, Chinese, Italian, and many more!</li>
+    <li>Search by Diet Type:** </li>
+    <li>Search by Meal Type:** Search from a list of meal types, including: main course, beverage, snack, and more!</li>
+    <li>Search by Dietary Intolerance:** Search from a list of dietary intolerances, including: Dairy, Gluten, Peanut, and more!</li>
+  </ul>
+
+
+  <p>Creating an account provides access to the following features:</p>
+  <ul>
+    <li>Liking recipes, which saves them to a personal 'recipe box' for future reference</li>
+    <li>The ability to follow other users, and see recipes they've liked</li>
+    <li>Save recipes as meal plans for specific dates, with the ability to add custom titles and notes</li>
+    <li>Automated email address confirmation and password resets: Your data will never be sold or shared</li>
+  </ul>
+
+  <div class="container">
+    {% if not current_user.is_authenticated %}
+    <a href="{{url_for('users.register')}}" class="btn btn-primary">Join for free!</a>
+    <a href="{{url_for('users.login')}}" class="btn btn-success">Member login</a>
+    {% endif %}
+  </div>
+</div>
