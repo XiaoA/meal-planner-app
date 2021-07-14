@@ -17,6 +17,12 @@ def index():
     form = SearchIngredientForm()
     return render_template('recipes/index.html', form=form)
 
+@recipes_blueprint.route('/about', methods=['GET'])
+def about():
+    """ Returns a simple 'About' page. """
+
+    return render_template('recipes/about.html')
+
 # Cuisine Search
 @recipes_blueprint.route('/recipes/search/cuisine', methods=['GET'])
 def search_cuisine_recipes():
