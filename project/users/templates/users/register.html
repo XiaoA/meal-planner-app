@@ -2,57 +2,68 @@
 
 
 {% block content %}
-<div class="mb-3">
-  <div class="form-wrap">
-    <h1>User Registration</h1>
+<div class="container py-5 h-100">
+  <div class="row d-flex justify-content-center align-items-center h-100" style="color: #0347CA;">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+      <div class="card shadow-2-strong" style="border-radius: 1rem; background-color: #F7F7F7;">
+        <div class="card-body p-5 text-center">
 
-    <form method="POST">
-      {{ form.csrf_token }}
+          <h3 class="mb-5">Register for Free!</h3>
+          <form method="POST">
+            {{ form.csrf_token }}
 
-      {{ form.email.label(class="form-label") }}
-      {{ form.email(class="form-control") }}
-      {% for error in form.email.errors %}
-      <p class="validation-error">[{{ error }}]</p>
-      {% endfor %}
+            <div class="form-outline mb-4">
+            {{ form.email(class="form-control form-control-lg", placeholder="Email") }}
+            {% for error in form.email.errors %}
+            <p class="validation-error">[{{ error }}]</p>
+            {% endfor %}
+            </div>
 
-      {{ form.password_hashed.label(class="form-label") }}
-      {{ form.password_hashed(class="form-control password") }}
-      {% for error in form.password_hashed.errors %}
-      <p class="validation-error">[{{ error }}]</p>
-      {% endfor %}
-      
-      <label for="show_password">
-        <input type="checkbox" name="show_password" id="show_password" data-show-password=".password">
-        Show Password
-      </label>
+            <div class="form-outline mb-4">
+              {{ form.password_hashed(class="form-control form-control-lg", placeholder="Password") }}
+              {% for error in form.password_hashed.errors %}
+              <p class="validation-error">[{{ error }}]</p>
+              {% endfor %}
+            </div>
 
-      <br >
+            <div class="form-outline mb-4">
+              <label for="show_password">
+                <input type="checkbox" name="show_password" id="show_password" data-show-password=".password">
+                Show Password
+              </label>
+            </div>
 
-      {{ form.username.label(class="form-label") }}
-      {{ form.username(class="form-control") }}
-      {% for error in form.username.errors %}
-      <p class="validation-error">[{{ error }}]</p>
-      {% endfor %}
-      
-      {{ form.first_name.label(class="form-label") }}
-      {{ form.first_name(class="form-control") }}
-      {% for error in form.first_name.errors %}
-      <p class="validation-error">[{{ error }}]</p>
-      {% endfor %}
-      
-      {{ form.last_name.label(class="form-label") }}
-      {{ form.last_name(class="form-control") }}
-      {% for error in form.last_name.errors %}
-      <p class="validation-error">[{{ error }}]</p>
-      {% endfor %}
+            <div class="form-outline mb-4">
+              {{ form.username(class="form-control form-control-lg", placeholder="Username") }}
+              {% for error in form.username.errors %}
+              <p class="validation-error">[{{ error }}]</p>
+              {% endfor %}
+            </div>
 
+            <div class="form-outline mb-4">
+              {{ form.first_name(class="form-control form-control-lg", placeholder="First Name") }}
+              {% for error in form.first_name.errors %}
+              <p class="validation-error">[{{ error }}]</p>
+              {% endfor %}
+            </div>
 
+            <div class="form-outline mb-4">
 
-      <br />
-      
-      {{ form.submit(class="btn btn-primary") }}
-    </form>
+              {{ form.last_name(class="form-control form-control-lg", placeholder="Last Name (Optional)") }}
+              {% for error in form.last_name.errors %}
+              <p class="validation-error">[{{ error }}]</p>
+              {% endfor %}
+
+            </div>
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Register</button>
+          </form>          
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+
+
 <script src="{{ url_for('static', filename='js/app.js') }}">
   {% endblock %}
