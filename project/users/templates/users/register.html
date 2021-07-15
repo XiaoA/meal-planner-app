@@ -2,6 +2,7 @@
 
 
 {% block content %}
+
 <div class="container py-5 h-100">
   <div class="row d-flex justify-content-center align-items-center h-100" style="color: #0347CA;">
     <div class="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -20,7 +21,7 @@
             </div>
 
             <div class="form-outline mb-4">
-              {{ form.password_hashed(class="form-control form-control-lg", placeholder="Password") }}
+              {{ form.password_hashed(class="password_hashed form-control form-control-lg", placeholder="Password") }}
               {% for error in form.password_hashed.errors %}
               <p class="validation-error">[{{ error }}]</p>
               {% endfor %}
@@ -28,7 +29,7 @@
 
             <div class="form-outline mb-4">
               <label for="show_password">
-                <input type="checkbox" name="show_password" id="show_password" data-show-password=".password">
+                <input type="checkbox" name="show_password" id="show_password" data-show-password=".password_hashed">
                 Show Password
               </label>
             </div>
@@ -63,7 +64,5 @@
   </div>
 </div>
 
-
-
-<script src="{{ url_for('static', filename='js/app.js') }}">
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
   {% endblock %}
