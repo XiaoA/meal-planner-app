@@ -1,22 +1,31 @@
 {% extends 'base.html' %}
-
 {% block content %}
-
-<form method="GET", action="/recipes/search/meal-type-search-results">
-  {{ form.hidden_tag() }}
-
-  {% for field in form if field.widget.input_type != 'hidden'%}
-  <div class="form-group">
-    {{field.label}}
-    {{field(class_="form-control")}}
-    {% for err in field.errors %}
-    <small class="form-text text-danger">
-      {{err}}
-    </small>
-    {% endfor %}
+<div class="container py-5 h-100">
+  <div class="row search-form-row d-flex justify-content-center align-items-center h-100">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+      <div class="card search-form-card shadow-2-strong">
+        <div class="card-body p-5 text-center">
+          <h3 class="mb-5">Search by Meal Type</h3>
+          <form method="GET", action="/recipes/search/meal-type-search-results">
+            {{ form.hidden_tag() }}
+            {% for field in form if field.widget.input_type != 'hidden'%}
+            <div class="form-group">
+              <p>Choose a meal type below.</p>
+              {{field(class_="form-control")}}
+              {% for err in field.errors %}
+              <small class="form-text text-danger">
+                {{err}}
+              </small>
+              {% endfor %}
+            </div>
+            {% endfor %}
+            <br>
+            <button class="btn btn-success">Submit</button>
+            <a href="/" class="btn btn-danger">Go Back</a>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
-  {% endfor %}
-  <button class="btn  btn-success  btn-lg">Submit</button>
-  <a href="/" class="btn btn-danger btn-lg">Go Back</a>
-</form>
+</div>
 {% endblock %}
