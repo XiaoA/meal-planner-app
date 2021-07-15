@@ -1,3 +1,12 @@
 #call-to-action {
     margin-top: 50px;
 }
+
+.search-form-row {
+    color: #0347CA;
+}
+
+.search-form-card {
+    border-radius: 1rem;
+    background-color: #F7F7F7;
+}
