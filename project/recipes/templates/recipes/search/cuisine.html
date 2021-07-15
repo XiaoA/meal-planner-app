@@ -2,22 +2,36 @@
 
 {% block content %}
 
-<form method="GET", action="/recipes/search/cuisine-search-results">
-  {{ form.hidden_tag() }}
+<div class="container py-5 h-100">
+  <div class="row d-flex justify-content-center align-items-center h-100" style="color: #0347CA;">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+      <div class="card shadow-2-strong" style="border-radius: 1rem; background-color: #F7F7F7;">
+        <div class="card-body p-5 text-center">
 
-  {{cuisine}}
-  {% for field in form if field.widget.input_type != 'hidden'%}
-  <div class="form-group">
-    {{field.label}}
-    {{field(class_="form-control")}}
-    {% for err in field.errors %}
-    <small class="form-text text-danger">
-      {{err}}
-    </small>
-    {% endfor %}
+          <h3 class="mb-5">Search by Cuisine</h3>
+          <form method="GET", action="/recipes/search/cuisine-search-results">
+            {{ form.hidden_tag() }}
+
+            {{cuisine}}
+            {% for field in form if field.widget.input_type != 'hidden'%}
+            <div class="form-group">
+              <p>Choose a cuisine below</p>
+              {{field(class="form-control")}}
+              {% for err in field.errors %}
+              <small class="form-text text-danger">
+                {{err}}
+              </small>
+              {% endfor %}
+            </div>
+            {% endfor %}
+            <br>
+            <button class="btn btn-success">Submit</button>
+            <a href="/" class="btn btn-danger">Go Back</a>
+
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
-  {% endfor %}
-  <button class="btn  btn-success  btn-lg">Submit</button>
-  <a href="/" class="btn btn-danger btn-lg">Go Back</a>
-</form>
+</div>
 {% endblock %}
