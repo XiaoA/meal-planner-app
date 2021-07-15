@@ -1,39 +1,43 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="form-wrap">
-  <h1 class="form-heading">Login</h1>
 
-  <form method="POST">
-    {{ form.csrf_token }}
+<div class="container py-5 h-100">
+  <div class="row d-flex justify-content-center align-items-center h-100" style="color: #0347CA;">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+      <div class="card shadow-2-strong" style="border-radius: 1rem; background-color: #F7F7F7;">
+        <div class="card-body p-5 text-center">
 
-    {{ form.email.label(class="form-label") }}
-    {{ form.email(class="form-control") }}
-    {% for error in form.email.errors %}
-    <span class="validation-error">[{{ error }}]</span>
-    {% endfor %}
+          <h3 class="mb-5">Member Login</h3>
+          <form method="POST">
+            {{ form.csrf_token }}
 
-    {{ form.password_hashed.label(class="form-label") }}
-    {{ form.password_hashed(class="form-control password") }}
-    {% for error in form.password_hashed.errors %}
-    <span class="validation-error">[{{ error }}]</span>
-    {% endfor %}
+            <div class="form-outline mb-4">
+            {{ form.email(class="form-control form-control-lg", placeholder="Email") }}
+            {% for error in form.email.errors %}
+            <p class="validation-error">[{{ error }}]</p>
+            {% endfor %}
+            </div>
 
+            <div class="form-outline mb-4">
+              {{ form.password_hashed(class="form-control form-control-lg", placeholder="Password") }}
+              {% for error in form.password_hashed.errors %}
+              <p class="validation-error">[{{ error }}]</p>
+              {% endfor %}
+            </div>
 
-    <label for="show_password">
-      <input type="checkbox" name="show_password" id="show_password" data-show-password=".password">
-      Show Password
-    </label>
-
-    {{ form.remember_me(class="form-check-input") }}
-    {{ form.remember_me.label(class="form-check-label") }}
-    <br />
-    {{ form.submit(class="btn btn-primary password-field") }}
-    
-    <div class="forgot-password">
-      <p><em><a href="{{ url_for('users.password_reset_via_email') }}">Forgot your password?</a></em></p>
+            <div class="form-outline mb-4">
+              <label for="show_password">
+                <input type="checkbox" name="show_password" id="show_password" data-show-password=".password">
+                Show Password
+              </label>
+            </div>
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Log In</button>
+          </form>          
+        </div>
+      </div>
     </div>
-  </form>
+  </div>
 </div>
 <script src="{{ url_for('static', filename='js/app.js') }}">
   {% endblock %}
