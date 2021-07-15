@@ -11,7 +11,7 @@
             {% for field in form if field.widget.input_type != 'hidden'%}
             <div class="form-group">
               <p>Choose a meal type below.</p>
-              {{field(class_="form-control")}}
+              {{field(class="form-control")}}
               {% for err in field.errors %}
               <small class="form-text text-danger">
                 {{err}}
