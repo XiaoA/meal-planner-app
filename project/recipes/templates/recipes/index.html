@@ -14,64 +14,95 @@
       </p>
       {% endfor %}
     </form>
-    <div class="container">
+
+    <div class="container" id="call-to-action">
       <h3>Or, try a custom search!</h3>
       <p>
-        <a class="btn btn-primary" data-bs-toggle="collapse" href="#cuisineCollapse" role="button" aria-expanded="false" aria-controls="cuisineCollapse">Search by Cuisine</a>
-        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#dietTypeCollapse" aria-expanded="false" aria-controls="dietTypeCollapse">Search by Diet Type</button>
-        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#mealTypeCollapse" aria-expanded="false" aria-controls="mealTypeCollapse">Search by Meal Type</button>
-        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#intolerancesCollapse" aria-expanded="false" aria-controls="intolerancesCollapse">Search by Dietary Intolerances</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cuisineModal" data-bs-whatever="@cuisine">Search by Cuisine</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dietTypeModal" data-bs-whatever="@diet">Search by Diet Type</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mealTypeModal" data-bs-whatever="@type">Search by Meal Type</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#intoleranceModal" data-bs-whatever="@intolerance">Search by Dietary Intolerances</button>
       </p>
 
-      <div class="row">
-        <div class="col">
-          <div class="collapse multi-collapse" id="cuisineCollapse">
-            <div class="card card-body">
-              <div class="container text-center">
-                <img src="{{url_for('static', filename='img/mapodofu_cropped.jpg' )}}">
-                <h1>Cuisine Search</h1>
-                <p>Search from a list of cuisines, including: African, Cajun, Chinese, Italian, and many more!</p>
-                <a href="/recipes/search/cuisine">Search by Cuisine</a>
-              </div>
+      <div class="modal fade" id="cuisineModal" tabindex="-1" aria-labelledby="cuisineLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="cuisineLabel">Search by Cuisine</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+              <form>
+                <div class="mb-3">
+                  <img src="{{url_for('static', filename='img/mapodofu_cropped.jpg' )}}">
+                  <h1>Cuisine Search</h1>
+                  <p>Search from a list of cuisines, including: African, Cajun, Chinese, Italian, and many more!</p>
+                  <a href="/recipes/search/cuisine">Search by Cuisine</a>
+                </div>
+              </form>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="col">
-          <div class="collapse multi-collapse" id="dietTypeCollapse">
-            <div class="card card-body">
-              <div class="container text-center">
-                <img src="{{url_for('static', filename='img/sushi_rolls.jpg' )}}">
-                <h1>Diet Type Search</h1>
-                <p>Search from a list of diet types, including: Gluten Free, Ketogenic, Vegan, and more!</p>
-                <a href="/recipes/search/diet">Search by Diet Type</a>
-              </div>
+      <div class="modal fade" id="dietTypeModal" tabindex="-1" aria-labelledby="dietTypeLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="dietTypeLabel">Search by Diet Type</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+              <form>
+                <div class="mb-3">
+                  <img src="{{url_for('static', filename='img/sushi_rolls.jpg' )}}">
+                  <h1>Diet Type Search</h1>
+                  <p>Search from a list of diet types, including: Gluten Free, Ketogenic, Vegan, and more!</p>
+                  <a href="/recipes/search/diet">Search by Diet Type</a>
+                </div>
+              </form>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="col">
-          <div class="collapse multi-collapse" id="mealTypeCollapse">
-            <div class="card card-body">
-              <div class="container text-center">
-                <img src="{{url_for('static', filename='img/dessert.jpg' )}}">
-                <h1>Meal Type Search</h1>
-                <p>Search from a list of meal types, including: main course, beverage, snack, and more!</p>
-                <a href="/recipes/search/meal-type">Search by Meal Type</a>
-              </div>
+      <div class="modal fade" id="mealTypeModal" tabindex="-1" aria-labelledby="mealTypeLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="mealTypeLabel">Search by Meal Type</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+              <form>
+                <div class="mb-3">
+                  <img src="{{url_for('static', filename='img/dessert.jpg' )}}">
+                  <h1>Meal Type Search</h1>
+                  <p>Search from a list of meal types, including: main course, beverage, snack, and more!</p>
+                  <a href="/recipes/search/meal-type">Search by Meal Type</a>
+                </div>
+              </form>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="col">
-          <div class="collapse multi-collapse" id="intolerancesCollapse">
-            <div class="card card-body">
-              <div class="container text-center">
-                <img src="{{url_for('static', filename='img/latte.jpg' )}}">
-                <h1>Dietary Intolerance Search</h1>
-                <p>Search from a list of dietary intolerances, including: Dairy, Gluten, Peanut, and more!</p>
-                <a href="/recipes/search/intolerance">Search by Dietary Intolerance</a>
-              </div>
+      <div class="modal fade" id="intoleranceModal" tabindex="-1" aria-labelledby="intoleranceLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="intoleranceLabel">Search by Dietary Intolerance</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+              <form>
+                <div class="mb-3">
+                  <img src="{{url_for('static', filename='img/latte.jpg' )}}">
+                  <h1>Dietary Intolerance Search</h1>
+                  <p>Search from a list of dietary intolerances, including: Dairy, Gluten, Peanut, and more!</p>
+                  <a href="/recipes/search/intolerance">Search by Dietary Intolerance</a>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -79,5 +110,4 @@
     </div>
   </div>
 </div>
-
 {% endblock %}      
