@@ -87,19 +87,19 @@ def configure_logging(app):
         app.logger.addHandler(stream_handler)
     else:
     # Configure custom logging
-    file_handler = RotatingFileHandler('instance/recipie.log',
+        file_handler = RotatingFileHandler('instance/recipie.log',
                                        maxBytes=16384,
                                        backupCount=20)
-    file_formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(filename)s:%(lineno)d]')
-    file_handler.setFormatter(file_formatter)
-    file_handler.setLevel(logging.INFO)
-    app.logger.addHandler(file_handler)        
+        file_formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(filename)s:%(lineno)d]')
+        file_handler.setFormatter(file_formatter)
+        file_handler.setLevel(logging.INFO)
+        app.logger.addHandler(file_handler)        
 
-    # Remove the default Flask logger
-    app.logger.removeHandler(default_handler)
+        # Remove the default Flask logger
+        app.logger.removeHandler(default_handler)
 
-    # Log application startup event
-    app.logger.info('Starting Recipie App...')
+        # Log application startup event
+        app.logger.info('Starting Recipie App...')
 
     
 def register_error_pages(app):
