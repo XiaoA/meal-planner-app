@@ -21,6 +21,7 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     BCRYPT_LOG_ROUNDS = 4
     REMEMBER_COOKIE_DURATION = timedelta(days=14)
+    LOG_TO_STDOUT = os.getenv('LOG_TO_STDOUT', default=False)
 
     
     # Flask Mail Config
