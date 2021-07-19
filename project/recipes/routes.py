@@ -88,7 +88,7 @@ def show_ingredient_search_results():
             }
         )
         results = response.json()['results']
-
+        
         current_app.logger.info(f"Searched for recipes containing: { ingredient }")
         flash(f"Searched for recipes with { ingredient }", 'success')    
 

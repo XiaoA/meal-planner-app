@@ -1,83 +1,57 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>User Profile</h1>
-{% if user == current_user %}
+<h1 class="text-center">{{user_profile.username}}'s Profile</h1>
 
-<div class="card">
-  <div class="card-heading">
-    <h2>Account</h2>
-  </div>
-  <div class="card-body">
-    <p>Email: {{ user.email }}</p>
 
-  </div>
+<div class="card-group">
+  <div class="card mb-3">
+    <div class="card-header">
+      <h3 class="text-center">Account Details</h3>
+    </div>
+
+
+    <div class="card-body">
+      <p><strong>Joined on:</strong> {{ current_user.registered_on.strftime("%A, %B %d, %Y") }}</p>
+      {% if user == current_user %}
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      {% if current_user.email_confirmed %}
+      <p>Email address confirmed on {{ current_user.email_confirmed_on.strftime("%A, %B %d, %Y") }}</p>
+      {% else %}
+      <p>Email address has not been confirmed!</p>
+      {% endif %}
+      <p><a href="{{ url_for('users.change_password') }}">Change Password</a></p>
+        {% if not current_user.email_confirmed %}
+      <p><a href="{{ url_for('users.resend_email_confirmation') }}">Resend Email Confirmation</a></p>
+        {% endif %}
+       <p><a href="{{ url_for('users.logout') }}">Log Out</a></p>
+      </div>
+      {% else %}
+      <p class="card-text">Check out my recipe box and follow me to keep up on my favorites!</p>
+    </div>
+  {% endif %}
 </div>
 
-<div class="card">
-  <div class="card-heading">
-    <h2>Account Statistics</h2>
+<div class="card mb-3 text-center">
+  <div class="card-header">
+    <h3 class="text-center">Follows</h3>
   </div>
   <div class="card-body">
-    <p>Joined on {{ current_user.registered_on.strftime("%A, %B %d, %Y") }}</p>
-    {% if current_user.email_confirmed %}
-    <p>Email address confirmed on {{ current_user.email_confirmed_on.strftime("%A, %B %d, %Y") }}</p>
-    {% else %}
-    <p>Email address has not been confirmed!</p>
-    {% endif %}
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-heading">
-    <h2>Account Actions</h2>
-  </div>
-  <div class="card-body">
-    <p><a href="{{ url_for('users.change_password') }}">Change Password</a></p>
-    {% if not current_user.email_confirmed %}
-    <p><a href="{{ url_for('users.resend_email_confirmation') }}">Resend Email Confirmation</a></p>
-    {% endif %}
-    <p><a href="{{ url_for('users.logout') }}">Log Out</a></p>     
-  </div>
-</div>
-<div class="card">
-  <div class="card-heading">
-    <h2>Follows</h2>
-  </div>
-  <div class="card-body">
-    <a href="{{ url_for('users.show_following', user_id=current_user.id) }}">Following</a>
-    <a href="{{ url_for('users.users_followers', user_id=current_user.id) }}">Followers</a>
-
-  </div>
-</div>
-
-{% else %}
-<div class="card">
-  <div class="card-heading">
-    <h2>Account</h2>
-  </div>
-  <div class="card-body">
-    <p><strong>Username:</strong> {{ user_profile.username }}</p>
-    <p>Joined on {{ current_user.registered_on.strftime("%A, %B %d, %Y") }}</p>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-heading">
-    <h2>Follow Status</h2>
-  </div>
-  <div class="card-body">
+    <p class="card-text"></p>
+    <button type="button" class="btn btn-outline-secondary"><a href="{{ url_for('users.show_following', user_id=current_user.id) }}"> Following</a><span class="badge rounded-pill bg-danger"> {{user.followed.count()}}</span></button>
+    <button type="button" class="btn btn-outline-secondary"> <a href="{{ url_for('users.users_followers', user_id=current_user.id) }}"> Followers</a><span class="badge rounded-pill bg-danger"> {{user.followers.count()}}</span></button>
+    <br>
     {% if not current_user.is_following(user) %}
-    <p>You are not following {{user_profile.username }}.</p>
+    <p>You are not following {{ user_profile.username }}.</p>
     <p>
       <form action="{{ url_for('users.follow_user', user_id=user.id) }}" method="POST">
         {{ form.hidden_tag() }}
-        {{ form.submit(value='Follow') }}
+        {{ form.submit(value='Follow', class="btn btn-secondary") }}
       </form>
     </p>
     {% else %}
     <p>You are following {{user_profile.username }}.</p>
-     <p>
+    <p>
       <form action="{{ url_for('users.unfollow_user', user_id=user.id) }}" method="POST">
         {{ form.hidden_tag() }}
         {{ form.submit(value='Unfollow') }}
@@ -86,5 +60,17 @@
     {% endif %}
   </div>
 </div>
-{% endif %}
+<div class="card mb-3 text-center">
+  <div class="card-header">
+    <h3 class="text-center">{{user_profile.username}}'s Recipes</h3>
+  </div>
+  {% if user.user_recipes.count() > 0 %}
+  <p>{{user_profile.username}} likes <a href="{{user.user_recipes.first().recipe_url}}"> {{user.user_recipes.first().recipe_title}} </a>.</p>
+  <p>Check out {{user_profile.username}}'s recipe box to find new recipes to try!</p>
+  <button type="button" class="btn btn-seconary"><a href="{{url_for('users.show_recipe_box', user_id=user.id) }}">View {{user_profile.username}}'s Favorite Recipes</a></button>
+  {% else %}
+  <p class="text-center">{{ user_profile.username }} has not liked any recipes yet.</p>
+  {% endif %}
+</div>
 {% endblock %}
+</div>

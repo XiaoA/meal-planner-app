@@ -4,7 +4,7 @@ from datetime import timedelta
 
 API_BASE_URL = "https://api.spoonacular.com"
 API_INGREDIENT_SEARCH_URL = " https://api.spoonacular.com/recipes/complexSearch"
-API_KEY = os.getenv('API_KEY', default='')
+API_KEY = os.getenv('API_KEY')
 
 # Determine the folder of the top-level directory of this project
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
@@ -14,7 +14,8 @@ class Config(object):
     DEBUG = False
     TESTING = False
     SECRET_KEY = os.getenv('SECRET_KEY', default='DEV_SECREt_KEY')
-
+    API_KEY = os.getenv('API_KEY', default='')
+    
     WTF_CSRF_ENABLED = True
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL',
                                         default="postgresql:///meal_planner_app").replace("postgres://", "postgresql://", 1)
@@ -22,7 +23,7 @@ class Config(object):
     BCRYPT_LOG_ROUNDS = 4
     REMEMBER_COOKIE_DURATION = timedelta(days=14)
     LOG_TO_STDOUT = os.getenv('LOG_TO_STDOUT', default=False)
-
+    
     
     # Flask Mail Config
    # Flask-Mail Configuration
@@ -37,13 +38,13 @@ class Config(object):
 class ProductionConfig(Config):
     FLASK_ENV = 'production'
 
-    # Flask Mail Config
-    # MAIL_SERVER = 'smtp.sendgrid.net'
-    # MAIL_PORT = 587
-    # MAIL_USE_TLS = True
-    # MAIL_USE_SSL = False
-    # MAIL_USERNAME = 'apikey'
-    # MAIL_PASSWORD = os.getenv('SENDGRID_API_KEY', default='')
+    # Flask Mail Config (Heroku/Sendgrid)
+    MAIL_SERVER = 'smtp.sendgrid.net'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USE_SSL = False
+    MAIL_USERNAME = 'apikey'
+    MAIL_PASSWORD = os.getenv('SENDGRID_API_KEY', default='')
 
 
 class DevelopmentConfig(Config):
