@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1 class="page-headline text-center">Users you're following</h1>
+<div class="container text-center">
+  {% if user.followed.count() == 0 %}
+  <h3 class ="text-center">You're not following anyone.</h3>
+  <p>Find a <a href="{{url_for('users.show_all_users')}}">user</a> to follow!</p>
+  {% endif %}
+</div>
+
 <div class="container">
   <div class="row">
     {% for followed in user.followed %}
@@ -15,7 +22,7 @@
         </div>
       </div>
     </div>
-{% endfor %}
+    {% endfor %}
   </div>
 </div>
 {% endblock %}
