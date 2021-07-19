@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
 
-{% block header %}
-{% block title %}View Recipe Details{% endblock %}
-{% endblock %}
 
 {% block content %}
 <div class="container text-center">
-  <h3>{{ results.title }}</h3>
+ <h1 class="page-headline">{{ results.title }}</h1>
+
+
   <p><img src="{{results.image}}"></p>
   
 
