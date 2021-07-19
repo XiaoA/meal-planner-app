@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 
-
 <div class="container">
   <div class="row">
     {% for user_profile in user_profiles %}
@@ -12,16 +11,11 @@
           <h5 class="card-title">{{ user_profile.username }}</h5>
           <a href="/users/{{user_profile.user_id}}" class="btn btn-primary">View Profile</a>
         </div>
-        
-
       </div>
     </div>
-
     {% endfor %}
-    
   </div>
 </div>
-
 {% endblock %}
 
 

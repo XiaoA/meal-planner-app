@@ -1,6 +1,6 @@
 <!doctype html>
 <head>
-  <title>{% block title %}{% endblock %} - Recipie</title>
+  <title>Recipie</title>
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
@@ -26,8 +26,10 @@
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://www.fillmurray.com/30/30" class="img-fluid rounded-start" alt="Fill Murray">
                     My Account
                   </a>
+
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="{{ url_for('users.show_user_profile', user_id=current_user.id) }}">My Profile</a></li>
                     <li><a class="dropdown-item" href="{{ url_for('users.show_recipe_box', user_id=current_user.id) }}">My Recipe Box</a></li>

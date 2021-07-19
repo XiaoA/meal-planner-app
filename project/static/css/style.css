@@ -10,3 +10,13 @@
     border-radius: 1rem;
     background-color: #F7F7F7;
 }
+
+div.card-header {
+    background-color: #F7F7F7;
+}
+
+span.badge.rounded-pill.bg-danger {
+    margin-left: 20px;
+}
+
+
