@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1 class="text-center">{{user_profile.username}}'s Profile</h1>
-
+<h1 class="page-headline text-center">{{user_profile.username}}'s Profile</h1>
 
 <div class="card-group">
   <div class="card mb-3">
@@ -21,14 +20,14 @@
       <p>Email address has not been confirmed!</p>
       {% endif %}
       <p><a href="{{ url_for('users.change_password') }}">Change Password</a></p>
-        {% if not current_user.email_confirmed %}
+      {% if not current_user.email_confirmed %}
       <p><a href="{{ url_for('users.resend_email_confirmation') }}">Resend Email Confirmation</a></p>
-        {% endif %}
-       <p><a href="{{ url_for('users.logout') }}">Log Out</a></p>
-      </div>
-      {% else %}
-      <p class="card-text">Check out my recipe box and follow me to keep up on my favorites!</p>
+      {% endif %}
+      <p><a href="{{ url_for('users.logout') }}">Log Out</a></p>
     </div>
+    {% else %}
+    <p class="card-text">Check out my recipe box and follow me to keep up on my favorites!</p>
+  </div>
   {% endif %}
 </div>
 
@@ -37,27 +36,32 @@
     <h3 class="text-center">Follows</h3>
   </div>
   <div class="card-body">
-    <p class="card-text"></p>
+    {% if user == current_user %}
     <button type="button" class="btn btn-outline-secondary"><a href="{{ url_for('users.show_following', user_id=current_user.id) }}"> Following</a><span class="badge rounded-pill bg-danger"> {{user.followed.count()}}</span></button>
     <button type="button" class="btn btn-outline-secondary"> <a href="{{ url_for('users.users_followers', user_id=current_user.id) }}"> Followers</a><span class="badge rounded-pill bg-danger"> {{user.followers.count()}}</span></button>
-    <br>
-    {% if not current_user.is_following(user) %}
+
+    {% elif ( (not user == current_user and not current_user.is_following(user) ) ) %}
     <p>You are not following {{ user_profile.username }}.</p>
     <p>
+      <button type="button" class="btn btn-outline-secondary"><a href="{{ url_for('users.show_following', user_id=current_user.id) }}"> Following</a><span class="badge rounded-pill bg-danger"> {{user.followed.count()}}</span></button>
+      <button type="button" class="btn btn-outline-secondary"> <a href="{{ url_for('users.users_followers', user_id=current_user.id) }}"> Followers</a><span class="badge rounded-pill bg-danger"> {{user.followers.count()}}</span></button>
       <form action="{{ url_for('users.follow_user', user_id=user.id) }}" method="POST">
         {{ form.hidden_tag() }}
         {{ form.submit(value='Follow', class="btn btn-secondary") }}
       </form>
-    </p>
-    {% else %}
-    <p>You are following {{user_profile.username }}.</p>
-    <p>
-      <form action="{{ url_for('users.unfollow_user', user_id=user.id) }}" method="POST">
-        {{ form.hidden_tag() }}
-        {{ form.submit(value='Unfollow') }}
-      </form>
-    </p>
-    {% endif %}
+
+      {% else %}
+      <p>You are following {{user_profile.username }}.</p>
+      <p>
+        <button type="button" class="btn btn-outline-secondary"><a href="{{ url_for('users.show_following', user_id=current_user.id) }}"> Following</a><span class="badge rounded-pill bg-danger"> {{user.followed.count()}}</span></button>
+        <button type="button" class="btn btn-outline-secondary"> <a href="{{ url_for('users.users_followers', user_id=current_user.id) }}"> Followers</a><span class="badge rounded-pill bg-danger"> {{user.followers.count()}}</span></button>
+        <form action="{{ url_for('users.unfollow_user', user_id=user.id) }}" method="POST">
+          {{ form.hidden_tag() }}
+          {{ form.submit(value='Unfollow') }}
+        </form>
+      </p>
+      {% endif %}
+
   </div>
 </div>
 <div class="card mb-3 text-center">

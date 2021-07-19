@@ -19,4 +19,6 @@ span.badge.rounded-pill.bg-danger {
     margin-left: 20px;
 }
 
-
+.page-headline {
+    margin-bottom: 100px;
+}
