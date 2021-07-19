@@ -108,6 +108,7 @@ def login():
     if request.method == 'POST':
         if form.validate_on_submit():
             user = User.query.filter_by(email=form.email.data).first()
+            user_profile = user.user_profiles.first()
             if user and user.is_password_correct(form.password_hashed.data):
 
                 # User's credentials have been validated, so log them in
@@ -115,7 +116,7 @@ def login():
                 flash(f'Thanks for logging in, {current_user.email}!', 'success')
                 current_app.logger.info(f'Logged in user: {current_user.email}')
                 
-                return render_template('users/profile.html', user=user)
+                return render_template('users/profile.html', user=user, user_profile=user_profile)
 
         flash('ERROR! Incorrect login credentials.', 'danger')
     return render_template('users/login.html', form=form)
