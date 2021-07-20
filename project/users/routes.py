@@ -340,16 +340,15 @@ def users_followers(user_id):
 @login_required
 def show_recipe_box(user_id):
     """Show an authenticated user's saved recipes."""
-    user_id = current_user.id
-    if not current_user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-
-    recipes = RecipeBox.query.filter(user_id == current_user.id) 
-    return render_template("users/recipes.html", user_id=user_id, recipes=recipes)
+    user = User.query.get_or_404(user_id)
+    user_profile = user.user_profiles.first()
+    user_recipes = user.user_recipes.all()
+    return render_template("users/recipes.html", user_id=user_id, user_profile=user_profile, user_recipes=user_recipes)
 
 @users_blueprint.route('/users/<int:user_id>/meal-plans', methods=['GET'])
 @login_required
+def show_meal_plans(user_id):
+    """Show an authenticated user's meal plans."""
 def show_meal_plans(user_id):
     """Show an authenticated user's meal plans."""
     user_id = current_user.id
