@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container">
-<h1 class="page-headline text-center">About Recipie</h1>
+  <h1 class="page-headline text-center">About Recipie</h1>
+  <div class="col-4 offset-4 d-flex justify-content-center">
+<img src="{{ url_for('static', filename='img/recipie_logo.png') }}" alt="logo" width="500" height="500" class="img-fluid">
+  </div>
 
+  <div class="container about-text">
   <h3>The Recipie app makes it easy to find new recipes, create meal plans, and share recipes with others!</h3>
 
   <p>Without creating an account, anyone can perform various searches on the Spoonacular API:</p>
@@ -28,6 +32,7 @@
     <a href="{{url_for('users.register')}}" class="btn btn-primary">Join for free!</a>
     <a href="{{url_for('users.login')}}" class="btn btn-success">Member login</a>
     {% endif %}
+  </div>
   </div>
 </div>
 {% endblock%}
