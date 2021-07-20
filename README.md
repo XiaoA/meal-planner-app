@@ -3,6 +3,7 @@
 
 [https://ab-recipie-app.herokuapp.com/](Recipie "Recipie Link")
 
+### Overview
 The Recipie app makes it easy to find new recipes, create meal plans, and share recipes with others!
 
 #### Without creating an account, anyone can perform various searches on the Spoonacular API:
@@ -19,3 +20,11 @@ The Recipie app makes it easy to find new recipes, create meal plans, and share 
 - Save recipes as meal plans for specific dates, with the ability to add custom titles and notes
 - Automated email address confirmation and password resets: Your data will never be sold or shared
 
+### Technical Details
+### Requiements:
+
+- Python: 3.7.9
+- Flask: 1.1.2
+- Postgresql: 13.3
+
+To see a full list of all requirments: [requirements.txt](requirements.txt)
