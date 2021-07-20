@@ -349,13 +349,11 @@ def show_recipe_box(user_id):
 @login_required
 def show_meal_plans(user_id):
     """Show an authenticated user's meal plans."""
-def show_meal_plans(user_id):
-    """Show an authenticated user's meal plans."""
     user_id = current_user.id
     if not current_user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    meal_plans = Meal.query.filter(user_id == current_user.id)
+    meal_plans = Meal.query.filter(user_id == current_user.id).order_by(Meal.meal_date.desc())
     return render_template("users/meal-plans.html", user_id=user_id, meal_plans=meal_plans)
 
