@@ -64,6 +64,7 @@
 
   </div>
 </div>
+{% if not user == current_user %}
 <div class="card mb-3 text-center">
   <div class="card-header">
     <h3 class="text-center">{{user_profile.username}}'s Recipes</h3>
@@ -76,5 +77,6 @@
   <p class="text-center">{{ user_profile.username }} has not liked any recipes yet.</p>
   {% endif %}
 </div>
+{% endif %}
 {% endblock %}
 </div>
