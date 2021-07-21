@@ -4,20 +4,21 @@
 {% block content %}
 
 <div class="container py-5 h-100">
-  <div class="row d-flex justify-content-center align-items-center h-100" style="color: #0347CA;">
+  <div class="user-form-row d-flex justify-content-center align-items-center h-100">
     <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-      <div class="card shadow-2-strong" style="border-radius: 1rem; background-color: #F7F7F7;">
-        <div class="card-body p-5 text-center">
+      <div class="user-form-card shadow-2-strong">
+        <div class="card-body p-5">
 
-          <h3 class="mb-5">Register for Free!</h3>
+          <h3 class="mb-5 text-center">Register for Free!</h3>
+          
           <form method="POST">
             {{ form.csrf_token }}
 
             <div class="form-outline mb-4">
-            {{ form.email(class="form-control form-control-lg", placeholder="Email") }}
-            {% for error in form.email.errors %}
-            <p class="validation-error">[{{ error }}]</p>
-            {% endfor %}
+              {{ form.email(class="form-control form-control-lg", placeholder="Email") }}
+              {% for error in form.email.errors %}
+              <p class="validation-error">[{{ error }}]</p>
+              {% endfor %}
             </div>
 
             <div class="form-outline mb-4">
@@ -27,12 +28,12 @@
               {% endfor %}
             </div>
 
-            <div class="form-outline mb-4">
-              <label for="show_password">
-                <input type="checkbox" name="show_password" id="show_password" data-show-password=".password_hashed">
-                Show Password
-              </label>
-            </div>
+              <div class="form-outline mb-4">
+                <label for="show_password">
+                  <input type="checkbox" name="show_password" id="show_password" data-show-password=".password_hashed">
+                  Show Password
+                </label>
+              </div>
 
             <div class="form-outline mb-4">
               {{ form.username(class="form-control form-control-lg", placeholder="Username") }}
@@ -56,7 +57,9 @@
               {% endfor %}
 
             </div>
-            <button class="btn btn-primary btn-lg btn-block" type="submit">Register</button>
+            <div class="text-center">
+              <button class="btn btn-primary btn-lg btn-block" type="submit">Register</button>
+            </div>
           </form>          
         </div>
       </div>
@@ -65,4 +68,4 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-  {% endblock %}
+{% endblock %}
