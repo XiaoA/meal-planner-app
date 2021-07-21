@@ -27,9 +27,9 @@ h1{
     color: #0347CA;
 }
 
-.user-form-card {
+user-form-card.shadow-2-strong {
     border-radius: 1rem;
-    background-color: #F7F7F7;
+    background-color: #E8E8E8;
 }
 
 /* Cards */
@@ -41,5 +41,6 @@ div.card-header {
 span.badge.rounded-pill.bg-danger {
     margin-left: 20px;
 }
+
 
 
