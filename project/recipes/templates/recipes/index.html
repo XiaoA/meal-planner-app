@@ -6,24 +6,25 @@
 {% endblock %}
 
 {% block content %}
-
-<div class="container-fluid col-xxl-8 px-4 py-5 index-splash-bg">
-  <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
-    <div class="col-10 col-sm-8 col-lg-6">
-      <img src="{{url_for('static', filename='img/homemade_kimchee.png' )}}" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy">
-    </div>
-    <div class="col-lg-6">
-      <h1 class="display-5 fw-bold lh-1 mb-3">Finding new recipies is as easy as Reci<span class="pie-text">pie</span>!</h1>
-      <p class="lead">Search for new recipes. Follow like-minded food lovers. Share meal ideas. All for free!</p>
-      <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-        <button type="button" class="btn btn-danger btn-lg px-4 me-md-2"><a href="#recipe-search" class="white-text-btn" style="text-decoration: none; color: #FFF;">Search Recipes</a></button>
-        <button type="button" class="btn btn-primary btn-lg px-4"><a href="{{ url_for('users.register') }}" class="link-btn" style="text-decoration: none; color: #FFF;">Register</a></button>
+<section id="index-top-section">
+  <div class="container-fluid col-xxl-8 px-4 py-5 index-splash-bg">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+      <div class="col-10 col-sm-8 col-lg-6">
+        <img src="{{url_for('static', filename='img/homemade_kimchee.png' )}}" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy">
+      </div>
+      <div class="col-lg-6">
+        <h1 class="display-5 fw-bold lh-1 mb-3">Finding new recipies is as easy as Reci<span class="pie-text">pie</span>!</h1>
+        <p class="lead">Search for new recipes. Follow like-minded food lovers. Share meal ideas. All for free!</p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+          <button type="button" class="btn btn-danger btn-lg px-4 me-md-2"><a href="#recipe-search" class="white-text-btn" style="text-decoration: none; color: #FFF;">Search Recipes</a></button>
+          <button type="button" class="btn btn-primary btn-lg px-4"><a href="{{ url_for('users.register') }}" class="link-btn" style="text-decoration: none; color: #FFF;">Register</a></button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<section id="food-quote">
+<section id="food-quote-section">
   <div class="bg-dark text-secondary px-4 py-5 text-center">
     <div class="py-5">
       <h2 class="fw-bold text-white">"A recipe has no soul. You as the cook must bring soul to the recipe"</h2>
@@ -40,9 +41,6 @@
     <h2 class="pb-2 border-bottom">Here's what's cooking...</h2>
     <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
       <div class="col d-flex align-items-start">
-        <div class="icon-square bg-light text-dark flex-shrink-0 me-3">
-          <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"/></svg>
-        </div>
         <div>
           <h3>Search for new recipes.</h3>
           <p>Do you sometimes find it challenging to come up with creative meal ideas?</p>
@@ -54,9 +52,6 @@
         </div>
       </div>
       <div class="col d-flex align-items-start">
-        <div class="icon-square bg-light text-dark flex-shrink-0 me-3">
-          <svg class="bi" width="1em" height="1em"><use xlink:href="#cpu-fill"/></svg>
-        </div>
         <div>
           <h3>Save your favorites. Plan your next meal!</h3>
           <p>Members can save favorite recipes to their public recipe box, or schedule private meal plans.</p><p>Goodbye, stressful meal planning. Hello, yummy dishes!</p>
@@ -66,9 +61,6 @@
         </div>
       </div>
       <div class="col d-flex align-items-start">
-        <div class="icon-square bg-light text-dark flex-shrink-0 me-3">
-          <svg class="bi" width="1em" height="1em"><use xlink:href="#tools"/></svg>
-        </div>
         <div>
           <h3>Copycats welcome.</h3>
           <p>Need a little inspiration? Browse the favorite recipes other users have shared. Go ahead; take those recipes and make them yours. They won't mind.</p>
