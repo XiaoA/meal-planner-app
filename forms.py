@@ -5,7 +5,7 @@ from config import API_KEY
 
 """ Recipe Search Forms"""
 class SearchIngredientForm(FlaskForm):
-    query = StringField("Recipe Search", validators=[InputRequired(message="Search term can't be blank.")])
+    query = StringField("Recipe Search", validators=[InputRequired(message="Search term can't be blank.")], render_kw={"placeholder": "chicken"})
     apiKey = API_KEY
 
 class SearchCuisineForm(FlaskForm):

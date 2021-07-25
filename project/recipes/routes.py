@@ -15,6 +15,7 @@ from sqlalchemy.exc import IntegrityError
 def index():
     """ Returns a list of recipes or ingredients that match the given search term. """
     form = SearchIngredientForm()
+    
     return render_template('recipes/index.html', form=form)
 
 @recipes_blueprint.route('/about', methods=['GET'])

@@ -1,0 +1,39 @@
+/* Custom styles for the Flask Recipe App Profile Page */
+
+/* Fonts */
+
+
+#call-to-action {
+    margin-top: 50px;
+}
+
+/* Form Styline */
+.search-form-row {
+    color: #0347CA;
+}
+
+.search-form-card {
+    border-radius: 1rem;
+    background-color: #F7F7F7;
+}
+
+
+/* Cards */
+
+.follow-button {
+    border-left: 3rem;
+    border-right: 3rem;
+}
+
+.follow-btn-font {
+    color: #fff;
+    
+}
+
+/* Badges */
+span.badge.rounded-pill.bg-danger {
+    margin-left: 1rem;
+}
+
+
+

@@ -1,113 +1,198 @@
 {% extends 'base.html' %}
 
+{% block styling %}
+{{super()}}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index-styles.css') }}">
+{% endblock %}
+
 {% block content %}
-<div class="p-5 mb-4 rounded-3">
-  <div class="container-fluid py-5 text-center">
-    <h1 class="display-5 fw-bold text-center">Welcome to Recipie!</h1>
-    <p class="text-center">Enter an ingredient to find sample recipies...</p>
-    <form action="/recipes/search/ingredient-search-results" method="GET">
+
+<div class="container-fluid col-xxl-8 px-4 py-5 index-splash-bg">
+  <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+    <div class="col-10 col-sm-8 col-lg-6">
+      <img src="{{url_for('static', filename='img/homemade_kimchee.png' )}}" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy">
+    </div>
+    <div class="col-lg-6">
+      <h1 class="display-5 fw-bold lh-1 mb-3">Finding new recipies is as easy as Reci<span class="pie-text">pie</span>!</h1>
+      <p class="lead">Search for new recipes. Follow like-minded food lovers. Share meal ideas. All for free!</p>
+      <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+        <button type="button" class="btn btn-danger btn-lg px-4 me-md-2"><a href="#recipe-search" class="white-text-btn" style="text-decoration: none; color: #FFF;">Search Recipes</a></button>
+        <button type="button" class="btn btn-primary btn-lg px-4"><a href="{{ url_for('users.register') }}" class="link-btn" style="text-decoration: none; color: #FFF;">Register</a></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="food-quote">
+  <div class="bg-dark text-secondary px-4 py-5 text-center">
+    <div class="py-5">
+      <h2 class="fw-bold text-white">"A recipe has no soul. You as the cook must bring soul to the recipe"</h2>
+      <div class="col-lg-6 mx-auto">
+        <p class="fs-5 mb-4">- Thomas Keller, American chef</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="call-to-action-section"></div>
+
+  <div class="container px-4 py-5" id="hanging-icons">
+    <h2 class="pb-2 border-bottom">Here's what's cooking...</h2>
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+      <div class="col d-flex align-items-start">
+        <div class="icon-square bg-light text-dark flex-shrink-0 me-3">
+          <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"/></svg>
+        </div>
+        <div>
+          <h3>Search for new recipes.</h3>
+          <p>Do you sometimes find it challenging to come up with creative meal ideas?</p>
+
+          <p>With access to over 5,000 recipes from the <a href="https://spoonacular.com/food-api">Spoonacular API</a>, you're guaranteed to find great new recipes for snacks, family dinners, parties, or a quiet night on the couch!</p>
+          <a href="#recipe-search" class="btn btn-primary">
+            Let's go!
+          </a>
+        </div>
+      </div>
+      <div class="col d-flex align-items-start">
+        <div class="icon-square bg-light text-dark flex-shrink-0 me-3">
+          <svg class="bi" width="1em" height="1em"><use xlink:href="#cpu-fill"/></svg>
+        </div>
+        <div>
+          <h3>Save your favorites. Plan your next meal!</h3>
+          <p>Members can save favorite recipes to their public recipe box, or schedule private meal plans.</p><p>Goodbye, stressful meal planning. Hello, yummy dishes!</p>
+          <a href="{{ url_for('users.register') }}" class="btn btn-primary">
+            Join for free
+          </a>
+        </div>
+      </div>
+      <div class="col d-flex align-items-start">
+        <div class="icon-square bg-light text-dark flex-shrink-0 me-3">
+          <svg class="bi" width="1em" height="1em"><use xlink:href="#tools"/></svg>
+        </div>
+        <div>
+          <h3>Copycats welcome.</h3>
+          <p>Need a little inspiration? Browse the favorite recipes other users have shared. Go ahead; take those recipes and make them yours. They won't mind.</p>
+
+          <p>Found a great dish? Pass it on. Inspire your followers!</p>
+          <a href="{{ url_for('users.register') }}" class="btn btn-primary">
+            Join for free
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="recipe-searches-section">
+  <div class="text-secondary text-center ingredient-search-bg">
+
+    <h2 class="fw-bold text-white recipe-search-h2"><a id="recipe-search">Try a random ingredient search...</a></h2>
+    <form action="/recipes/search/ingredient-search-results" method="GET" placeholder="Enter ingredient" class="ingredient-search-bar">
       {% for field in form if field.widget.input_type != 'hidden' %}
       <p>
-
         {{ field }}
         <button>Submit</button>
       </p>
       {% endfor %}
     </form>
-
-    <div class="container" id="call-to-action">
-      <h3>Or, try a custom search!</h3>
-      <p>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cuisineModal" data-bs-whatever="@cuisine">Search by Cuisine</button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dietTypeModal" data-bs-whatever="@diet">Search by Diet Type</button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mealTypeModal" data-bs-whatever="@type">Search by Meal Type</button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#intoleranceModal" data-bs-whatever="@intolerance">Search by Dietary Intolerances</button>
-      </p>
-
-      <div class="modal fade" id="cuisineModal" tabindex="-1" aria-labelledby="cuisineLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="cuisineLabel">Search by Cuisine</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="text-center text-white">
+      <h1 class="text-white search-h1 recipe-search-h1">Or, try a custom search!</h1>
+    </div>
+  </div>
+  
+  
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img src="{{url_for('static', filename='img/mapodofu_cropped.jpg')}}" class="img-fluid rounded-start" alt="...">
             </div>
-            <div class="modal-body text-center">
-              <form>
-                <div class="mb-3">
-                  <img src="{{url_for('static', filename='img/mapodofu_cropped.jpg' )}}">
-                  <h1>Cuisine Search</h1>
-                  <p>Search from a list of cuisines, including: African, Cajun, Chinese, Italian, and many more!</p>
-                  <a href="/recipes/search/cuisine">Search by Cuisine</a>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h2 class="card-title">Search by Cuisine</h2>
+                <hr>
+                <h5 class="card-text">Search from a list of cuisines, including: African, Cajun, Chinese, Italian, and many more!</h5>
+                <div class="search-btn">
+                  <button class="btn btn-outline-primary"><a href="{{ url_for('recipes.search_cuisine_recipes') }}">Go!</a></button>
                 </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal fade" id="dietTypeModal" tabindex="-1" aria-labelledby="dietTypeLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="dietTypeLabel">Search by Diet Type</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-              <form>
-                <div class="mb-3">
-                  <img src="{{url_for('static', filename='img/sushi_rolls.jpg' )}}">
-                  <h1>Diet Type Search</h1>
-                  <p>Search from a list of diet types, including: Gluten Free, Ketogenic, Vegan, and more!</p>
-                  <a href="/recipes/search/diet">Search by Diet Type</a>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal fade" id="mealTypeModal" tabindex="-1" aria-labelledby="mealTypeLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="mealTypeLabel">Search by Meal Type</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-              <form>
-                <div class="mb-3">
-                  <img src="{{url_for('static', filename='img/dessert.jpg' )}}">
-                  <h1>Meal Type Search</h1>
-                  <p>Search from a list of meal types, including: main course, beverage, snack, and more!</p>
-                  <a href="/recipes/search/meal-type">Search by Meal Type</a>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal fade" id="intoleranceModal" tabindex="-1" aria-labelledby="intoleranceLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="intoleranceLabel">Search by Dietary Intolerance</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-              <form>
-                <div class="mb-3">
-                  <img src="{{url_for('static', filename='img/latte.jpg' )}}">
-                  <h1>Dietary Intolerance Search</h1>
-                  <p>Search from a list of dietary intolerances, including: Dairy, Gluten, Peanut, and more!</p>
-                  <a href="/recipes/search/intolerance">Search by Dietary Intolerance</a>
-                </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img src="{{url_for('static', filename='img/sushi_rolls.jpg')}}" class="img-fluid rounded-start" alt="...">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h2 class="card-title">Search by Diet Type</h2>
+                <hr>
+                <h5 class="card-text">Search from a list of diet types, including: Gluten Free, Ketogenic, Vegan, and more!</h5>
+                <div class="search-btn">
+                  <button class="btn btn-outline-primary btn-search-btn"><a href="{{ url_for('recipes.search_diet_recipes') }}">Go!</a></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img src="{{url_for('static', filename='img/dessert.jpg')}}" class="img-fluid rounded-start" alt="...">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h2 class="card-title">Search by Meal Type</h2>
+                <hr>
+                <h5 class="card-text">Search from a list of meal types, including: main course, beverage, snack, and more!</h5>
+                <button class="btn btn-outline-primary btn-search-btn"><a href="{{ url_for('recipes.search_meal_type_recipes') }}">Go!</a></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img src="{{url_for('static', filename='img/latte.jpg')}}" class="img-fluid rounded-start" alt="...">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h2 class="card-title">Search by Dietary Intolerance</h2>
+                <hr>
+                <h5 class="card-text">Search from a list of dietary intolerances, including: Dairy, Gluten, Peanut, and more!</h5>
+                <button class="btn btn-outline-primary btn-search-btn"><a href="{{ url_for('recipes.search_dietary_intolerances') }}">Go!</a></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 {% endblock %}      

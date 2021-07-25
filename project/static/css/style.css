@@ -1,26 +1,20 @@
-/* Custom styles for the Flask Recipe App */
+/* Global custom styles for the Flask Recipe App */
 
-/* Fonts */
-h1{
-    margin-bottom: 100px;
+body {
+    background-color: #F2F4F6;
+    color: #0B1F66;
 }
 
-.about-text {
-    margin-top: 2rem;
-}
+/* /\* Fonts *\/ */
+/* h1 { */
+/*     color: #0B1F66; */
+/*     margin-top: 2rem; */
+/*     margin-bottom: 5rem; */
+/* } */
 
-#call-to-action {
-    margin-top: 50px;
-}
-
-/* Form Styline */
+/* /\* Form Styling *\/ */
 .search-form-row {
     color: #0347CA;
-}
-
-.search-form-card {
-    border-radius: 1rem;
-    background-color: #F7F7F7;
 }
 
 .user-form-blue {
@@ -32,15 +26,12 @@ user-form-card.shadow-2-strong {
     background-color: #E8E8E8;
 }
 
-/* Cards */
-div.card-header {
-    background-color: #F7F7F7;
-}
-
-/* Badges */
+/* /\* Badges *\/ */
 span.badge.rounded-pill.bg-danger {
     margin-left: 20px;
 }
 
-
+.d-flex {
+    display: flex;
+}
 
