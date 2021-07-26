@@ -1,7 +1,8 @@
 /* Page Styles */
 #index-top-section, .index-splash-bg {
     background-color: #F2F4F6;
-    height: 65vh;
+    height: 100vh;
+    margin-bottom: 3rem;
 }
 
 /* Font Styles */

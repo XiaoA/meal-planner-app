@@ -6,25 +6,35 @@
 {% endblock %}
 
 {% block content %}
+
 <section id="index-top-section">
-  <div class="container-fluid col-xxl-8 px-4 py-5 index-splash-bg">
-    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
-      <div class="col-10 col-sm-8 col-lg-6">
-        <img src="{{url_for('static', filename='img/homemade_kimchee.png' )}}" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy">
-      </div>
+  
+  <div class="container px-5">
+    <div class="row gx-5 align-items-center">
       <div class="col-lg-6">
-        <h1 class="display-5 fw-bold lh-1 mb-3">Finding new recipies is as easy as Reci<span class="pie-text">pie</span>!</h1>
-        <p class="lead">Search for new recipes. Follow like-minded food lovers. Share meal ideas. All for free!</p>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-          <button type="button" class="btn btn-danger btn-lg px-4 me-md-2"><a href="#recipe-search" class="white-text-btn" style="text-decoration: none; color: #FFF;">Search Recipes</a></button>
+        
+        <div class="mb-5 mb-lg-0 text-center text-lg-start">
+          <h2 class="display-1 fw-bold lh-1 mb-3">Finding new recipies is as easy as Reci<span class="pie-text">pie</span>!</h2>
+          <p class="lead fw-normal text-muted mb-5">Search for new recipes. Follow like-minded food lovers. Share meal ideas. All for free!</p>
+          <div class="">
+          <button type="button" class="btn btn-success btn-lg px-4 me-md-2"><a href="#recipe-search" class="white-text-btn" style="text-decoration: none; color: #FFF;">Search Recipes</a></button>
           <button type="button" class="btn btn-primary btn-lg px-4"><a href="{{ url_for('users.register') }}" class="link-btn" style="text-decoration: none; color: #FFF;">Register</a></button>
         </div>
+        </div>
       </div>
+
+      <div class="col-lg-6">
+        <div class="index-splash-image">
+          <img src="{{url_for('static', filename='img/homemade_kimchee.png' )}}" class="d-block img-fluid mb-5" alt="homemage kimchee plate" style="max-height: 75%%">
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
 
 <section id="food-quote-section">
+
   <div class="bg-dark text-secondary px-4 py-5 text-center">
     <div class="py-5">
       <h2 class="fw-bold text-white">"A recipe has no soul. You as the cook must bring soul to the recipe"</h2>
@@ -186,5 +196,4 @@
     </div>
   </div>
 </section>
-
 {% endblock %}      
