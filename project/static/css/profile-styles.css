@@ -2,7 +2,6 @@
 
 /* Fonts */
 
-
 #call-to-action {
     margin-top: 50px;
 }
@@ -17,22 +16,15 @@
     background-color: #F7F7F7;
 }
 
-
-/* Cards */
-
 .follow-button {
-    border-left: 3rem;
-    border-right: 3rem;
-}
-
-.follow-btn-font {
-    color: #fff;
-    
+    color: #FFF;
+    text-decoration: none;
+    padding-right: 1rem;
 }
 
 /* Badges */
 span.badge.rounded-pill.bg-danger {
-    margin-left: 1rem;
+    /* margin-left: 1rem; */
 }
 
 
