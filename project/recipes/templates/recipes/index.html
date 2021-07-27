@@ -12,22 +12,29 @@
 
       <div class="col-lg-6">
         <div class="text-center">
-          <h1 class="my-3">Finding new recipies is as easy as Reci<span class="pie-text">pie</span>!</h1>
+          <h1 class="display-1 lh-1 my-3">Finding new recipies is as easy as Reci<span class="pie-text">pie</span>!</h1>
           <p class="lead fw-normal text-muted">Search for new recipes. Follow like-minded food lovers. Share meal ideas. All for free!</p>
-          <div class="d-flex flex-column flex-lg-row align-items-center gap-1 my-1">
-            <button type="button" class="btn btn-success btn-lg"><a href="#recipe-search" class="white-text-btn" style="text-decoration: none; color: #FFF;">Search Recipes</a></button>
-            <button type="button" class="btn btn-primary btn-lg"><a href="{{ url_for('users.register') }}" class="link-btn" style="text-decoration: none; color: #FFF;">Register</a></button>
+
+          <div class="container d-grid btn-cta">
+              <div class="d-flex flex-column flex-lg-row gap-1 mx-auto ">
+                <button type="button" class="btn btn-success btn-lg"><a href="#recipe-search" class="text-center" style="text-decoration: none; color: #FFF;">Search Recipes</a></button>
+                <button type="button" class="btn btn-primary btn-lg"><a href="{{ url_for('users.register') }}" class="text-center" style="text-decoration: none; color: #FFF;">Register</a></button>
+              </div>
           </div>
         </div>
       </div>
 
+
+        
       <div class="col-lg-6">
         <div class="index-splash-image mx-auto">
-          <img src="{{url_for('static', filename='img/homemade_kimchee.png' )}}" class="img-fluid"index-splash-image" alt="homemage kimchee plate">
+          <img src="{{url_for('static', filename='img/homemade_kimchee.png' )}}" class="img-fluid index-splash-image" alt="homemage kimchee plate">
         </div>
       </div>
     </div>
   </div>
+
+
 </header>
 
 <aside id="food-quote-section">
