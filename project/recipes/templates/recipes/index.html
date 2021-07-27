@@ -12,22 +12,29 @@
 
       <div class="col-lg-6">
         <div class="text-center">
-          <h1 class="my-3">Finding new recipies is as easy as Reci<span class="pie-text">pie</span>!</h1>
+          <h1 class="display-1 lh-1 my-3">Finding new recipies is as easy as Reci<span class="pie-text">pie</span>!</h1>
           <p class="lead fw-normal text-muted">Search for new recipes. Follow like-minded food lovers. Share meal ideas. All for free!</p>
-          <div class="d-flex flex-column flex-lg-row align-items-center gap-1">
-            <button type="button" class="btn btn-success btn-lg"><a href="#recipe-search" class="white-text-btn" style="text-decoration: none; color: #FFF;">Search Recipes</a></button>
-            <button type="button" class="btn btn-primary btn-lg"><a href="{{ url_for('users.register') }}" class="link-btn" style="text-decoration: none; color: #FFF;">Register</a></button>
+
+          <div class="container d-grid btn-cta">
+              <div class="d-flex flex-column flex-lg-row gap-1 mx-auto ">
+                <button type="button" class="btn btn-success btn-lg"><a href="#recipe-search" class="text-center" style="text-decoration: none; color: #FFF;">Search Recipes <i class="bi bi-search"></i></a></button>
+                <button type="button" class="btn btn-primary btn-lg"><a href="{{ url_for('users.register') }}" class="text-center" style="text-decoration: none; color: #FFF;">Register <i class="bi bi-person-plus-fill"></i></a></button>
+              </div>
           </div>
         </div>
       </div>
 
+
+        
       <div class="col-lg-6">
         <div class="index-splash-image mx-auto">
-          <img src="{{url_for('static', filename='img/homemade_kimchee.png' )}}" class="img-fluid"index-splash-image" alt="homemage kimchee plate">
+          <img src="{{url_for('static', filename='img/homemade_kimchee.png' )}}" class="img-fluid index-splash-image" alt="homemage kimchee plate">
         </div>
       </div>
     </div>
   </div>
+
+
 </header>
 
 <aside id="food-quote-section">
@@ -52,7 +59,7 @@
 
           <p>With access to over 5,000 recipes from the <a href="https://spoonacular.com/food-api">Spoonacular API</a>, you're guaranteed to find great new recipes for snacks, family dinners, parties, or a quiet night on the couch!</p>
           <a href="#recipe-search" class="btn btn-primary">
-            Let's go!
+            Let's go! <i class="bi bi-search"></i>
           </a>
         </div>
       </div>
@@ -61,7 +68,7 @@
           <h3>Save your favorites. Plan your next meal!</h3>
           <p>Members can save favorite recipes to their public recipe box, or schedule private meal plans.</p><p>Goodbye, stressful meal planning. Hello, yummy dishes!</p>
           <a href="{{ url_for('users.register') }}" class="btn btn-primary">
-            Join for free
+            Join for free <i class="bi bi-person-plus-fill"></i>
           </a>
         </div>
       </div>
@@ -72,7 +79,7 @@
 
           <p>Found a great dish? Pass it on. Inspire your followers!</p>
           <a href="{{ url_for('users.register') }}" class="btn btn-primary">
-            Join for free
+            Join for free <i class="bi bi-person-plus-fill"></i>
           </a>
         </div>
       </div>
@@ -97,7 +104,6 @@
     </div>
   </div>
   
-  
   <div class="container">
     <div class="row">
       <div class="col-12">
@@ -112,7 +118,7 @@
                 <hr>
                 <h5 class="card-text">Search from a list of cuisines, including: African, Cajun, Chinese, Italian, and many more!</h5>
                 <div class="search-btn">
-                  <button class="btn btn-outline-primary"><a href="{{ url_for('recipes.search_cuisine_recipes') }}">Go!</a></button>
+                  <button class="btn btn-primary btn-lg btn-search-btn"><a href="{{ url_for('recipes.search_cuisine_recipes') }}">Search <i class="bi bi-arrow-up-right-square-fill"></i></a></button>
                 </div>
               </div>
             </div>
@@ -137,7 +143,7 @@
                 <hr>
                 <h5 class="card-text">Search from a list of diet types, including: Gluten Free, Ketogenic, Vegan, and more!</h5>
                 <div class="search-btn">
-                  <button class="btn btn-outline-primary btn-search-btn"><a href="{{ url_for('recipes.search_diet_recipes') }}">Go!</a></button>
+                  <button class="btn btn-primary btn-lg btn-search-btn"><a href="{{ url_for('recipes.search_diet_recipes') }}">Search <i class="bi bi-arrow-up-right-square-fill"></i></a></button>
                 </div>
               </div>
             </div>
@@ -160,7 +166,7 @@
                 <h2 class="card-title">Search by Meal Type</h2>
                 <hr>
                 <h5 class="card-text">Search from a list of meal types, including: main course, beverage, snack, and more!</h5>
-                <button class="btn btn-outline-primary btn-search-btn"><a href="{{ url_for('recipes.search_meal_type_recipes') }}">Go!</a></button>
+                <button class="btn btn-primary btn-lg btn-search-btn"><a href="{{ url_for('recipes.search_meal_type_recipes') }}">Search <i class="bi bi-arrow-up-right-square-fill"></i></a></button>
               </div>
             </div>
           </div>
@@ -182,7 +188,7 @@
                 <h2 class="card-title">Search by Dietary Intolerance</h2>
                 <hr>
                 <h5 class="card-text">Search from a list of dietary intolerances, including: Dairy, Gluten, Peanut, and more!</h5>
-                <button class="btn btn-outline-primary btn-search-btn"><a href="{{ url_for('recipes.search_dietary_intolerances') }}">Go!</a></button>
+                <button class="btn btn-primary btn-lg btn-search-btn"><a href="{{ url_for('recipes.search_dietary_intolerances') }}">Search <i class="bi bi-arrow-up-right-square-fill"></i></a></button>
               </div>
             </div>
           </div>
