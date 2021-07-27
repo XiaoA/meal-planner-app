@@ -1,3 +1,39 @@
+.index-splash-image {
+    width: 50%;
+    min-width: 250px;
+}
+
+@media (min-width: 576px) {
+    .index-splash-image {
+        width: 50%;
+        min-width: 300px;
+
+    }
+}
+
+@media (min-width: 768px) {
+    .index-splash-image {
+        width: 50%;
+        min-width: 400px;
+    }
+}
+
+@media (min-width: 992px) {
+    .index-splash-image {
+        width: 50%;
+        min-width: 500px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .index-splash-image {
+        width: 50%;
+        min-width: 600px;
+    }
+}
+
+
+
 /* Page Styles */
 #index-top-section, .index-splash-bg {
     background-color: #F2F4F6;
@@ -5,7 +41,7 @@
     margin-bottom: 3rem;
 }
 
-/* Font Styles */
+/* /\* Font Styles *\/ */
 .recipe-search-h2 {
     padding-top: 3rem;
     padding-bottom: 0.5rem;
@@ -26,9 +62,21 @@
 }
 
 /* Section Styles */
+
+#food-quote-section {
+    margin-top: 10rem;
+}
+@media (min-width: 576px) {
+    #food-quote-section {
+        margin-top: 10rem;
+
+    }
+}
+
 #recipe-searches-section, .ingredient-search-bg {
     background-color: #0B1F66;
 }
+
 
 /* Image styles */
 img {
