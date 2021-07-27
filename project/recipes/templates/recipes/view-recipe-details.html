@@ -10,7 +10,7 @@
   
 
   {% if current_user.is_authenticated %}
-  <div class="container interaction-buttons d-flex gap-1">
+  <div class="container interaction-buttons d-flex gap-1 mx-auto text-center mb-3">
     <form method="POST" action="/recipes/like-recipe/{{ results.id }}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
       <input type="hidden" name="recipe_url" value="{{ results.sourceUrl }}">

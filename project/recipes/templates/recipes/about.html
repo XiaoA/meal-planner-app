@@ -2,40 +2,44 @@
 {% block content %}
 <div class="container">
   <h1 class="page-headline text-center my-3">About Recipie</h1>
- <div class="card">
- <div class="col-4 d-flex justify-content-center mx-auto">
-    
-<img src="{{ url_for('static', filename='img/recipie_logo.png') }}" alt="logo" width="500" height="500" class="img-fluid">
-  </div>
+  <div class="card">
+    <div class="col-4 d-flex justify-content-center mx-auto">
+      
+      <img src="{{ url_for('static', filename='img/recipie_logo.png') }}" alt="logo" width="500" height="500" class="img-fluid">
+    </div>
 
-  <div class="container about-text">
-  <h3>The Recipie app makes it easy to find new recipes, create meal plans, and share recipes with others!</h3>
-  <hr>
-  <p class="lead fw-bold">Without creating an account, anyone can perform various searches on the Spoonacular API:</p>
-  <ul>
-    <li>Perform a wildcard search for an ingredient, and get a list of random recipes</li>
-    <li>Search by Cuisine:** Choose from from a list of over cuisines, including: African, Cajun, Chinese, Italian, and many more!</li>
-    <li>Search by Diet Type:** </li>
-    <li>Search by Meal Type:** Search from a list of meal types, including: main course, beverage, snack, and more!</li>
-    <li>Search by Dietary Intolerance:** Search from a list of dietary intolerances, including: Dairy, Gluten, Peanut, and more!</li>
-  </ul>
+    <div class="container about-text">
+      <h3>The Recipie app makes it easy to find new recipes, create meal plans, and share recipes with others!</h3>
+      <hr>
+      <p class="lead fw-bold">Without creating an account, anyone can perform various searches on the Spoonacular API:</p>
+      <ul>
+        <li>Perform a wildcard search for an ingredient, and get a list of random recipes</li>
+        <li>Search by Cuisine:** Choose from from a list of over cuisines, including: African, Cajun, Chinese, Italian, and many more!</li>
+        <li>Search by Diet Type:** </li>
+        <li>Search by Meal Type:** Search from a list of meal types, including: main course, beverage, snack, and more!</li>
+        <li>Search by Dietary Intolerance:** Search from a list of dietary intolerances, including: Dairy, Gluten, Peanut, and more!</li>
+      </ul>
 
 
-  <p class="lead fw-bold">Creating an account provides access to the following features:</p>
-  <ul>
-    <li>Liking recipes, which saves them to a personal 'recipe box' for future reference</li>
-    <li>The ability to follow other users, and see recipes they've liked</li>
-    <li>Save recipes as meal plans for specific dates, with the ability to add custom titles and notes</li>
-    <li>Automated email address confirmation and password resets: Your data will never be sold or shared</li>
-  </ul>
+      <p class="lead fw-bold">Creating an account provides access to the following features:</p>
+      <ul>
+        <li>Liking recipes, which saves them to a personal 'recipe box' for future reference</li>
+        <li>The ability to follow other users, and see recipes they've liked</li>
+        <li>Save recipes as meal plans for specific dates, with the ability to add custom titles and notes</li>
+        <li>Automated email address confirmation and password resets: Your data will never be sold or shared</li>
+      </ul>
 
-  <div class="container">
-    {% if not current_user.is_authenticated %}
-    <a href="{{url_for('users.register')}}" class="btn btn-primary">Join for free!</a>
-    <a href="{{url_for('users.login')}}" class="btn btn-success">Member login</a>
-    {% endif %}
+      {% if not current_user.is_authenticated %}
+      <div class="container">
+        <div class="row">
+        <div class="col-4 d-flex gap-1 mx-auto text-center my-5">
+          <a href="{{url_for('users.register')}}" class="btn btn-primary">Join for free!</a>
+          <a href="{{url_for('users.login')}}" class="btn btn-success">Member login</a>
+        </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
   </div>
-  </div>
- </div>
-  </div>
+</div>
 {% endblock%}
