@@ -25,10 +25,18 @@
 }
 
 /* Link/Button Styles */
-a {
+
+.btn-search-btn {
+    margin-top: 5rem;
+
+}
+
+button a {
     color: #FFF !important;
     text-decoration: none !important;
+    display: block;
 }
+
 
 /* Section Styles */
 
