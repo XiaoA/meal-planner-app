@@ -1,7 +1,6 @@
 /* Page Styles */
 #index-top-section, .index-splash-bg {
     background-color: #F2F4F6;
-    height: 100vh;
     margin-bottom: 3rem;
 }
 
@@ -25,10 +24,8 @@
 }
 
 /* Link/Button Styles */
-
 .btn-search-btn {
     margin-top: 5rem;
-
 }
 
 button a {
