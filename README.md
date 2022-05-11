@@ -1,7 +1,7 @@
 # Recipie
 ## The Recipe search app that's as easy as pie!
 
-[https://ab-recipie-app.herokuapp.com/](Recipie "Recipie Link")
+https://ab-recipie-app.herokuapp.com
 
 The Recipie app makes it easy to find new recipes, create meal plans, and share recipes with others!
 
